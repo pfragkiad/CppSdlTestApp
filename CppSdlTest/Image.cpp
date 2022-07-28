@@ -4,31 +4,31 @@ using namespace GL;
 
 Image::Image()
 {
-	m_xSize = 0;
-	m_ySize = 0;
-	m_pTexture = nullptr;
+	_xSize = 0;
+	_ySize = 0;
+	_pTexture = nullptr;
 }
 
 Image::~Image()
 {
-	if (m_pTexture != nullptr)
-		SDL_DestroyTexture(m_pTexture);
-	m_pTexture = nullptr;
+	if (_pTexture != nullptr)
+		SDL_DestroyTexture(_pTexture);
+	_pTexture = nullptr;
 }
 
 //function to initialize
 void Image::Initialize(const int xSize, const int ySize, SDL_Renderer* pRenderer)
 {
 	//resize the image arrays
-	m_rChannel.resize(xSize, std::vector<double>(ySize, 0.0));
-	m_gChannel.resize(xSize, std::vector<double>(ySize, 0.0));
-	m_bChannel.resize(xSize, std::vector<double>(ySize, 0.0));
+	_rChannel.resize(xSize, std::vector<double>(ySize, 0.0));
+	_gChannel.resize(xSize, std::vector<double>(ySize, 0.0));
+	_bChannel.resize(xSize, std::vector<double>(ySize, 0.0));
 
 	//store the dimensions
-	m_xSize = xSize; m_ySize = ySize;
+	_xSize = xSize; _ySize = ySize;
 
 	//store the pointer to the renderer
-	m_pRenderer = pRenderer;
+	_pRenderer = pRenderer;
 
 	//initialize the texture
 	InitTexture();
@@ -37,29 +37,29 @@ void Image::Initialize(const int xSize, const int ySize, SDL_Renderer* pRenderer
 //funtion to set the colour of a pixel
 void Image::SetPixel(const int x, const int y, const double red, const double green, const double blue)
 {
-	m_rChannel.at(x).at(y) = red;
-	m_gChannel.at(x).at(y) = green;
-	m_bChannel.at(x).at(y) = blue;
+	_rChannel.at(x).at(y) = red;
+	_gChannel.at(x).at(y) = green;
+	_bChannel.at(x).at(y) = blue;
 }
 
 //function to generate the display
 void Image::Display()
 {
 	//allocate memory for a pixel buffer
-	Uint32* tempPixels = new Uint32[(size_t)m_xSize * (size_t)m_ySize];
+	Uint32* tempPixels = new Uint32[(size_t)_xSize * (size_t)_ySize];
 
 	//clear the pixel buffer
-	memset(tempPixels, 0, (size_t)m_xSize * (size_t)m_ySize);
+	memset(tempPixels, 0, (size_t)_xSize * (size_t)_ySize);
 
-	for (int x = 0; x < m_xSize; ++x)
-		for (int y = 0; y < m_ySize; ++y)
-			tempPixels[y * m_xSize + x] = ConvertColor(
-				m_rChannel.at(x).at(y),
-				m_gChannel.at(x).at(y),
-				m_bChannel.at(x).at(y));
+	for (int x = 0; x < _xSize; ++x)
+		for (int y = 0; y < _ySize; ++y)
+			tempPixels[y * _xSize + x] = ConvertColor(
+				_rChannel.at(x).at(y),
+				_gChannel.at(x).at(y),
+				_bChannel.at(x).at(y));
 
 	//update the texture with the pixel buffer
-	SDL_UpdateTexture(m_pTexture, nullptr, tempPixels, m_xSize * sizeof(Uint32));
+	SDL_UpdateTexture(_pTexture, nullptr, tempPixels, _xSize * sizeof(Uint32));
 
 	//delete the pixel buffer
 	delete[] tempPixels;
@@ -67,10 +67,10 @@ void Image::Display()
 	//copy the texture to the renderer
 	SDL_Rect srcRect, bounds;
 	srcRect.x = srcRect.y = 0;
-	srcRect.w = m_xSize;
-	srcRect.h = m_ySize;
+	srcRect.w = _xSize;
+	srcRect.h = _ySize;
 	bounds = srcRect;
-	SDL_RenderCopy(m_pRenderer, m_pTexture, &srcRect, &bounds);
+	SDL_RenderCopy(_pRenderer, _pTexture, &srcRect, &bounds);
 }
 
 //function to initialize the texture
@@ -92,12 +92,12 @@ void Image::InitTexture()
 #endif
 
 	//delete any previously created texture
-	if (m_pTexture != nullptr)
-		SDL_DestroyTexture(m_pTexture);
+	if (_pTexture != nullptr)
+		SDL_DestroyTexture(_pTexture);
 
 	//create the texture that will store the image
-	SDL_Surface* tempSurface = SDL_CreateRGBSurface(0, m_xSize, m_ySize, 32, rmask, gmask, bmask, amask);
-	m_pTexture = SDL_CreateTextureFromSurface(m_pRenderer, tempSurface);
+	SDL_Surface* tempSurface = SDL_CreateRGBSurface(0, _xSize, _ySize, 32, rmask, gmask, bmask, amask);
+	_pTexture = SDL_CreateTextureFromSurface(_pRenderer, tempSurface);
 	SDL_FreeSurface(tempSurface);
 }
 

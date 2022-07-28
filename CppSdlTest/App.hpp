@@ -25,10 +25,10 @@ namespace GL
 
 	private:
 		//instance of the image
-		Image m_image;
+		Image _image;
 
 		//instance of the scene class
-		Scene m_scene;
+		Scene _scene;
 
 		// SDL2 stuff
 		bool isRunning;

@@ -25,10 +25,10 @@ bool App::OnInit()
 	pRenderer = SDL_CreateRenderer(pWindow, -1, 0);
 
 	//initialize the Image instance
-	m_image.Initialize(1280, 720, pRenderer);
+	_image.Initialize(1280, 720, pRenderer);
 
-	//Examples::Example1Simple2ColorImage(m_image);
-	m_scene.Render(m_image);
+	//Examples::Example1Simple2ColorImage(_image);
+	_scene.Render(_image);
 
 	return true;
 }
@@ -69,10 +69,10 @@ void App::OnRender()
 	SDL_RenderClear(pRenderer);
 
 	//render the scene
-	m_scene.Render(m_image);
+	_scene.Render(_image);
 
 	//display the image
-	m_image.Display();
+	_image.Display();
 	
 	//show the result
 	SDL_RenderPresent(pRenderer);

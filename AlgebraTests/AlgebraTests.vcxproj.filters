@@ -15,43 +15,57 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="AlgebraTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="App.cpp">
+    <ClCompile Include="..\CppSdlTest\algebra\TestCode\qbMatrix_DeterminantTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Image.cpp">
+    <ClCompile Include="..\CppSdlTest\algebra\TestCode\qbMatrixTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Examples.hpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
+    <ClCompile Include="..\CppSdlTest\algebra\TestCode\TestCode_qbEIG.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Ray.cpp">
+    <ClCompile Include="..\CppSdlTest\algebra\TestCode\TestCode_qbLinearSolve.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
+    <ClCompile Include="..\CppSdlTest\algebra\TestCode\TestCode_qbLSQ.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CppSdlTest\algebra\TestCode\TestCode_qbPCA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CppSdlTest\algebra\TestCode\TestCode_qbQR.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="App.hpp">
+    <ClInclude Include="..\CppSdlTest\algebra\EIG.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Image.hpp">
+    <ClInclude Include="..\CppSdlTest\algebra\LinSolve.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.hpp">
+    <ClInclude Include="..\CppSdlTest\algebra\LSQ.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Ray.hpp">
+    <ClInclude Include="..\CppSdlTest\algebra\Matrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.hpp">
+    <ClInclude Include="..\CppSdlTest\algebra\PCA.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\CppSdlTest\algebra\QR.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CppSdlTest\algebra\Vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CppSdlTest\algebra\README.md" />
+    <None Include="..\CppSdlTest\algebra\TestCode\qbPCATestData.csv" />
+    <None Include="..\CppSdlTest\algebra\TestCode\qbPCATestData_Reduced.csv" />
   </ItemGroup>
 </Project>

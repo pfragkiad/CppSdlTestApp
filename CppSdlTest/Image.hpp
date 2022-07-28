@@ -25,8 +25,8 @@ namespace GL
 
 		void Display();
 
-		inline int GetXSize() { return m_xSize; }
-		inline int GetYSize() { return m_ySize; }
+		inline int GetXSize() { return _xSize; }
+		inline int GetYSize() { return _ySize; }
 
 	private:
 		Uint32 ConvertColor(const double red, const double green, const double blue);
@@ -34,16 +34,16 @@ namespace GL
 		void InitTexture();
 
 		//arrays to store image data
-		std::vector<std::vector<double>> m_rChannel;
-		std::vector<std::vector<double>> m_gChannel;
-		std::vector<std::vector<double>> m_bChannel;
+		std::vector<std::vector<double>> _rChannel;
+		std::vector<std::vector<double>> _gChannel;
+		std::vector<std::vector<double>> _bChannel;
 
 		//store the dimensions of the image
-		int m_xSize, m_ySize;
+		int _xSize, _ySize;
 
 		//SDL2 stuff
-		SDL_Renderer* m_pRenderer;
-		SDL_Texture* m_pTexture;
+		SDL_Renderer* _pRenderer;
+		SDL_Texture* _pTexture;
 
 	};
 }
