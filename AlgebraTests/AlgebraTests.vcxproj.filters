@@ -18,54 +18,54 @@
     <ClCompile Include="AlgebraTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\CppSdlTest\algebra\TestCode\qbMatrix_DeterminantTest.cpp">
+    <ClCompile Include="TestCode\qbMatrix_DeterminantTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\CppSdlTest\algebra\TestCode\qbMatrixTest.cpp">
+    <ClCompile Include="TestCode\qbMatrixTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\CppSdlTest\algebra\TestCode\TestCode_qbEIG.cpp">
+    <ClCompile Include="TestCode\TestCode_qbEIG.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\CppSdlTest\algebra\TestCode\TestCode_qbLinearSolve.cpp">
+    <ClCompile Include="TestCode\TestCode_qbLinearSolve.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\CppSdlTest\algebra\TestCode\TestCode_qbLSQ.cpp">
+    <ClCompile Include="TestCode\TestCode_qbLSQ.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\CppSdlTest\algebra\TestCode\TestCode_qbPCA.cpp">
+    <ClCompile Include="TestCode\TestCode_qbPCA.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\CppSdlTest\algebra\TestCode\TestCode_qbQR.cpp">
+    <ClCompile Include="TestCode\TestCode_qbQR.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\CppSdlTest\algebra\EIG.h">
+    <ClInclude Include="EIG.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\CppSdlTest\algebra\LinSolve.h">
+    <ClInclude Include="LinSolve.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\CppSdlTest\algebra\LSQ.h">
+    <ClInclude Include="LSQ.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\CppSdlTest\algebra\Matrix.h">
+    <ClInclude Include="Matrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\CppSdlTest\algebra\PCA.h">
+    <ClInclude Include="PCA.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\CppSdlTest\algebra\QR.h">
+    <ClInclude Include="QR.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\CppSdlTest\algebra\Vector.h">
+    <ClInclude Include="Vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\CppSdlTest\algebra\README.md" />
-    <None Include="..\CppSdlTest\algebra\TestCode\qbPCATestData.csv" />
-    <None Include="..\CppSdlTest\algebra\TestCode\qbPCATestData_Reduced.csv" />
+    <None Include="README.md" />
+    <None Include="TestCode\qbPCATestData.csv" />
+    <None Include="TestCode\qbPCATestData_Reduced.csv" />
   </ItemGroup>
 </Project>

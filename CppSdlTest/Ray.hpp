@@ -1,6 +1,6 @@
 #ifndef RAY_H
 #define RAY_H
-#include "algebra/Vector.h"
+#include "../AlgebraTests/Vector.h"
 
 namespace GL
 {

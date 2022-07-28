@@ -1,12 +1,12 @@
 // AlgebraTests.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
-#include "../CppSdlTest/algebra/Vector.h"
-#include "../CppSdlTest/algebra/Matrix.h"
-#include "../CppSdlTest/algebra/EIG.h"
-#include "../CppSdlTest/algebra/LinSolve.h"
-#include "../CppSdlTest/algebra/LSQ.h"
-#include "../CppSdlTest/algebra/PCA.h"
-#include "../CppSdlTest/algebra/QR.h"
+#include "Vector.h"
+#include "Matrix.h"
+#include "EIG.h"
+#include "LinSolve.h"
+#include "LSQ.h"
+#include "PCA.h"
+#include "QR.h"
 
 
 #include <iostream>

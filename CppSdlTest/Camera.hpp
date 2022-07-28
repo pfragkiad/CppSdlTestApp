@@ -1,7 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "./algebra/Vector.h"
+#include "../AlgebraTests/Vector.h"
 #include "Ray.hpp"
 
 namespace GL
