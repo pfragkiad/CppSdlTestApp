@@ -1,8 +1,9 @@
-#include "CApp.h"
+#include "App.hpp"
+
 
 int main(int argc, char** argv)
 {
-	CApp app;
+	GL::App app;
 	return app.OnExecute();
 }
 

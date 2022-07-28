@@ -1,16 +1,17 @@
-#include "CApp.h"
+#include "App.hpp"
+#include "Examples.hpp"
 
-
+using namespace GL;
 
 //the constructor(defaut)
-CApp::CApp()
+App::App()
 {
 	isRunning = true;
 	pWindow = nullptr;
 	pRenderer = nullptr;
 }
 
-bool CApp::OnInit()
+bool App::OnInit()
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 		return false;
@@ -23,22 +24,16 @@ bool CApp::OnInit()
 
 	pRenderer = SDL_CreateRenderer(pWindow, -1, 0);
 
-	//initialize the CImage instance
+	//initialize the Image instance
 	m_image.Initialize(1280, 720, pRenderer);
 
-	//create some color variations
-	for (int x = 0; x < 1280; ++x)
-		for (int y = 0; y < 720; ++y)
-		{
-			double red = static_cast<double>(x) / 1280.0 * 255.0;
-			double green = static_cast<double>(y) / 720.0 * 255.0;
-			m_image.SetPixel(x, y, red, green, 0.0);
-		}
+	//Examples::Example1Simple2ColorImage(m_image);
+	m_scene.Render(m_image);
 
 	return true;
 }
 
-int CApp::OnExecute()
+int App::OnExecute()
 {
 	//failure
 	if (!OnInit()) return -1;
@@ -56,32 +51,35 @@ int CApp::OnExecute()
 	return 0;
 }
 
-void CApp::OnEvent(SDL_Event* event)
+void App::OnEvent(SDL_Event* event)
 {
 	if (event->type == SDL_QUIT)
 		isRunning = false;
 }
 
 
-void CApp::OnLoop() {}
+void App::OnLoop() {}
 
 
 
-void CApp::OnRender()
+void App::OnRender()
 {
 	//set the background color
 	SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
 	SDL_RenderClear(pRenderer);
 
+	//render the scene
+	m_scene.Render(m_image);
+
 	//display the image
 	m_image.Display();
-
+	
 	//show the result
 	SDL_RenderPresent(pRenderer);
 }
 
 
-void CApp::OnExit()
+void App::OnExit()
 {
 	//tidy up SDL2 stuff
 	if (pRenderer != nullptr)

@@ -1,13 +1,15 @@
-#include "CImage.h"
+#include "Image.hpp"
 
-CImage::CImage()
+using namespace GL;
+
+Image::Image()
 {
 	m_xSize = 0;
 	m_ySize = 0;
 	m_pTexture = nullptr;
 }
 
-CImage::~CImage()
+Image::~Image()
 {
 	if (m_pTexture != nullptr)
 		SDL_DestroyTexture(m_pTexture);
@@ -15,7 +17,7 @@ CImage::~CImage()
 }
 
 //function to initialize
-void CImage::Initialize(const int xSize, const int ySize, SDL_Renderer* pRenderer)
+void Image::Initialize(const int xSize, const int ySize, SDL_Renderer* pRenderer)
 {
 	//resize the image arrays
 	m_rChannel.resize(xSize, std::vector<double>(ySize, 0.0));
@@ -33,7 +35,7 @@ void CImage::Initialize(const int xSize, const int ySize, SDL_Renderer* pRendere
 }
 
 //funtion to set the colour of a pixel
-void CImage::SetPixel(const int x, const int y, const double red, const double green, const double blue)
+void Image::SetPixel(const int x, const int y, const double red, const double green, const double blue)
 {
 	m_rChannel.at(x).at(y) = red;
 	m_gChannel.at(x).at(y) = green;
@@ -41,7 +43,7 @@ void CImage::SetPixel(const int x, const int y, const double red, const double g
 }
 
 //function to generate the display
-void CImage::Display()
+void Image::Display()
 {
 	//allocate memory for a pixel buffer
 	Uint32* tempPixels = new Uint32[(size_t)m_xSize * (size_t)m_ySize];
@@ -72,7 +74,7 @@ void CImage::Display()
 }
 
 //function to initialize the texture
-void CImage::InitTexture()
+void Image::InitTexture()
 {
 	//initilize the texture
 	Uint32 rmask, gmask, bmask, amask;
@@ -99,7 +101,7 @@ void CImage::InitTexture()
 	SDL_FreeSurface(tempSurface);
 }
 
-Uint32 CImage::ConvertColor(const double red, const double green, const double blue)
+Uint32 Image::ConvertColor(const double red, const double green, const double blue)
 {
 	//convert the colours to unsigned integers
 	unsigned char r = static_cast<unsigned char>(red);

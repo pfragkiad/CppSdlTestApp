@@ -134,13 +134,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CApp.cpp" />
-    <ClCompile Include="CppSdlTest.cpp" />
-    <ClCompile Include="CImage.cpp" />
+    <ClCompile Include="App.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Image.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Examples.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CApp.h" />
-    <ClInclude Include="CImage.h" />
+    <ClInclude Include="App.hpp" />
+    <ClInclude Include="Image.hpp" />
+    <ClInclude Include="Scene.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
