@@ -4,9 +4,9 @@
 
 GL::Camera::Camera()
 {
-	_position = Vector<double>{ std::vector<double>{0.0,-10.0,0.0} };
-	_lookAt = Vector<double>{ std::vector<double>{0.0,0.0,0.0} };
-	_up = Vector<double>{ std::vector<double>{0.0,0.0,1.0} };
+	_position = Vector<double>{ {0.0,-10.0,0.0} };
+	_lookAt = Vector<double>{ {0.0,0.0,0.0} };
+	_up = Vector<double>{ {0.0,0.0,1.0} };
 
 	_length = 1.0;
 	_horizontalSize = 1.0;

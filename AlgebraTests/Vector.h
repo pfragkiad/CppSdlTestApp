@@ -21,6 +21,8 @@ public:
 	// With input data (std::vector).
 	Vector(std::vector<T> inputData);
 
+	Vector(std::initializer_list<T> data);
+
 	// And the destructor.
 	~Vector();
 
@@ -104,6 +106,14 @@ Vector<T>::Vector(std::vector<T> inputData)
 	_nDims = inputData.size();
 	_vectorData = inputData;
 }
+
+template <class T>
+Vector<T>::Vector(std::initializer_list<T> data)
+{
+	_nDims = data.size();
+	_vectorData = std::vector<T>(data);
+}
+
 
 template <class T>
 Vector<T>::~Vector()

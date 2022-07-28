@@ -14,7 +14,10 @@
 
 int main()
 {
-    Vector<double> v1(std::vector<double>({ 0.0,1.0,3.0 }));
+    //Vector<double> v1(std::vector<double>({ 0.0,1.0,3.0 }));
+    Vector<double> v1({ 0.0,1.0,3.0 });
+    v1.Print();
+
 
     std::vector<double> v2{ 1.0,1.0 };
     std::vector<double> v3(v2);
