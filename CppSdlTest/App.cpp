@@ -11,21 +11,26 @@ App::App()
 	pRenderer = nullptr;
 }
 
-bool App::OnInit()
+//bool App::OnInit()
+//{
+//	return OnInit(1280, 720);
+//}
+
+bool App::OnInit(int width, int height)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 		return false;
 
 	pWindow = SDL_CreateWindow("qbRayTracer!",
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		1280, 720, SDL_WINDOW_SHOWN);
+		width, height, SDL_WINDOW_SHOWN);
 
 	if (pWindow == nullptr) return false;
 
 	pRenderer = SDL_CreateRenderer(pWindow, -1, 0);
 
 	//initialize the Image instance
-	_image.Initialize(1280, 720, pRenderer);
+	_image.Initialize(width, height, pRenderer);
 
 	//Examples::Example1Simple2ColorImage(_image);
 	_scene.Render(_image);
@@ -33,10 +38,15 @@ bool App::OnInit()
 	return true;
 }
 
-int App::OnExecute()
+int App::Run()
+{
+	return Run(1280, 720);
+}
+
+int App::Run(int width, int height)
 {
 	//failure
-	if (!OnInit()) return -1;
+	if (!OnInit(width,height)) return -1;
 
 	while (isRunning)
 	{

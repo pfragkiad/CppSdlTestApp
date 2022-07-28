@@ -16,8 +16,10 @@ namespace GL
 	public:
 		App();
 
-		int OnExecute();
-		bool OnInit();
+		int Run();
+		int Run(int width, int height);
+		//bool OnInit();
+		bool OnInit(int width, int height);
 		void OnEvent(SDL_Event* event);
 		void OnLoop();
 		void OnRender();
