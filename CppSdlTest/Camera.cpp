@@ -1,4 +1,5 @@
 #include "Camera.hpp"
+#include "Ray.hpp"
 #include <cmath>
 
 GL::Camera::Camera()
@@ -85,6 +86,18 @@ double GL::Camera::GetHorizontalSize()
 double GL::Camera::GetAspectRatio()
 {
 	return _aspectRatio;
+}
+
+GL::Ray GL::Camera::GenerateRay(float projectionScreenX, float projectionScreenY)
+{
+	//compute the location of the screen piont in world coordinates
+	Vector<double> screenWorldCoordinate =
+		_screenCenter +
+		_u * projectionScreenX +
+		_v * projectionScreenY;
+
+	//use this point along with the camera position to compute the ray
+	return GL::Ray(_position, screenWorldCoordinate);
 }
 
 void GL::Camera::UpdateCameraGeometry()
