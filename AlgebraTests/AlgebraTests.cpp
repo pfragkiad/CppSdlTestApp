@@ -15,8 +15,11 @@
 int main()
 {
     //Vector<double> v1(std::vector<double>({ 0.0,1.0,3.0 }));
-    Vector<double> v1({ 0.0,1.0,3.0 });
-    v1.Print();
+    Vector<double> v1({ 1.0,0.0,0.0 }), v1t({0.0,1.0,0.0});
+    double vn = v1*v1t; //dot product
+    auto n = v1 ^ v1t;
+    n.Print();
+   // std::cout << vn << std::endl;
 
 
     std::vector<double> v2{ 1.0,1.0 };

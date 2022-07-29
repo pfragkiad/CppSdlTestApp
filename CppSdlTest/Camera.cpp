@@ -11,6 +11,8 @@ GL::Camera::Camera()
 	_length = 1.0;
 	_horizontalSize = 1.0;
 	_aspectRatio = 1.0;
+
+	UpdateCameraGeometry();
 }
 
 void GL::Camera::SetPosition(const Vector<double>& newPosition)
@@ -110,9 +112,11 @@ void GL::Camera::UpdateCameraGeometry()
 
 	//compute the U and V vectors
 	//_up is not normalized and is not vertical to the _aligmentVector
-	_u = Vector<double>::cross(_alignmentVector, _up);
+	//_u = Vector<double>::cross(_alignmentVector, _up);
+	_u = _alignmentVector ^ _up;
 	_u.Normalize();
-	_v = Vector<double>::cross(_u, _alignmentVector); //=up normalized?
+
+	_v = _u ^ _alignmentVector; //Vector<double>::cross(_u, _alignmentVector)
 	//_v.Normalize();
 	//_v = _up.Normalized(); //this should be if the _up is vertical to the alignment
 	_screenCenter = _position + _length * _alignmentVector;

@@ -7,6 +7,7 @@ Image::Image()
 	_xSize = 0;
 	_ySize = 0;
 	_pTexture = nullptr;
+	_pRenderer = nullptr;
 }
 
 Image::~Image()

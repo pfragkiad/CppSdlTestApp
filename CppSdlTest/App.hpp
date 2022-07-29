@@ -7,6 +7,7 @@
 #include <SDL.h>
 #include "Image.hpp"
 #include "Scene.hpp"
+#include "Camera.hpp"
 
 namespace GL
 {
@@ -31,6 +32,8 @@ namespace GL
 
 		//instance of the scene class
 		Scene _scene;
+
+		Camera _camera;
 
 		// SDL2 stuff
 		bool isRunning;

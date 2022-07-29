@@ -47,15 +47,19 @@ public:
 	Vector<T> operator+ (const Vector<T>& rhs) const;
 	Vector<T> operator- (const Vector<T>& rhs) const;
 	Vector<T> operator* (const T& rhs) const;
-	//mine
+	T operator* (const Vector<T>& rhs) const; //dot product
+
+	Vector<T> operator/ (const T& rhs) const;
 	void operator*= (const T& rhs);
 	void operator/= (const T& rhs);
 
 	// Friend functions.
 	template <class T> friend Vector<T> operator* (const T& lhs, const Vector<T>& rhs);
-
 	//normalize e.g. !v1
 	template <class T> friend Vector<T> operator! (const Vector<T>& rhs);
+	template <class T> friend Vector<T> operator^ (const Vector<T>& lhs, const Vector<T>& rhs);
+
+
 
 	// Static functions.
 	static T dot(const Vector<T>& a, const Vector<T>& b);
@@ -164,11 +168,12 @@ template <class T>
 Vector<T> Vector<T>::Normalized()
 {
 	// Compute the vector norm.
-	T vecNorm = this->norm();
+	T vecNorm = norm();
 
-	// Compute the normalized version of the vector.
-	Vector<T> result(_vectorData);
-	return result * (static_cast<T>(1.0) / vecNorm);
+	//// Compute the normalized version of the vector.
+	//Vector<T> result(_vectorData);
+	//return result * (static_cast<T>(1.0) / vecNorm);
+	return Vector<T>(_vectorData) / vecNorm;
 }
 
 // Normalize the vector in place.
@@ -176,13 +181,14 @@ template <class T>
 void Vector<T>::Normalize()
 {
 	// Compute the vector norm.
-	T vecNorm = this->norm();
+	T vecNorm = norm();
 
 	// Compute the elements of the normalized version of the vector.
 	for (int i = 0; i < _nDims; ++i)
 	{
-		T temp = _vectorData.at(i) * (static_cast<T>(1.0) / vecNorm);
-		_vectorData.at(i) = temp;
+		//T temp = _vectorData.at(i) / vecNorm; //;* (static_cast<T>(1.0) / vecNorm);
+		//_vectorData.at(i) = temp;
+		_vectorData.at(i) /= vecNorm;
 	}
 }
 
@@ -214,9 +220,12 @@ Vector<T> Vector<T>::operator- (const Vector<T>& rhs) const
 	if (_nDims != rhs._nDims)
 		throw std::invalid_argument("Vector dimensions do not match.");
 
-	std::vector<T> resultData;
+	//std::vector<T> resultData;
+	//for (int i = 0; i < _nDims; ++i)
+	//	resultData.push_back(_vectorData.at(i) - rhs._vectorData.at(i));
+	std::vector<T> resultData(_vectorData);
 	for (int i = 0; i < _nDims; ++i)
-		resultData.push_back(_vectorData.at(i) - rhs._vectorData.at(i));
+		resultData.at(i) -= rhs._vectorData.at(i);
 
 	Vector<T> result(resultData);
 	return result;
@@ -226,12 +235,32 @@ template <class T>
 Vector<T> Vector<T>::operator* (const T& rhs) const
 {
 	// Perform scalar multiplication.
-	std::vector<T> resultData;
+	//std::vector<T> resultData;
+	//for (int i = 0; i < _nDims; ++i)
+	//	resultData.push_back(_vectorData.at(i) * rhs);
+	std::vector<T> resultData(_vectorData);
 	for (int i = 0; i < _nDims; ++i)
-		resultData.push_back(_vectorData.at(i) * rhs);
+		resultData.at(i) *= rhs;
 
-	Vector<T> result(resultData);
-	return result;
+	return Vector<T>(resultData);
+}
+
+template <class T>
+T Vector<T>::operator*(const Vector<T>& rhs) const //dot product
+{
+	return dot(*this, rhs);
+}
+
+template <class T>
+Vector<T> Vector<T>::operator/ (const T& rhs) const
+{
+	std::vector<T> resultData(_vectorData);
+	for (int i = 0; i < _nDims; ++i)
+		resultData.at(i) /= rhs;
+
+	//Vector<T> result(resultData);
+	//return result;
+	return Vector<T>(resultData);
 }
 
 //mine
@@ -268,14 +297,21 @@ Vector<T> operator* (const T& lhs, const Vector<T>& rhs)
 	for (int i = 0; i < rhs._nDims; ++i)
 		resultData.at(i) *= lhs;
 
-	Vector<T> result(resultData);
-	return result;
+	return Vector<T>(resultData);
 }
 
 template<class T>
-inline Vector<T> operator!(const Vector<T>& rhs)
+Vector<T> operator!(const Vector<T>& rhs)
 {
-	return rhs.Normalized();
+	Vector<T> result{ rhs };
+	result.Normalize();
+	return result;
+}
+
+template <class T>
+Vector<T> operator^ (const Vector<T>& lhs, const Vector<T>& rhs)
+{
+	return Vector<T>::cross(lhs, rhs);
 }
 
 /* **************************************************************************************************
@@ -310,13 +346,12 @@ Vector<T> Vector<T>::cross(const Vector<T>& a, const Vector<T>& b)
 		throw std::invalid_argument("The cross-product can only be computed for three-dimensional vectors.");
 
 	// Compute the cross product.
-	std::vector<T> resultData;
-	resultData.push_back((a._vectorData.at(1) * b._vectorData.at(2)) - (a._vectorData.at(2) * b._vectorData.at(1)));
-	resultData.push_back(-((a._vectorData.at(0) * b._vectorData.at(2)) - (a._vectorData.at(2) * b._vectorData.at(0))));
-	resultData.push_back((a._vectorData.at(0) * b._vectorData.at(1)) - (a._vectorData.at(1) * b._vectorData.at(0)));
+	std::vector<T> resultData(3);
+	resultData.at(0) = a._vectorData.at(1) * b._vectorData.at(2) - a._vectorData.at(2) * b._vectorData.at(1);
+	resultData.at(1) = -a._vectorData.at(0) * b._vectorData.at(2) - a._vectorData.at(2) * b._vectorData.at(0);
+	resultData.at(2) = a._vectorData.at(0) * b._vectorData.at(1) - a._vectorData.at(1) * b._vectorData.at(0);
 
-	Vector<T> result(resultData);
-	return result;
+	return Vector<T>(resultData);
 }
 
 #endif

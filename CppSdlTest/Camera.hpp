@@ -40,18 +40,18 @@ namespace GL
 		void UpdateCameraGeometry();
 
 	private:
-		Vector<double> _position{ 3 };
-		Vector<double> _lookAt{ 3 };
-		Vector<double> _up{ 3 };
+		Vector<double> _position;
+		Vector<double> _lookAt;
+		Vector<double> _up;
 		double _length;
 		double _horizontalSize;
 		double _aspectRatio;
 
-		Vector<double> _alignmentVector{ 3 };
+		Vector<double> _alignmentVector;
 		//projection screen parameters (U, V, center)
-		Vector<double> _u{ 3 };
-		Vector<double> _v{ 3 };
-		Vector<double> _screenCenter{ 3 };
+		Vector<double> _u;
+		Vector<double> _v;
+		Vector<double> _screenCenter;
 
 	};
 
