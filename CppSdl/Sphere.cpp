@@ -8,7 +8,7 @@ GL::Sphere::~Sphere()
 {
 }
 
-bool GL::Sphere::TestIntersection(const Ray& castRay, Vector<double>& intPoint, Vector<double>& localNormal, Vector<double>& localColor)
+bool GL::Sphere::TestIntersection(const Ray& castRay, Vector<double>& intersectionPoint, Vector<double>& localNormal, Vector<double>& localColor)
 {
 	//compute the values of a, b, c
 
@@ -26,5 +26,22 @@ bool GL::Sphere::TestIntersection(const Ray& castRay, Vector<double>& intPoint, 
 
 	//test whether we actually have an intersection!
 	double intTest = b * b - 4.0 * c;
-	return intTest > 0.0;
+	bool tested =  intTest >= 0.0;
+	if (!tested) return false;
+
+	double sqr = sqrt(intTest);
+	double t1 = (-b + sqr) / 2.0;
+	double t2 = (-b - sqr) / 2.0;
+
+	//if either t1 or t2 are negative, then at least part of the object is 
+	//behind the camera and so we will ignore it
+	if (t1 < 0.0 || t2 < 0.0) return false;
+
+	//determine which point of intersection was closest to the camera!
+	if (t1 < t2) //t1 is closest to the camera (we are not interested in t2)
+		intersectionPoint = castRay._point1 + vhat * t1;
+	else
+		intersectionPoint = castRay._point1 + vhat * t2;
+ 
+	return true;
 }

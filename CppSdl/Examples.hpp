@@ -2,6 +2,10 @@
 #define EXAMPLES_H
 
 #include "Image.hpp"
+#include "Camera.hpp"
+#include "Sphere.hpp"
+
+#include <random>
 
 namespace GL
 {
@@ -20,6 +24,8 @@ namespace GL
 					image.SetPixel(x, y, red, green, 0.0);
 				}
 		}
+
+		void Example2SimpleSphere(Image& image, Camera& camera, Sphere& sphere);
 
 	}
 

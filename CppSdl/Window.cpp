@@ -1,11 +1,11 @@
-#include "App.hpp"
+#include "Window.hpp"
 #include "Examples.hpp"
 #include "../Algebra/Vector.h"
 
 using namespace GL;
 
 //the constructor(defaut)
-App::App()
+Window::Window()
 {
 	isRunning = true;
 	pWindow = nullptr;
@@ -17,7 +17,7 @@ App::App()
 //	return OnInit(1280, 720);
 //}
 
-bool App::OnInit(int width, int height)
+bool Window::OnInit(int width, int height)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 		return false;
@@ -33,33 +33,21 @@ bool App::OnInit(int width, int height)
 	//initialize the Image instance
 	_image.Initialize(width, height, pRenderer);
 
-	//set the background color to white
-	SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
-	SDL_RenderClear(pRenderer);
-
-	//Examples::Example1Simple2ColorImage(_image);
-	_scene.Render(_image);
-	
-	//display the result
-	_image.Display();
-
-	//show the result
-	SDL_RenderPresent(pRenderer);
-
-
 
 	return true;
 }
 
-int App::Run()
+int Window::Run()
 {
 	return Run(1280, 720);
 }
 
-int App::Run(int width, int height)
+int Window::Run(int width, int height)
 {
 	//failure
 	if (!OnInit(width,height)) return -1;
+
+	//OnRender(); //render once
 
 	while (isRunning)
 	{
@@ -74,35 +62,35 @@ int App::Run(int width, int height)
 	return 0;
 }
 
-void App::OnEvent(SDL_Event* event)
+void Window::OnEvent(SDL_Event* event)
 {
 	if (event->type == SDL_QUIT)
 		isRunning = false;
 }
 
 
-void App::OnLoop() {}
+void Window::OnLoop() {}
 
-
-
-void App::OnRender()
+void Window::OnRender()
 {
-	////set the background color
-	//SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
-	//SDL_RenderClear(pRenderer);
+	//set the background color
+	SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
+	SDL_RenderClear(pRenderer);
 
-	////render the scene
-	//_scene.Render(_image);
+	//render the scene
+	std::cout << "Rendering the scene...";
+	_scene.Render(_image);
+	std::cout << "\nDone!\n";
 
-	////display the image
-	//_image.Display();
-	//
-	////show the result
-	//SDL_RenderPresent(pRenderer);
+	//display the image
+	_image.Display();
+	
+	//show the result
+	SDL_RenderPresent(pRenderer);
 }
 
 
-void App::OnExit()
+void Window::OnExit()
 {
 	//tidy up SDL2 stuff
 	if (pRenderer != nullptr)

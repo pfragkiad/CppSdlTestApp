@@ -12,10 +12,10 @@
 namespace GL
 {
 
-	class App
+	class Window
 	{
 	public:
-		App();
+		Window();
 
 		int Run();
 		int Run(int width, int height);

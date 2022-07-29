@@ -1,4 +1,4 @@
-#include "App.hpp"
+#include "Window.hpp"
 
 #include <iostream>
 
@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 {
 	//testCamera();
 
-	GL::App app;
+	GL::Window app;
 	return app.Run();
 }
 

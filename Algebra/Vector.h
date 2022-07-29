@@ -162,7 +162,7 @@ void Vector<T>::SetElement(int index, T value)
 /* **************************************************************************************************
 FUNCTIONS TO PERFORM COMPUTATIONS ON THE VECTOR
 /* *************************************************************************************************/
-// Compute the length of the vector,known as the 'norm'.
+// Compute the length of the vector, known as the 'norm'.
 template <class T>
 T Vector<T>::norm()
 {
@@ -178,12 +178,12 @@ template <class T>
 Vector<T> Vector<T>::Normalized()
 {
 	// Compute the vector norm.
-	T vecNorm = norm();
+	//T length = norm();
 
 	//// Compute the normalized version of the vector.
 	//Vector<T> result(_vectorData);
 	//return result * (static_cast<T>(1.0) / vecNorm);
-	return Vector<T>(_vectorData) / vecNorm;
+	return Vector<T>(_vectorData) / norm();
 }
 
 // Normalize the vector in place.
@@ -191,14 +191,14 @@ template <class T>
 void Vector<T>::Normalize()
 {
 	// Compute the vector norm.
-	T vecNorm = norm();
+	T length = norm();
 
 	// Compute the elements of the normalized version of the vector.
 	for (int i = 0; i < _nDims; ++i)
 	{
 		//T temp = _vectorData.at(i) / vecNorm; //;* (static_cast<T>(1.0) / vecNorm);
 		//_vectorData.at(i) = temp;
-		_vectorData.at(i) /= vecNorm;
+		_vectorData.at(i) /= length;
 	}
 }
 

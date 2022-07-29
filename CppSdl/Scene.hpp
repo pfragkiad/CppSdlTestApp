@@ -1,6 +1,7 @@
 #ifndef CSCENE_H
 #define CSCENE_H
 
+#include <memory>
 #include <vector>
 #include <SDL.h>
 #include "Image.hpp"
@@ -22,7 +23,11 @@ namespace GL
 	private:
 		Camera _camera; 
 
-		Sphere _testSphere;
+		////a unit sphere on the origin
+		//Sphere _testSphere;
+
+		//The list of objects in the scene
+		std::vector<std::shared_ptr<GL::Shape>> _objects;
 	};
 }
 
