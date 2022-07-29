@@ -1,5 +1,6 @@
 #include "App.hpp"
 #include "Examples.hpp"
+#include "../Algebra/Vector.h"
 
 using namespace GL;
 
@@ -32,8 +33,20 @@ bool App::OnInit(int width, int height)
 	//initialize the Image instance
 	_image.Initialize(width, height, pRenderer);
 
+	//set the background color to white
+	SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
+	SDL_RenderClear(pRenderer);
+
 	//Examples::Example1Simple2ColorImage(_image);
 	_scene.Render(_image);
+	
+	//display the result
+	_image.Display();
+
+	//show the result
+	SDL_RenderPresent(pRenderer);
+
+
 
 	return true;
 }
@@ -74,18 +87,18 @@ void App::OnLoop() {}
 
 void App::OnRender()
 {
-	//set the background color
-	SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
-	SDL_RenderClear(pRenderer);
+	////set the background color
+	//SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
+	//SDL_RenderClear(pRenderer);
 
-	//render the scene
-	_scene.Render(_image);
+	////render the scene
+	//_scene.Render(_image);
 
-	//display the image
-	_image.Display();
-	
-	//show the result
-	SDL_RenderPresent(pRenderer);
+	////display the image
+	//_image.Display();
+	//
+	////show the result
+	//SDL_RenderPresent(pRenderer);
 }
 
 

@@ -1,7 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "../AlgebraTests/Vector.h"
+#include "../Algebra/Vector.h"
 #include "Ray.hpp"
 
 namespace GL
@@ -34,7 +34,7 @@ namespace GL
 
 		//function to generate a ray
 		//projectionScreenX/Y [-1.0f to 1.0f]
-		Ray GenerateRay(float projectionScreenX, float projectionScreenY);
+		bool GenerateRay(float projectionScreenX, float projectionScreenY, Ray& cameraRay);
 
 
 		void UpdateCameraGeometry();

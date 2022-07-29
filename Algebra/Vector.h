@@ -59,11 +59,11 @@ public:
 	template <class T> friend Vector<T> operator! (const Vector<T>& rhs);
 	template <class T> friend Vector<T> operator^ (const Vector<T>& lhs, const Vector<T>& rhs);
 
-
-
 	// Static functions.
 	static T dot(const Vector<T>& a, const Vector<T>& b);
 	static Vector<T> cross(const Vector<T>& a, const Vector<T>& b);
+
+	template <class T> friend std::ostream& operator << (std::ostream& os, const Vector<T>& v);
 
 	void inline Print()
 	{
@@ -71,19 +71,29 @@ public:
 			std::cout << std::fixed << std::setprecision(6) << _vectorData.at(row) << std::endl;
 	}
 
+
 private:
 	std::vector<T> _vectorData;
 	size_t _nDims;
 
 };
 
-// A simple function to print a vector to stdout.
-template <class T>
-void PrintVector(Vector<T> inputVector)
+//// A simple function to print a vector to stdout.
+//template <class T>
+//void PrintVector(Vector<T> inputVector)
+//{
+//	size_t nRows = inputVector.GetNumDims();
+//	for (int row = 0; row < nRows; ++row)
+//		std::cout << std::fixed << std::setprecision(6) << inputVector.GetElement(row) << std::endl;
+//}
+
+template<class T>
+std::ostream& operator << (std::ostream& os, const Vector<T>& v)
 {
-	size_t nRows = inputVector.GetNumDims();
-	for (int row = 0; row < nRows; ++row)
-		std::cout << std::fixed << std::setprecision(6) << inputVector.GetElement(row) << std::endl;
+	for (int row = 0; row < v._nDims; ++row)
+		//os << std::fixed << std::setprecision(6) << v.GetElement(row) << std::endl;
+		os << std::fixed << std::setprecision(6) << v._vectorData[row] << std::endl;
+	return os;
 }
 
 /* **************************************************************************************************

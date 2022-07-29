@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="AlgebraTests">
+      <UniqueIdentifier>{61f4eff8-31af-44e6-a4a6-453a75546a5f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AlgebraTests\MatrixTests.h">
+      <Filter>AlgebraTests</Filter>
+    </ClCompile>
+    <ClCompile Include="AlgebraTests\EIGTests.h">
+      <Filter>AlgebraTests</Filter>
+    </ClCompile>
+    <ClCompile Include="AlgebraTests\MatrixDeterminantTests.h">
+      <Filter>AlgebraTests</Filter>
+    </ClCompile>
+    <ClCompile Include="AlgebraTests\LinearSolveTests.h">
+      <Filter>AlgebraTests</Filter>
+    </ClCompile>
+    <ClCompile Include="AlgebraTests\LSQTests.h">
+      <Filter>AlgebraTests</Filter>
+    </ClCompile>
+    <ClCompile Include="AlgebraTests\PCATests.h">
+      <Filter>AlgebraTests</Filter>
+    </ClCompile>
+    <ClCompile Include="AlgebraTests\QRTests.h">
+      <Filter>AlgebraTests</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EIG.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LinSolve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LSQ.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PCA.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QR.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Algebra.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
+    <None Include="AlgebraTests\PCATestData.csv">
+      <Filter>AlgebraTests</Filter>
+    </None>
+    <None Include="AlgebraTests\PCATestData_Reduced.csv">
+      <Filter>AlgebraTests</Filter>
+    </None>
+  </ItemGroup>
+</Project>

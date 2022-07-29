@@ -90,7 +90,7 @@ double GL::Camera::GetAspectRatio()
 	return _aspectRatio;
 }
 
-GL::Ray GL::Camera::GenerateRay(float projectionScreenX, float projectionScreenY)
+bool GL::Camera::GenerateRay(float projectionScreenX, float projectionScreenY, GL::Ray &cameraRay)
 {
 	//compute the location of the screen piont in world coordinates
 	Vector<double> screenWorldCoordinate =
@@ -98,8 +98,13 @@ GL::Ray GL::Camera::GenerateRay(float projectionScreenX, float projectionScreenY
 		_u * projectionScreenX +
 		_v * projectionScreenY;
 
-	//use this point along with the camera position to compute the ray
-	return GL::Ray(_position, screenWorldCoordinate);
+	cameraRay._point1 = _position;
+	cameraRay._point2 = screenWorldCoordinate;
+	cameraRay._lab = screenWorldCoordinate - _position;
+
+	////use this point along with the camera position to compute the ray
+	//return GL::Ray(_position, screenWorldCoordinate);
+	return true;
 }
 
 void GL::Camera::UpdateCameraGeometry()
@@ -115,7 +120,6 @@ void GL::Camera::UpdateCameraGeometry()
 	//_u = Vector<double>::cross(_alignmentVector, _up);
 	_u = _alignmentVector ^ _up;
 	_u.Normalize();
-
 	_v = _u ^ _alignmentVector; //Vector<double>::cross(_u, _alignmentVector)
 	//_v.Normalize();
 	//_v = _up.Normalized(); //this should be if the _up is vertical to the alignment

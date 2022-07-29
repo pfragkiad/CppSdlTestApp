@@ -138,16 +138,20 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Image.cpp" />
+    <ClCompile Include="Shape.cpp" />
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Examples.hpp" />
+    <ClCompile Include="Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.hpp" />
     <ClInclude Include="Camera.hpp" />
     <ClInclude Include="Image.hpp" />
+    <ClInclude Include="Shape.hpp" />
     <ClInclude Include="Ray.hpp" />
     <ClInclude Include="Scene.hpp" />
+    <ClInclude Include="Sphere.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

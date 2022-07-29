@@ -24,6 +24,7 @@
     <ProjectGuid>{1a3fe367-e289-4ea7-b410-4227e2089041}</ProjectGuid>
     <RootNamespace>AlgebraTests</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Algebra</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -127,16 +128,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="TestCode\qbMatrixTest.cpp" />
-    <ClCompile Include="TestCode\qbMatrix_DeterminantTest.cpp" />
-    <ClCompile Include="TestCode\TestCode_qbEIG.cpp" />
-    <ClCompile Include="TestCode\TestCode_qbLinearSolve.cpp" />
-    <ClCompile Include="TestCode\TestCode_qbLSQ.cpp" />
-    <ClCompile Include="TestCode\TestCode_qbPCA.cpp" />
-    <ClCompile Include="TestCode\TestCode_qbQR.cpp" />
-    <ClCompile Include="AlgebraTests.cpp" />
+    <ClCompile Include="AlgebraTests\MatrixTests.h" />
+    <ClCompile Include="AlgebraTests\MatrixDeterminantTests.h" />
+    <ClCompile Include="AlgebraTests\EIGTests.h" />
+    <ClCompile Include="AlgebraTests\LinearSolveTests.h" />
+    <ClCompile Include="AlgebraTests\LSQTests.h" />
+    <ClCompile Include="AlgebraTests\PCATests.h" />
+    <ClCompile Include="AlgebraTests\QRTests.h" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Algebra.h" />
     <ClInclude Include="EIG.h" />
     <ClInclude Include="LinSolve.h" />
     <ClInclude Include="LSQ.h" />
@@ -147,8 +149,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
-    <None Include="TestCode\qbPCATestData.csv" />
-    <None Include="TestCode\qbPCATestData_Reduced.csv" />
+    <None Include="AlgebraTests\PCATestData.csv" />
+    <None Include="AlgebraTests\PCATestData_Reduced.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

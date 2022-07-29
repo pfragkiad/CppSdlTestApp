@@ -66,8 +66,9 @@ public:
 	template <class T> friend Matrix<T> operator* (const Matrix<T>& lhs, const T& rhs);
 
 	// Matrix * Vector.
-	template <class U> friend Vector<U> operator* (const Matrix<U>& lhs, const Vector<U>& rhs);
+	template <class T> friend Vector<T> operator* (const Matrix<T>& lhs, const Vector<T>& rhs);
 
+	
 	bool Separate(Matrix<T>& matrix1, Matrix<T>& matrix2, int colNum);
 	bool Join(const Matrix<T>& matrix2);
 	Matrix<T> FindSubMatrix(int rowNum, int colNum);
@@ -81,7 +82,8 @@ public:
 	bool IsSymmetric();
 	void Print();
 	void Print(int precision);
-
+	
+	template <class T> friend std::ostream& operator << (std::ostream& os, const Matrix& m);
 private:
 	int Sub2Ind(int row, int col) const;
 	bool CloseEnough(T f1, T f2);
@@ -90,26 +92,39 @@ private:
 	void MultRow(int i, T multFactor);
 	int FindRowWithMaxElement(int colNumber, int startingRow);
 
-private:
+    //fields
 	T* _matrixData;
 	int _nRows, _nCols, _nElements;
 };
 
-// A simple function to print a matrix to stdout.
+//// A simple function to print a matrix to stdout.
+//template <class T>
+//void PrintMatrix(Matrix<T> matrix)
+//{
+//	int nRows = matrix.GetNumRows();
+//	int nCols = matrix.GetNumCols();
+//	for (int row = 0; row < nRows; ++row)
+//	{
+//		for (int col = 0; col < nCols; ++col)
+//		{
+//			std::cout << std::fixed << std::setprecision(3) << matrix.GetElement(row, col) << "  ";
+//		}
+//		std::cout << std::endl;
+//	}
+//}
+
+
 template <class T>
-void PrintMatrix(Matrix<T> matrix)
+std::ostream& operator<<(std::ostream& os, const Matrix<T>& m)
 {
-	//int nRows = matrix.GetNumRows();
-	//int nCols = matrix.GetNumCols();
-	//for (int row = 0; row < nRows; ++row)
-	//{
-	//	for (int col = 0; col < nCols; ++col)
-	//	{
-	//		std::cout << std::fixed << std::setprecision(3) << matrix.GetElement(row, col) << "  ";
-	//	}
-	//	std::cout << std::endl;
-	//}
-	matrix.Print();
+	int _nRows = m.GetNumRows(), _nCols = m.GetNumCols();
+	for (int row = 0; row < _nRows; ++row)
+	{
+		for (int col = 0; col < _nCols; ++col)
+			os << std::fixed << std::setprecision(3) << m.GetElement(row, col) << "  ";
+		os << std::endl;
+	}
+	return os;
 }
 
 
@@ -196,17 +211,13 @@ bool Matrix<T>::Resize(int numRows, int numCols)
 	_nElements = (_nRows * _nCols);
 	delete[] _matrixData;
 	_matrixData = new T[_nElements];
-	if (_matrixData != nullptr)
-	{
-		for (int i = 0; i < _nElements; i++)
-			_matrixData[i] = 0.0;
+	if (_matrixData == nullptr) return false;
 
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	for (int i = 0; i < _nElements; i++)
+		_matrixData[i] = 0.0;
+
+	return true;
+
 }
 
 // Function to convert the existing matrix into an identity matrix.
@@ -688,6 +699,7 @@ T Matrix<T>::Determinant()
 
 	return determinant;
 }
+
 
 /* **************************************************************************************************
 COMPUTE MATRIX INVERSE (USING GAUSS-JORDAN ELIMINATION)
@@ -1203,11 +1215,9 @@ void Matrix<T>::MultRow(int i, T multFactor)
 template <class T>
 void Matrix<T>::Print()
 {
-	int nRows = this->GetNumRows();
-	int nCols = this->GetNumCols();
-	for (int row = 0; row < nRows; ++row)
+	for (int row = 0; row < _nRows; ++row)
 	{
-		for (int col = 0; col < nCols; ++col)
+		for (int col = 0; col < _nCols; ++col)
 		{
 			std::cout << std::fixed << std::setprecision(3) << this->GetElement(row, col) << "  ";
 		}
@@ -1219,11 +1229,9 @@ void Matrix<T>::Print()
 template <class T>
 void Matrix<T>::Print(int precision)
 {
-	int nRows = this->GetNumRows();
-	int nCols = this->GetNumCols();
-	for (int row = 0; row < nRows; ++row)
+	for (int row = 0; row < _nRows; ++row)
 	{
-		for (int col = 0; col < nCols; ++col)
+		for (int col = 0; col < _nCols; ++col)
 		{
 			std::cout << std::fixed << std::setprecision(precision) << this->GetElement(row, col) << "  ";
 		}
@@ -1262,4 +1270,6 @@ Matrix<T> Matrix<T>::FindSubMatrix(int rowNum, int colNum)
 
 	return subMatrix;
 }
+
+
 #endif

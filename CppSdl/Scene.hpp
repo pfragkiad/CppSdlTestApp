@@ -5,6 +5,9 @@
 #include <SDL.h>
 #include "Image.hpp"
 
+#include "Camera.hpp"
+#include "Sphere.hpp"
+
 namespace GL
 {
 	class Scene
@@ -15,6 +18,11 @@ namespace GL
 
 		//function to perform the rendering
 		bool Render(Image& outputImage);
+
+	private:
+		Camera _camera; 
+
+		Sphere _testSphere;
 	};
 }
 
