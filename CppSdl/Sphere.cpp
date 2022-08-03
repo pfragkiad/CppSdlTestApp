@@ -8,11 +8,11 @@ GL::Sphere::~Sphere()
 {
 }
 
-bool GL::Sphere::TestIntersection(const Ray& castRay, Vector<double>& intersectionPoint, Vector<double>& localNormal, Vector<double>& localColor)
+bool GL::Sphere::TestIntersection(const Ray& castRay, VectorD& intersectionPoint, VectorD& localNormal, VectorD& localColor)
 {
 	//compute the values of a, b, c
 
-	Vector<double> vhat = !castRay._lab;
+	VectorD vhat = !castRay._lab;
 
 	//note that a is equal to the squared magnitude of the direction of the case ray.
 	//as this iwll be a unit vector, we can conclude that the value of 'a' will always be 1

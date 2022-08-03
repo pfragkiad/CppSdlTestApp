@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../Algebra/Vector.h" 
+#include "../Algebra/Algebra.h" 
 #include "Ray.hpp"
+#include "Transform.hpp"
 
 namespace GL
 {
@@ -14,7 +15,10 @@ namespace GL
 		virtual ~Shape();
 
 		//function to test for intersections
-		virtual bool TestIntersection(const Ray& castRay, Vector<double>& intPoint, Vector<double>& localNormal, Vector<double>& localColor);
+		virtual bool TestIntersection(const Ray& castRay, VectorD& intPoint, VectorD& localNormal, VectorD& localColor);
+
+		//function to set the transform matrix
+		void SetTransformMatrix(const Transform& transform);
 
 		//function to test whether 2 floating-point numbers are close to being equal
 		bool CloseEnough(const double f1, const double f2);
@@ -22,8 +26,10 @@ namespace GL
 		//public member variables:
 	public:
 		//the base color of the object
-		Vector<double> _baseColor;
+		VectorD _baseColor;
 
+		//geometric transform applied to the object
+		Transform _transformMatrix;
 	};
 
 }

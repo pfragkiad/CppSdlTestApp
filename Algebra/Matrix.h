@@ -29,10 +29,10 @@ public:
 	void SetToIdentity();
 
 	// Element access methods.
-	T GetElement(int row, int col) const;
-	bool SetElement(int row, int col, T elementValue);
-	int GetNumRows() const;
-	int GetNumCols() const;
+	T Get(int row, int col) const;
+	bool Set(int row, int col, T elementValue);
+	int RowsCount() const;
+	int ColsCount() const;
 
 	// Manipulation methods.
 	// Compute matrix inverse.
@@ -80,8 +80,8 @@ public:
 	bool IsRowEchelon();
 	bool IsNonZero();
 	bool IsSymmetric();
-	void Print();
-	void Print(int precision);
+	void Print () const;
+	void Print(int precision) const;
 	
 	template <class T> friend std::ostream& operator << (std::ostream& os, const Matrix& m);
 private:
@@ -117,11 +117,11 @@ private:
 template <class T>
 std::ostream& operator<<(std::ostream& os, const Matrix<T>& m)
 {
-	int _nRows = m.GetNumRows(), _nCols = m.GetNumCols();
+	int _nRows = m.RowsCount(), _nCols = m.ColsCount();
 	for (int row = 0; row < _nRows; ++row)
 	{
 		for (int col = 0; col < _nCols; ++col)
-			os << std::fixed << std::setprecision(3) << m.GetElement(row, col) << "  ";
+			os << std::fixed << std::setprecision(6) << m.Get(row, col) << "  ";
 		os << std::endl;
 	}
 	return os;
@@ -243,7 +243,7 @@ void Matrix<T>::SetToIdentity()
 ELEMENT FUNCTIONS
 /* *************************************************************************************************/
 template <class T>
-T Matrix<T>::GetElement(int row, int col) const
+T Matrix<T>::Get(int row, int col) const
 {
 	int linearIndex = Sub2Ind(row, col);
 	if (linearIndex >= 0)
@@ -254,7 +254,7 @@ T Matrix<T>::GetElement(int row, int col) const
 }
 
 template <class T>
-bool Matrix<T>::SetElement(int row, int col, T elementValue)
+bool Matrix<T>::Set(int row, int col, T elementValue)
 {
 	int linearIndex = Sub2Ind(row, col);
 	if (linearIndex >= 0)
@@ -269,13 +269,13 @@ bool Matrix<T>::SetElement(int row, int col, T elementValue)
 }
 
 template <class T>
-int Matrix<T>::GetNumRows() const
+int Matrix<T>::RowsCount() const
 {
 	return _nRows;
 }
 
 template <class T>
-int Matrix<T>::GetNumCols() const
+int Matrix<T>::ColsCount() const
 {
 	return _nCols;
 }
@@ -418,7 +418,7 @@ template <class T>
 Vector<T> operator* (const Matrix<T>& lhs, const Vector<T>& rhs)
 {
 	// Verify the dimensions of the inputs.
-	if (lhs._nCols != rhs.GetNumDims())
+	if (lhs._nCols != rhs.DimsCount())
 		throw std::invalid_argument("Number of columns in matrix must equal number of rows in vector.");
 
 	// Setup the vector for the output.
@@ -430,9 +430,9 @@ Vector<T> operator* (const Matrix<T>& lhs, const Vector<T>& rhs)
 		T cumulativeSum = static_cast<T>(0.0);
 		for (int col = 0; col < lhs._nCols; ++col)
 		{
-			cumulativeSum += (lhs.GetElement(row, col) * rhs.GetElement(col));
+			cumulativeSum += (lhs.Get(row, col) * rhs.Get(col));
 		}
-		result.SetElement(row, cumulativeSum);
+		result.Set(row, cumulativeSum);
 	}
 
 	return result;
@@ -591,13 +591,9 @@ bool Matrix<T>::Separate(Matrix<T>& matrix1, Matrix<T>& matrix2, int colNum)
 		for (int col = 0; col < _nCols; ++col)
 		{
 			if (col < colNum)
-			{
-				matrix1.SetElement(row, col, this->GetElement(row, col));
-			}
+				matrix1.Set(row, col, this->Get(row, col));
 			else
-			{
-				matrix2.SetElement(row, col - colNum, this->GetElement(row, col));
-			}
+				matrix2.Set(row, col - colNum, this->Get(row, col));
 		}
 	}
 	return true;
@@ -691,7 +687,7 @@ T Matrix<T>::Determinant()
 			/* Cumulatively multiply the determinant of the sub-matrix by the
 				current element of this matrix and the sign variable (note the
 				recursive calling of the Determinant() method). */
-			cumulativeSum += this->GetElement(0, j) * subMatrix.Determinant() * sign;
+			cumulativeSum += this->Get(0, j) * subMatrix.Determinant() * sign;
 			sign = -sign;
 		}
 		determinant = cumulativeSum;
@@ -862,7 +858,7 @@ Matrix<T> Matrix<T>::Transpose() const
 	{
 		for (int j = 0; j < _nCols; ++j)
 		{
-			resultMatrix.SetElement(j, i, this->GetElement(i, j));
+			resultMatrix.Set(j, i, this->Get(i, j));
 		}
 	}
 
@@ -996,16 +992,16 @@ int Matrix<T>::Rank()
 				if (!CloseEnough(currentMatrixDet, 0.0))
 				{
 					completeFlag = true;
-					numNonZeroRows = currentMatrix.GetNumRows();
+					numNonZeroRows = currentMatrix.RowsCount();
 				}
 				else
 				{
 					// Extract and store each sub-matrix (if larger than 2x2).
-					if ((currentMatrix.GetNumRows() > 2) && (currentMatrix.GetNumCols() > 2))
+					if ((currentMatrix.RowsCount() > 2) && (currentMatrix.ColsCount() > 2))
 					{
-						for (int i = 0; i < currentMatrix.GetNumRows(); ++i)
+						for (int i = 0; i < currentMatrix.RowsCount(); ++i)
 						{
-							for (int j = 0; j < currentMatrix.GetNumCols(); ++j)
+							for (int j = 0; j < currentMatrix.ColsCount(); ++j)
 							{
 								// Extract this sub-matrix and store.
 								subMatrixVector.push_back(currentMatrix.FindSubMatrix(i, j));
@@ -1025,8 +1021,8 @@ int Matrix<T>::Rank()
 				in row-echelon form and we can compute the rank quite easily
 				as simply the number of non-zero rows. */
 
-		int nRows = matrixCopy.GetNumRows();
-		int nCols = matrixCopy.GetNumCols();
+		int nRows = matrixCopy.RowsCount();
+		int nCols = matrixCopy.ColsCount();
 
 		// Loop over each row and test whether it has at least one non-zero element.
 		for (int i = 0; i < nRows; ++i)
@@ -1035,7 +1031,7 @@ int Matrix<T>::Rank()
 			int colSum = 0;
 			for (int j = 0; j < nCols; ++j)
 			{
-				if (!CloseEnough(matrixCopy.GetElement(i, j), 0.0))
+				if (!CloseEnough(matrixCopy.Get(i, j), 0.0))
 					colSum++;
 			}
 			// If colSum is greater than zero, then increment numNonZeroRows.
@@ -1135,8 +1131,8 @@ bool Matrix<T>::IsSymmetric()
 		int rowIndex = diagIndex + 1;
 		while ((rowIndex < _nRows) && returnFlag)
 		{
-			currentRowElement = this->GetElement(rowIndex, diagIndex);
-			currentColElement = this->GetElement(diagIndex, rowIndex);
+			currentRowElement = this->Get(rowIndex, diagIndex);
+			currentColElement = this->Get(diagIndex, rowIndex);
 
 			// Compare the row and column elements.
 			if (!CloseEnough(currentRowElement, currentColElement))
@@ -1213,13 +1209,13 @@ void Matrix<T>::MultRow(int i, T multFactor)
 
 // A simple function to print a matrix to stdout.
 template <class T>
-void Matrix<T>::Print()
+void Matrix<T>::Print() const
 {
 	for (int row = 0; row < _nRows; ++row)
 	{
 		for (int col = 0; col < _nCols; ++col)
 		{
-			std::cout << std::fixed << std::setprecision(3) << this->GetElement(row, col) << "  ";
+			std::cout << std::fixed << std::setprecision(6) << this->Get(row, col) << "  ";
 		}
 		std::cout << std::endl;
 	}
@@ -1227,13 +1223,13 @@ void Matrix<T>::Print()
 
 // A simple function to print a matrix to stdout, with specified precision.
 template <class T>
-void Matrix<T>::Print(int precision)
+void Matrix<T>::Print(int precision) const
 {
 	for (int row = 0; row < _nRows; ++row)
 	{
 		for (int col = 0; col < _nCols; ++col)
 		{
-			std::cout << std::fixed << std::setprecision(precision) << this->GetElement(row, col) << "  ";
+			std::cout << std::fixed << std::setprecision(precision) << this->Get(row, col) << "  ";
 		}
 		std::cout << std::endl;
 	}
@@ -1262,7 +1258,7 @@ Matrix<T> Matrix<T>::FindSubMatrix(int rowNum, int colNum)
 			// If i or j correspond to rowNum or colNum, then ignore this element.
 			if ((i != rowNum) && (j != colNum))
 			{
-				subMatrix._matrixData[count] = this->GetElement(i, j);
+				subMatrix._matrixData[count] = this->Get(i, j);
 				count++;
 			}
 		}

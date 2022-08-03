@@ -24,8 +24,8 @@ template <typename T>
 std::vector<T> ComputeColumnMeans(const Matrix<T> &inputData)
 {
 	// Determine the size of the input data.
-	int numRows = inputData.GetNumRows();
-	int numCols = inputData.GetNumCols();
+	int numRows = inputData.RowsCount();
+	int numCols = inputData.ColsCount();
 	
 	// Create a vector for output.
 	std::vector<T> output;	
@@ -35,7 +35,7 @@ std::vector<T> ComputeColumnMeans(const Matrix<T> &inputData)
 	{
 		T cumulativeSum = static_cast<T>(0.0);
 		for (int i=0; i<numRows; ++i)
-			cumulativeSum += inputData.GetElement(i,j);
+			cumulativeSum += inputData.Get(i,j);
 			
 		output.push_back(cumulativeSum / static_cast<T>(numRows));
 	}
@@ -48,14 +48,14 @@ template <typename T>
 void SubtractColumnMeans(Matrix<T> &inputData, std::vector<T> &columnMeans)
 {
 	// Determine the size of the input data.
-	int numRows = inputData.GetNumRows();
-	int numCols = inputData.GetNumCols();
+	int numRows = inputData.RowsCount();
+	int numCols = inputData.ColsCount();
 	
 	// Loop through and subtract the means.
 	for (int j=0; j<numCols; ++j)
 	{
 		for (int i=0; i<numRows; ++i)
-			inputData.SetElement(i,j, inputData.GetElement(i,j) - columnMeans.at(j));
+			inputData.Set(i,j, inputData.Get(i,j) - columnMeans.at(j));
 	}	
 }
 
@@ -70,7 +70,7 @@ Matrix<T> ComputeCovariance(const Matrix<T> &X)
 		we computed XX', the result would be a [k x k] matrix. The covariance
 		matrix should be [p x p], so we need to transpose, hence the use of
 		X'X. */
-	int numRows = X.GetNumRows();
+	int numRows = X.RowsCount();
 	Matrix<T> covX = (static_cast<T>(1.0) / static_cast<T>(numRows - 1)) * (X.Transpose() * X);
 	return covX;
 }
@@ -99,14 +99,14 @@ int ComputeEigenvectors(const Matrix<T> &covarianceMatrix, Matrix<T> &eigenvecto
 	std::reverse(eigenValues.begin(), eigenValues.end());
 
 	// Compute the eigenvector for each eigenvalue.
-	Vector<T> eV(X.GetNumCols());
-	Matrix<T> eVM(X.GetNumRows(), X.GetNumCols());
+	Vector<T> eV(X.ColsCount());
+	Matrix<T> eVM(X.RowsCount(), X.ColsCount());
 	for (int j=0; j<eigenValues.size(); ++j)
 	{
 		T eig = eigenValues.at(j);
 		int returnStatus2 = InvPIt<T>(X, eig, eV);
-		for (int i=0; i<eV.GetNumDims(); ++i)
-			eVM.SetElement(i, j, eV.GetElement(i));
+		for (int i=0; i<eV.DimsCount(); ++i)
+			eVM.Set(i, j, eV.Get(i));
 	}
 	
 	// Return the eigenvectors.

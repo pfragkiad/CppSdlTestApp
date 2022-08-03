@@ -5,9 +5,9 @@ using namespace GL;
 
 Scene::Scene() {
 	//configure the camera
-	_camera.SetPosition(Vector<double>{0.0, -10.0, 0.0});
-	_camera.SetLookAt(Vector<double>{0.0, 0.0, 0.0});
-	_camera.SetUp(Vector<double>{0.0, 0.0, 1.0});
+	_camera.SetPosition(VectorD{0.0, -10.0, 0.0});
+	_camera.SetLookAt(VectorD{0.0, 0.0, 0.0});
+	_camera.SetUp(VectorD{0.0, 0.0, 1.0});
 	_camera.SetHorizontalSize(0.25);
 	_camera.SetAspectRatio(1280.0 / 720.0);
 	_camera.UpdateCameraGeometry();
@@ -17,8 +17,8 @@ Scene::Scene() {
 
 	//construct a test light
 	_lights.push_back(std::make_shared<PointLight>(PointLight()));
-	_lights.at(0)->_location = Vector<double>{ 0.0,0.0,10.0 };//Vector<double>{ 10.0,-5.0,10.0 };
-	_lights.at(0)->_color = Vector<double>{ 255.0,255.0,255.0 };
+	_lights.at(0)->_location = VectorD{ 0.0,0.0,10.0 };//VectorD{ 10.0,-5.0,10.0 };
+	_lights.at(0)->_color = VectorD{ 255.0,255.0,255.0 };
 	_lights.at(0)->_intensity = 1.0;
 }
 
@@ -41,9 +41,9 @@ bool Scene::Render(Image& outputImage)
 
 	//loop over each pixel in our image
 	Ray cameraRay;
-	Vector<double> intersectionPoint(3);
-	Vector<double> localNormal(3);
-	Vector<double> localColor(3);
+	VectorD intersectionPoint(3);
+	VectorD localNormal(3);
+	VectorD localColor(3);
 
 	double xFact = 2.0 / xSize; //0 to 2
 	double yFact = 2.0 / ySize; //0 to 2
@@ -70,7 +70,7 @@ bool Scene::Render(Image& outputImage)
 				{
 					//compute intensity of illumination
 					double intensity;
-					Vector<double> color;
+					VectorD color;
 					bool validIllumination = false;
 					for (auto currentLight : _lights)
 					{

@@ -125,7 +125,7 @@ namespace AlgebraTests
 				// Test dimensionality reduction.
 				cout << endl;
 				cout << "Testing dimensionality reduction." << endl;
-				cout << "Starting with X which has " << X.GetNumRows() << " rows and " << X.GetNumCols() << " columns." << endl;
+				cout << "Starting with X which has " << X.RowsCount() << " rows and " << X.ColsCount() << " columns." << endl;
 				cout << endl;
 				cout << "Using only the first two principal components:" << endl;
 				Matrix<double> V, part2;
@@ -134,15 +134,15 @@ namespace AlgebraTests
 				cout << endl;
 
 				Matrix<double> newX = (V.Transpose() * X.Transpose()).Transpose();
-				cout << "Result has " << newX.GetNumRows() << " rows and " << newX.GetNumCols() << " columns." << endl;
+				cout << "Result has " << newX.RowsCount() << " rows and " << newX.ColsCount() << " columns." << endl;
 
 				// Open a file for writing
 				ofstream outputFile("PCATestData_Reduced.csv");
 				if (outputFile.is_open())
 				{
-					for (int i = 0; i < newX.GetNumRows(); ++i)
+					for (int i = 0; i < newX.RowsCount(); ++i)
 					{
-						outputFile << newX.GetElement(i, 0) << "," << newX.GetElement(i, 1) << endl;
+						outputFile << newX.Get(i, 0) << "," << newX.Get(i, 1) << endl;
 					}
 					outputFile.close();
 				}

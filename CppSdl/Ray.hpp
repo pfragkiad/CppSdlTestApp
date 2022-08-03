@@ -1,6 +1,6 @@
 #ifndef RAY_H
 #define RAY_H
-#include "../Algebra/Vector.h"
+#include "../Algebra/Algebra.h"
 
 namespace GL
 {
@@ -8,14 +8,14 @@ namespace GL
 	{
 	public:
 		Ray();
-		Ray(const Vector<double>& point1, const Vector<double>& point2);
+		Ray(const VectorD& point1, const VectorD& point2);
 
-		Vector<double> GetPoint1() const;
-		Vector<double> GetPoint2() const;
+		VectorD GetPoint1() const;
+		VectorD GetPoint2() const;
 
-		Vector<double> _point1;
-		Vector<double> _point2;
-		Vector<double> _lab;
+		VectorD _point1;
+		VectorD _point2;
+		VectorD _lab;
 	};
 }
 

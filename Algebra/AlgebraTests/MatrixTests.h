@@ -55,13 +55,13 @@ namespace AlgebraTests
 		// Test element retrieval.
 		cout << endl << "**************************" << endl;
 		cout << "Test element retrieval." << endl;
-		cout << "Element (0,0) = " << testMatrix.GetElement(0, 0) << endl;
-		cout << "Element (1,0) = " << testMatrix.GetElement(1, 0) << endl;
-		cout << "Element (2,0) = " << testMatrix.GetElement(2, 0) << endl;
-		cout << "Element (0,1) = " << testMatrix.GetElement(0, 1) << endl;
-		cout << "Element (1,1) = " << testMatrix.GetElement(1, 1) << endl;
-		cout << "Element (2,1) = " << testMatrix.GetElement(2, 1) << endl;
-		cout << "Element (5,5) = " << testMatrix.GetElement(5, 5) << endl;
+		cout << "Element (0,0) = " << testMatrix.Get(0, 0) << endl;
+		cout << "Element (1,0) = " << testMatrix.Get(1, 0) << endl;
+		cout << "Element (2,0) = " << testMatrix.Get(2, 0) << endl;
+		cout << "Element (0,1) = " << testMatrix.Get(0, 1) << endl;
+		cout << "Element (1,1) = " << testMatrix.Get(1, 1) << endl;
+		cout << "Element (2,1) = " << testMatrix.Get(2, 1) << endl;
+		cout << "Element (5,5) = " << testMatrix.Get(5, 5) << endl;
 
 		// *******************************************************************
 		// Test matrix multiplication.

@@ -1,13 +1,11 @@
 #include "Camera.hpp"
-#include "Ray.hpp"
-#include <cmath>
-#include "../Algebra/Algebra.h"
+
 
 GL::Camera::Camera()
 {
-	_position = -10.0 * Vectors::UnitY; //Vector<double>{ {0.0,-10.0,0.0} };
-	_lookAt = Vectors::Zero; //Vector<double>{ {0.0,0.0,0.0} };
-	_up = Vectors::UnitZ; // Vector<double>{ {0.0,0.0,1.0} };
+	_position = -10.0 * Algebra::Uy; //VectorD{ {0.0,-10.0,0.0} };
+	_lookAt = Algebra::Zero; //VectorD{ {0.0,0.0,0.0} };
+	_up = Algebra::Uz; // VectorD{ {0.0,0.0,1.0} };
 
 	_length = 1.0;
 	_horizontalSize = 1.0;
@@ -16,17 +14,17 @@ GL::Camera::Camera()
 	UpdateCameraGeometry();
 }
 
-void GL::Camera::SetPosition(const Vector<double>& newPosition)
+void GL::Camera::SetPosition(const VectorD& newPosition)
 {
 	_position = newPosition;
 }
 
-void GL::Camera::SetLookAt(const Vector<double>& newLookAt)
+void GL::Camera::SetLookAt(const VectorD& newLookAt)
 {
 	_lookAt = newLookAt;
 }
 
-void GL::Camera::SetUp(const Vector<double>& upVector)
+void GL::Camera::SetUp(const VectorD& upVector)
 {
 	_up = upVector;
 }
@@ -46,32 +44,32 @@ void GL::Camera::SetAspectRatio(double newAspect)
 	_aspectRatio = newAspect;
 }
 
-Vector<double> GL::Camera::GetPosition()
+VectorD GL::Camera::GetPosition()
 {
 	return _position;
 }
 
-Vector<double> GL::Camera::GetLookAt()
+VectorD GL::Camera::GetLookAt()
 {
 	return _lookAt;
 }
 
-Vector<double> GL::Camera::GetUp()
+VectorD GL::Camera::GetUp()
 {
 	return _up;
 }
 
-Vector<double> GL::Camera::GetU()
+VectorD GL::Camera::GetU()
 {
 	return _u;
 }
 
-Vector<double> GL::Camera::GetV()
+VectorD GL::Camera::GetV()
 {
 	return _v;
 }
 
-Vector<double> GL::Camera::GetScreenCenter()
+VectorD GL::Camera::GetScreenCenter()
 {
 	return _screenCenter;
 }
@@ -94,7 +92,7 @@ double GL::Camera::GetAspectRatio()
 bool GL::Camera::GenerateRay(float projectionScreenX, float projectionScreenY, GL::Ray &cameraRay)
 {
 	//compute the location of the screen piont in world coordinates
-	Vector<double> screenWorldCoordinate =
+	VectorD screenWorldCoordinate =
 		_screenCenter +
 		_u * projectionScreenX +
 		_v * projectionScreenY;
@@ -118,10 +116,10 @@ void GL::Camera::UpdateCameraGeometry()
 
 	//compute the U and V vectors
 	//_up is not normalized and is not vertical to the _aligmentVector
-	//_u = Vector<double>::cross(_alignmentVector, _up);
+	//_u = VectorD::cross(_alignmentVector, _up);
 	_u = _alignmentVector ^ _up;
 	_u.Normalize();
-	_v = _u ^ _alignmentVector; //Vector<double>::cross(_u, _alignmentVector)
+	_v = _u ^ _alignmentVector; //VectorD::cross(_u, _alignmentVector)
 	//_v.Normalize();
 	//_v = _up.Normalized(); //this should be if the _up is vertical to the alignment
 	_screenCenter = _position + _length * _alignmentVector;

@@ -1,8 +1,9 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "../Algebra/Vector.h"
+#include "../Algebra/Algebra.h"
 #include "Ray.hpp"
+
 
 namespace GL
 {
@@ -12,9 +13,9 @@ namespace GL
 		Camera();
 
 		//function to set camera parameters
-		void SetPosition(const Vector<double>& newPosition);
-		void SetLookAt(const Vector<double>& newLookAt);
-		void SetUp(const Vector<double>& upVector);
+		void SetPosition(const VectorD& newPosition);
+		void SetLookAt(const VectorD& newLookAt);
+		void SetUp(const VectorD& upVector);
 
 		//distange of the projection screen from the pinhole
 		void SetLength(double newLength);
@@ -22,12 +23,12 @@ namespace GL
 		void SetAspectRatio(double newAspect);
 
 		//functions to return camera parameters
-		Vector<double> GetPosition();
-		Vector<double> GetLookAt();
-		Vector<double> GetUp();
-		Vector<double> GetU(); //projectionScreenU
-		Vector<double> GetV(); //projectionScreenV
-		Vector<double> GetScreenCenter(); //projectionScreenCenter
+		VectorD GetPosition();
+		VectorD GetLookAt();
+		VectorD GetUp();
+		VectorD GetU(); //projectionScreenU
+		VectorD GetV(); //projectionScreenV
+		VectorD GetScreenCenter(); //projectionScreenCenter
 		double GetLength();
 		double GetHorizontalSize();
 		double GetAspectRatio();
@@ -40,18 +41,18 @@ namespace GL
 		void UpdateCameraGeometry();
 
 	private:
-		Vector<double> _position;
-		Vector<double> _lookAt;
-		Vector<double> _up;
+		VectorD _position;
+		VectorD _lookAt;
+		VectorD _up;
 		double _length;
 		double _horizontalSize;
 		double _aspectRatio;
 
-		Vector<double> _alignmentVector;
+		VectorD _alignmentVector;
 		//projection screen parameters (U, V, center)
-		Vector<double> _u;
-		Vector<double> _v;
-		Vector<double> _screenCenter;
+		VectorD _u;
+		VectorD _v;
+		VectorD _screenCenter;
 
 	};
 

@@ -1,8 +1,12 @@
 #pragma once
 
+#include <cmath>
+
 #include "Vector.h"
-#include "Vectors.h"
 #include "Matrix.h"
+
+#include "Statics.h"
+
 
 #include "EIG.h"
 #include "LinSolve.h"

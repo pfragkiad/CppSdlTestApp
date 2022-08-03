@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Examples.cpp" />
+    <ClCompile Include="Transform.cpp" />
     <ClCompile Include="LightBase.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Window.cpp" />
@@ -155,6 +156,7 @@
     <ClCompile Include="Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Transform.hpp" />
     <ClInclude Include="LightBase.hpp" />
     <ClInclude Include="PointLight.hpp" />
     <ClInclude Include="Window.hpp" />

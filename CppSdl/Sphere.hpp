@@ -12,7 +12,7 @@ namespace GL
 
 		virtual ~Sphere() override;
 
-		virtual bool TestIntersection(const Ray& castRay, Vector<double>& intPoint, Vector<double>& localNormal, Vector<double>& localColor) override;
+		virtual bool TestIntersection(const Ray& castRay, VectorD& intPoint, VectorD& localNormal, VectorD& localColor) override;
 
 	private:
 

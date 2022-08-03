@@ -63,10 +63,10 @@ int LinSolve(const Matrix<T> &aMatrix, const Vector<T> &bVector, Vector<T> &resu
 		row-echelon form. */
 	
 	// Extract data from bVector.
-	int numDims = bVector.GetNumDims();
+	int numDims = bVector.DimsCount();
 	std::vector<T> bVecData;
 	for (int i=0; i<numDims; ++i)
-		bVecData.push_back(bVector.GetElement(i));
+		bVecData.push_back(bVector.Get(i));
 		
 	// Use this to create a Matrix object with the same data (nx1).
 	Matrix<T> bMatrix(numDims, 1, bVecData);
@@ -93,7 +93,7 @@ int LinSolve(const Matrix<T> &aMatrix, const Vector<T> &bVector, Vector<T> &resu
 		2) originalRank = augmentedRank < n	=> An infinite number of solutions exist.
 		3) originalRank < augmentedRank			=> No solutions exist.  
 		********************************************************************* */
-	if ((originalRank == augmentedRank) && (originalRank < inputMatrix.GetNumRows()))
+	if ((originalRank == augmentedRank) && (originalRank < inputMatrix.RowsCount()))
 	{
 		return LINSOLVE_NOUNIQUESOLUTION;
 	}
@@ -109,28 +109,28 @@ int LinSolve(const Matrix<T> &aMatrix, const Vector<T> &bVector, Vector<T> &resu
 		Vector<T> output(bVecData);
 		
 		// Now use back-substitution to compute the result.
-		int numRows = rowEchelonMatrix.GetNumRows();
-		int numCols = rowEchelonMatrix.GetNumCols();
+		int numRows = rowEchelonMatrix.RowsCount();
+		int numCols = rowEchelonMatrix.ColsCount();
 		int startRow = numRows-1;
 		
 		// Loop over the rows, in reverse order.
 		for (int i=startRow; i>=0; --i)
 		{
 			// Extract the currentResult for this row.
-			T currentResult = rowEchelonMatrix.GetElement(i, numCols-1);
+			T currentResult = rowEchelonMatrix.Get(i, numCols-1);
 	
 			// Compute the cumulative sum.
 			T cumulativeSum = static_cast<T>(0.0);
 			for (int j=i+1; j<numRows; ++j)
 			{
-				cumulativeSum += (rowEchelonMatrix.GetElement(i,j) * output.GetElement(j));
+				cumulativeSum += (rowEchelonMatrix.Get(i,j) * output.Get(j));
 			}
 			
 			// Compute the answer.
-			T finalAnswer = (currentResult - cumulativeSum) / rowEchelonMatrix.GetElement(i,i);
+			T finalAnswer = (currentResult - cumulativeSum) / rowEchelonMatrix.Get(i,i);
 			
 			// And store.
-			output.SetElement(i, finalAnswer);
+			output.Set(i, finalAnswer);
 			
 		}
 		

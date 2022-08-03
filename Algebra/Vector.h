@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <iomanip>
-#include <math.h>
+#include <cmath>
 #include <vector>
 
 template <class T>
@@ -27,11 +27,11 @@ public:
 	~Vector();
 
 	// Functions to return parameters of the vector.
-	size_t GetNumDims() const;
+	size_t DimsCount() const;
 
 	// Functions to handle elements of the vector.
-	T GetElement(int index) const;
-	void SetElement(int index, T value);
+	T Get(int index) const;
+	void Set(int index, T value);
 
 	// Functions to perform computations on the vector.
 	// Return the length of the vector.
@@ -53,6 +53,9 @@ public:
 	void operator*= (const T& rhs);
 	void operator/= (const T& rhs);
 
+	T operator [](int i) const;
+	T& operator[](int i);
+
 	// Friend functions.
 	template <class T> friend Vector<T> operator* (const T& lhs, const Vector<T>& rhs);
 	//normalize e.g. !v1
@@ -65,10 +68,16 @@ public:
 
 	template <class T> friend std::ostream& operator << (std::ostream& os, const Vector<T>& v);
 
-	void inline Print()
+	void inline Print() const
 	{
 		for (int row = 0; row < _nDims; ++row)
-			std::cout << std::fixed << std::setprecision(6) << _vectorData.at(row) << std::endl;
+			std::cout << _vectorData.at(row) << std::endl;
+	}
+
+	void inline Print(int precision) const
+	{
+		for (int row = 0; row < _nDims; ++row)
+			std::cout << std::fixed << std::setprecision(precision) << _vectorData.at(row) << std::endl;
 	}
 
 
@@ -139,7 +148,7 @@ Vector<T>::~Vector()
 FUNCTIONS TO RETURN PARAMETERS
 /* *************************************************************************************************/
 template <class T>
-size_t Vector<T>::GetNumDims() const
+size_t Vector<T>::DimsCount() const
 {
 	return _nDims;
 }
@@ -148,13 +157,13 @@ size_t Vector<T>::GetNumDims() const
 FUNCTIONS TO HANDLE ELEMENTS OF THE VECTOR
 /* *************************************************************************************************/
 template <class T>
-T Vector<T>::GetElement(int index) const
+T Vector<T>::Get(int index) const
 {
 	return _vectorData[index];
 }
 
 template <class T>
-void Vector<T>::SetElement(int index, T value)
+void Vector<T>::Set(int index, T value)
 {
 	_vectorData[index] = value;
 }
@@ -289,6 +298,13 @@ void Vector<T>::operator/= (const T& rhs) ///////////
 	for (int i = 0; i < _nDims; ++i)
 		_vectorData.at(i) /= rhs;
 }
+
+//https://stackoverflow.com/questions/11066564/overload-bracket-operators-to-get-and-set
+template <class T>
+T Vector<T>::operator [](int i) const { return _vectorData[i]; }
+
+template<class T>
+T& Vector<T>::operator[](int i) { return _vectorData[i]; }
 
 
 //--

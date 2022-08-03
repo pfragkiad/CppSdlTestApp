@@ -147,7 +147,7 @@
     <ClInclude Include="PCA.h" />
     <ClInclude Include="QR.h" />
     <ClInclude Include="Vector.h" />
-    <ClInclude Include="Vectors.h" />
+    <ClInclude Include="Statics.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

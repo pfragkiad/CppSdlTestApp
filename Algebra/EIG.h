@@ -38,7 +38,7 @@ int EigQR(const Matrix<T> &inputMatrix, std::vector<T> &eigenValues)
 		return EIG_MATRIXNOTSYMMETRIC;		
 		
 	// The number of eigenvalues is equal to the number of rows.
-	int numRows = A.GetNumRows();
+	int numRows = A.RowsCount();
 	
 	// Create an identity matrix of the same dimensions.
 	Matrix<T> identityMatrix(numRows, numRows);
@@ -72,7 +72,7 @@ int EigQR(const Matrix<T> &inputMatrix, std::vector<T> &eigenValues)
 	
 	// At this point, the eigenvalues should be the diagonal elements of A.
 	for (int i=0; i<numRows; ++i)
-		eigenValues.push_back(A.GetElement(i,i));
+		eigenValues.push_back(A.Get(i,i));
 	
 	// Set the return status accordingly.
 	if (iterationCount == maxIterations)
@@ -100,7 +100,7 @@ int InvPIt(const Matrix<T> &inputMatrix, const T &eigenValue, Vector<T> &eigenVe
 	
 	/* The number of eigenvectors and eigenvalues that we will compute will be
 		equal to the number of rows in the input matrix. */
-	int numRows = A.GetNumRows();
+	int numRows = A.RowsCount();
 	
 	// Create an identity matrix of the same dimensions.
 	Matrix<T> identityMatrix(numRows, numRows);
@@ -109,7 +109,7 @@ int InvPIt(const Matrix<T> &inputMatrix, const T &eigenValue, Vector<T> &eigenVe
 	// Create an initial vector, v.
 	Vector<T> v(numRows);
 	for (int i=0; i<numRows; ++i)
-		v.SetElement(i, static_cast<T>(myDistribution(myRandomGenerator)));
+		v.Set(i, static_cast<T>(myDistribution(myRandomGenerator)));
 		
 	// Iterate.
 	int maxIterations = 100;
@@ -166,7 +166,7 @@ int EigPIt(const Matrix<T> &X, T &eigenValue, Vector<T> &eigenVector)
 	
 	/* The number of eigenvectors and eigenvalues that we will compute will be
 		equal to the number of rows in the input matrix. */
-	int numRows = inputMatrix.GetNumRows();
+	int numRows = inputMatrix.RowsCount();
 	
 	// Create an identity matrix of the same dimensions.
 	Matrix<T> identityMatrix(numRows, numRows);
@@ -179,7 +179,7 @@ int EigPIt(const Matrix<T> &X, T &eigenValue, Vector<T> &eigenVector)
 	// Create an initial vector, v.
 	Vector<T> v(numRows);
 	for (int i=0; i<numRows; ++i)
-		v.SetElement(i, static_cast<T>(myDistribution(myRandomGenerator)));
+		v.Set(i, static_cast<T>(myDistribution(myRandomGenerator)));
 		
 	// Loop over the required number of iterations.
 	Vector<T> v1(numRows);
@@ -201,9 +201,9 @@ int EigPIt(const Matrix<T> &X, T &eigenValue, Vector<T> &eigenVector)
 	// Compute the cumulative sum.
 	T cumulativeSum = static_cast<T>(0.0);
 	for (int i=1; i<numRows; ++i)
-		cumulativeSum += inputMatrix.GetElement(0,i) * v1.GetElement(i);
+		cumulativeSum += inputMatrix.Get(0,i) * v1.Get(i);
 		
-	eigenValue = (cumulativeSum / v1.GetElement(0)) + inputMatrix.GetElement(0,0);
+	eigenValue = (cumulativeSum / v1.Get(0)) + inputMatrix.Get(0,0);
 
 	return 0;
 }

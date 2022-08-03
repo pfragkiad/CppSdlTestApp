@@ -11,10 +11,10 @@ namespace GL
 		virtual ~PointLight() override;
 
 		//function to compute illumination
-		virtual bool ComputeIllumination(const Vector<double>& intPoint,
-			const Vector<double>& localNormal,
+		virtual bool ComputeIllumination(const VectorD& intPoint,
+			const VectorD& localNormal,
 			const pShapesVector& objectList, const pShape& currentObject,
-			Vector<double>& color, double& intensity) override;
+			VectorD& color, double& intensity) override;
 	};
 
 }

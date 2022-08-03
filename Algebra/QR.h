@@ -55,7 +55,7 @@ int QR(const Matrix<T>& A, Matrix<T>& Q, Matrix<T>& R)
 		return QR_MATRIXNOTSQUARE;
 
 	// Determine the number of columns (and rows, since the matrix is square).
-	int numCols = inputMatrix.GetNumCols();
+	int numCols = inputMatrix.ColsCount();
 
 	// Create a vector to store the P matrices for each column.
 	std::vector<Matrix<T>> Plist;
@@ -70,17 +70,17 @@ int QR(const Matrix<T>& A, Matrix<T>& Q, Matrix<T>& R)
 		Vector<T> b1(numCols - j);
 		for (int i = j; i < numCols; ++i)
 		{
-			a1.SetElement(i - j, inputMatrix.GetElement(i, j));
-			b1.SetElement(i - j, static_cast<T>(0.0));
+			a1.Set(i - j, inputMatrix.Get(i, j));
+			b1.Set(i - j, static_cast<T>(0.0));
 		}
-		b1.SetElement(0, static_cast<T>(1.0));
+		b1.Set(0, static_cast<T>(1.0));
 
 		// Compute the norm of the a1 vector.
 		T a1norm = a1.norm();
 
 		// Compute the sign we will use.
 		int sgn = -1;
-		if (a1.GetElement(0) < static_cast<T>(0.0))
+		if (a1.Get(0) < static_cast<T>(0.0))
 			sgn = 1;
 
 		// Compute the u-vector.
@@ -92,7 +92,7 @@ int QR(const Matrix<T>& A, Matrix<T>& Q, Matrix<T>& R)
 		// Convert n to a matrix so that we can transpose it.
 		Matrix<T> nMat(numCols - j, 1);
 		for (int i = 0; i < (numCols - j); ++i)
-			nMat.SetElement(i, 0, n.GetElement(i));
+			nMat.Set(i, 0, n.Get(i));
 
 		// Transpose nMat.
 		Matrix<T> nMatT = nMat.Transpose();
@@ -111,7 +111,7 @@ int QR(const Matrix<T>& A, Matrix<T>& Q, Matrix<T>& R)
 		{
 			for (int col = j; col < numCols; ++col)
 			{
-				P.SetElement(row, col, Ptemp.GetElement(row - j, col - j));
+				P.Set(row, col, Ptemp.Get(row - j, col - j));
 			}
 		}
 

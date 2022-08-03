@@ -56,8 +56,8 @@ namespace AlgebraTests {
 
 			cout << endl;
 			cout << "Verify the dimensions." << endl;
-			cout << "Original (rows,cols) = (" << testMatrix.GetNumRows() << ", " << testMatrix.GetNumCols() << ")." << endl;
-			cout << "Transposed (rows,cols) = (" << testMatrixT.GetNumRows() << ", " << testMatrixT.GetNumCols() << ")." << endl;
+			cout << "Original (rows,cols) = (" << testMatrix.RowsCount() << ", " << testMatrix.ColsCount() << ")." << endl;
+			cout << "Transposed (rows,cols) = (" << testMatrixT.RowsCount() << ", " << testMatrixT.ColsCount() << ")." << endl;
 		}
 
 		cout << endl;
@@ -107,9 +107,9 @@ namespace AlgebraTests {
 			for (double x = 0.0; x < xMax; x += xStep)
 			{
 				double randomNumber = myDistribution(myRandomGenerator);
-				X.SetElement(count, 0, 1.0);
-				X.SetElement(count, 1, x);
-				y.SetElement(count, ((m * x) + c) + randomNumber);
+				X.Set(count, 0, 1.0);
+				X.Set(count, 1, x);
+				y.Set(count, ((m * x) + c) + randomNumber);
 				count++;
 			}
 
