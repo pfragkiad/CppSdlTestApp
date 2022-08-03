@@ -27,3 +27,5 @@ namespace GL
 
 }
 
+typedef std::vector<std::shared_ptr<GL::LightBase>> pLightsVector;
+

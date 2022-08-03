@@ -14,6 +14,12 @@ Scene::Scene() {
 
 	//construct a test sphere
 	_objects.push_back(std::make_shared<Sphere>(Sphere()));
+
+	//construct a test light
+	_lights.push_back(std::make_shared<PointLight>(PointLight()));
+	_lights.at(0)->_location = Vector<double>{ 0.0,0.0,10.0 };//Vector<double>{ 10.0,-5.0,10.0 };
+	_lights.at(0)->_color = Vector<double>{ 255.0,255.0,255.0 };
+	_lights.at(0)->_intensity = 1.0;
 }
 
 //function to perform the rendering
@@ -44,7 +50,7 @@ bool Scene::Render(Image& outputImage)
 	double minDist = 1e6;
 	double maxDist = 0.0;
 
-     for (int x = 0; x < xSize; x++)
+	for (int x = 0; x < xSize; x++)
 		for (int y = 0; y < ySize; y++)
 		{
 			//normalize the x and y coordinates
@@ -62,13 +68,30 @@ bool Scene::Render(Image& outputImage)
 				//if we have a valid intersection, change pixel color to red
 				if (validIntersection)
 				{
+					//compute intensity of illumination
+					double intensity;
+					Vector<double> color;
+					bool validIllumination = false;
+					for (auto currentLight : _lights)
+					{
+						validIllumination = currentLight ->
+							ComputeIllumination(intersectionPoint, localNormal,
+								_objects, currentObject, color, intensity);
+						//std::cout << "Intensity: " << intensity << std::endl;
+					}
+
 					//compute the distance between the camera and the point of intersection
 					double distance = (intersectionPoint - cameraRay._point1).norm();
 					if (distance > maxDist) maxDist = distance;
 					else if (distance < minDist) minDist = distance;
 
-					double ratio = (distance - 9.0) / 0.94605; // = (distance - minDistance)/ (maxDistance-minDistance)
-					outputImage.SetPixel(x, y, 255.0 - 255 * ratio, 0, 00);
+					//double ratio = (distance - 9.0) / 0.94605; // = (distance - minDistance)/ (maxDistance-minDistance)
+					//outputImage.SetPixel(x, y, 255.0 - 255 * ratio, 0, 0.0);
+					if (validIllumination)
+						outputImage.SetPixel(x,y,255.0*intensity,0.0,10.0);
+					
+					else 
+						outputImage.SetPixel(x, y, 0.0, 0.0, 0.0);
 				}
 				else
 					outputImage.SetPixel(x, y, 0.0, 0.0, 0.0);

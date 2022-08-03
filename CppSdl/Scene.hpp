@@ -8,6 +8,7 @@
 
 #include "Camera.hpp"
 #include "Sphere.hpp"
+#include "PointLight.hpp"
 
 namespace GL
 {
@@ -29,6 +30,9 @@ namespace GL
 		//The list of objects in the scene
 		//std::vector<std::shared_ptr<GL::Shape>> _objects;
 		pShapesVector _objects;
+
+		//list of lights in the scene
+		pLightsVector _lights;
 	};
 }
 

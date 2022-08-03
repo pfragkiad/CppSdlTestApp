@@ -42,6 +42,9 @@ bool GL::Sphere::TestIntersection(const Ray& castRay, Vector<double>& intersecti
 		intersectionPoint = castRay._point1 + vhat * t1;
 	else
 		intersectionPoint = castRay._point1 + vhat * t2;
+
+	//compute the local normal
+	localNormal = !intersectionPoint;
  
 	return true;
 }
