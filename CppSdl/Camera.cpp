@@ -1,12 +1,13 @@
 #include "Camera.hpp"
 #include "Ray.hpp"
 #include <cmath>
+#include "../Algebra/Algebra.h"
 
 GL::Camera::Camera()
 {
-	_position = Vector<double>{ {0.0,-10.0,0.0} };
-	_lookAt = Vector<double>{ {0.0,0.0,0.0} };
-	_up = Vector<double>{ {0.0,0.0,1.0} };
+	_position = -10.0 * Vectors::UnitY; //Vector<double>{ {0.0,-10.0,0.0} };
+	_lookAt = Vectors::Zero; //Vector<double>{ {0.0,0.0,0.0} };
+	_up = Vectors::UnitZ; // Vector<double>{ {0.0,0.0,1.0} };
 
 	_length = 1.0;
 	_horizontalSize = 1.0;

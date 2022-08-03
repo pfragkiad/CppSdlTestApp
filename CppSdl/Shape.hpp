@@ -27,4 +27,7 @@ namespace GL
 	};
 
 }
+//they must be declared after the class definition!
+typedef std::shared_ptr<GL::Shape> pShape;
+typedef std::vector<pShape> pShapesVector;
 

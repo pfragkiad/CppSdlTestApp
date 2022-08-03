@@ -27,7 +27,8 @@ namespace GL
 		//Sphere _testSphere;
 
 		//The list of objects in the scene
-		std::vector<std::shared_ptr<GL::Shape>> _objects;
+		//std::vector<std::shared_ptr<GL::Shape>> _objects;
+		pShapesVector _objects;
 	};
 }
 

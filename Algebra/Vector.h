@@ -75,8 +75,8 @@ public:
 private:
 	std::vector<T> _vectorData;
 	size_t _nDims;
-
 };
+
 
 //// A simple function to print a vector to stdout.
 //template <class T>
@@ -363,5 +363,7 @@ Vector<T> Vector<T>::cross(const Vector<T>& a, const Vector<T>& b)
 
 	return Vector<T>(resultData);
 }
+
+
 
 #endif

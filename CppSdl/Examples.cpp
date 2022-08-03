@@ -52,9 +52,9 @@ void GL::Examples::Example2SimpleSphere(Image& image, Camera& camera, Sphere& sp
 				double distance = (intersectionPoint - cameraRay._point1).norm();
 				if (distance > maxDist) maxDist = distance;
 				else if (distance < minDist) minDist = distance;
-				
+
 				double ratio = (distance - 9.0) / 0.94605; // = (distance - minDistance)/ (maxDistance-minDistance)
-				image.SetPixel(x, y, 255.0-255*ratio, g, b);
+				image.SetPixel(x, y, 255.0 - 255 * ratio, g, b);
 			}
 			else
 				image.SetPixel(x, y, 0.0, 0.0, 0.0);
