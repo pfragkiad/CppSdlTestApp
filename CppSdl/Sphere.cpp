@@ -56,7 +56,7 @@ bool GL::Sphere::TestIntersection(const Ray& castRay, VD& intersectionPoint, VD&
 	//transform the intersection point back into world coordinates!
 	intersectionPoint = _transformMatrix.Apply(poi, true);
 
-	VD objOrigin = Algebra::Zero;
+	VD objOrigin = VDs::Zero;
 	VD newObjOrigin = _transformMatrix.Apply(objOrigin, true);
 
 	//compute the local normal

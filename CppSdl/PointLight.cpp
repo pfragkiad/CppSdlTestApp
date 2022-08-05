@@ -25,7 +25,8 @@ bool GL::PointLight::ComputeIllumination(const VD& intPoint, const VD& localNorm
     double angle = acos(localNormal * lightDir); //should be M_PI-...
 
     //if the normal is pointing away from the light then we have no illumination
-    //_USE_MATH_DEFINES must be defined
+    //_USE_MATH_DEFINES must be defined (M_PI conflicts with SDL declaration of M_PI)
+    constexpr double M_PI_2= 1.57079632679489661923132169163975144;
     if (angle > M_PI_2)
     {
         color = _color;

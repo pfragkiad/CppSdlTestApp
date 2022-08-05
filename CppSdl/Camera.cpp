@@ -4,8 +4,8 @@
 GL::Camera::Camera()
 {
 	_position = VD{ {0.0,-10.0,0.0} };
-	_lookAt = Algebra::Zero; //VD{ {0.0,0.0,0.0} };
-	_up = Algebra::Uz; // VD{ {0.0,0.0,1.0} };
+	_lookAt = VDs::Zero; //VD{ {0.0,0.0,0.0} };
+	_up = VDs::Uz; // VD{ {0.0,0.0,1.0} };
 
 	_length = 1.0;
 	_horizontalSize = 1.0;

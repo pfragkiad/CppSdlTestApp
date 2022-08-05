@@ -19,8 +19,8 @@ namespace GL
 			const pShapesVector& objectList, const pShape& currentObject,
 			VD& color, double& intensity);
 
-		VD _color{ Algebra::Zero };
-		VD _location{ Algebra::Zero };
+		VD _color{ VDs::Zero };
+		VD _location{ VDs::Zero };
 		double _intensity = 1.0;
 	};
 

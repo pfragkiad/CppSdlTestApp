@@ -30,11 +30,11 @@ void GL::Transform::Set(const VD& translation, const VD& rotation, const VD& sca
 	//define a matrix for each component of the transform
 	tuple<VD,VD,VD> par(translation, rotation, scale);
 
-	MD translationMatrix = Algebra::GetTranslation(translation);
-	MD rotationMatrixX = Algebra::GetRotationX(rotation[0]);
-	MD rotationMatrixY = Algebra::GetRotationY(rotation[1]);
-	MD rotationMatrixZ = Algebra::GetRotationZ(rotation[2]);
-	MD scaleMatrix = Algebra::GetScale(scale);
+	MD translationMatrix = MDs::GetTranslation(translation);
+	MD rotationMatrixX = MDs::GetRotationX(rotation[0]);
+	MD rotationMatrixY = MDs::GetRotationY(rotation[1]);
+	MD rotationMatrixZ = MDs::GetRotationZ(rotation[2]);
+	MD scaleMatrix = MDs::GetScale(scale);
 
 	//combine to give the final forward transform matrix
 

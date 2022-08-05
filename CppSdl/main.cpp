@@ -10,9 +10,9 @@ using namespace GL;
 void testCamera()
 {
 	Camera testCamera;
-	testCamera.SetPosition(Algebra::Zero);
-	testCamera.SetLookAt(2.0 * Algebra::Ux);
-	testCamera.SetUp(Algebra::Uz);
+	testCamera.SetPosition(VDs::Zero);
+	testCamera.SetLookAt(2.0 * VDs::Ux);
+	testCamera.SetUp(VDs::Uz);
 	testCamera.SetLength(1.0);
 	testCamera.SetHorizontalSize(1.0);
 	testCamera.SetAspectRatio(1.0);
@@ -29,18 +29,26 @@ void testCamera()
 
 void testUx()
 {
-	VD ux = Algebra::Ux;
+	VD ux = VDs::Ux;
 	ux[0] = 2.0; //works without changing the original!
 	std::cout << ux << std::endl;
 }
 
+void testLoops()
+{
+	for (size_t i = 5; i != numeric_limits<size_t>::max(); i--)
+		std::cout << i << endl;
+
+	size_t i = 5; do
+	{
+		std::cout << i << endl;
+	} while (i-- != 0);
+}
+
 int main(int argc, char** argv)
 {
-	//testCamera();
+	testCamera();
 	//testUx();
-	for (size_t i = 5; i-- > 0; )
-		std::cout << i << endl;
-	return 0;
 
 	GL::Window app{ Examples::Scene3Spheres() };
 	//GL::Window app{ Examples::SceneSphere() };

@@ -16,9 +16,6 @@
     <Filter Include="Header Files\Examples">
       <UniqueIdentifier>{79579309-352e-4b40-add9-d6be3d0d4a2c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Examples">
-      <UniqueIdentifier>{487b1c8a-4308-40b4-81de-5941666769e0}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -45,9 +42,6 @@
     <ClCompile Include="Sphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Examples.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="LightBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -59,9 +53,6 @@
     </ClCompile>
     <ClCompile Include="Examples.hpp">
       <Filter>Header Files\Examples</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneSphere.cpp">
-      <Filter>Source Files\Examples</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

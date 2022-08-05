@@ -6,30 +6,34 @@
 typedef Vector<double> VD;
 typedef Matrix<double> MD;
 
-//Common statics
-namespace Algebra
+class VDs //static double 3d vectors
 {
-	//Returns a Zero 3D Vector<double>.
-	const VD Zero{ 0.0,0.0,0.0 };
-	const VD Ux{ 1.0,0.0,0.0 };
-	const VD Uy{ 0.0,1.0,0.0 };
-	const VD Uz{ 0.0,0.0,1.0 };
+public:
+	inline static const VD Zero{ 0.0,0.0,0.0 };
+	inline static const VD Ux{ 1.0,0.0,0.0 };
+	inline static const VD Uy{ 0.0,1.0,0.0 };
+	inline static const VD Uz{ 0.0,0.0,1.0 };
+};
 
 
-	const MD I3{ 3,3,std::vector<double>{
+//Common statics
+class MDs
+{
+public:
+	inline static const MD I3{ 3,3,std::vector<double>{
 		1.0,0.0,0.0,
 		0.0,1.0,0.0,
 		0.0,0.0,1.0
 	} };
 
-	const MD I4{ 4,4,std::vector<double>{
+	inline static const MD I4{ 4,4,std::vector<double>{
 		1.0,0.0,0.0,0.0,
 		0.0,1.0,0.0,0.0,
 		0.0,0.0,1.0,0.0,
 		0.0,0.0,0.0,1.0
 	} };
 
-	inline MD GetTranslation(VD translation)
+	inline static MD GetTranslation(const VD& translation)
 	{
 		MD translationMatrix{ I4 };
 		translationMatrix.Set(0, 3, translation[0]);
@@ -38,7 +42,7 @@ namespace Algebra
 		return translationMatrix;
 	}
 
-	inline MD GetRotationZ(double angleZ)
+	inline static  MD GetRotationZ(double angleZ)
 	{
 		MD rotationMatrixZ{ I4 };
 		rotationMatrixZ.Set(0, 0, cos(angleZ));
@@ -48,7 +52,7 @@ namespace Algebra
 		return rotationMatrixZ;
 	}
 
-	inline MD GetRotationX(double angleX)
+	inline static MD GetRotationX(double angleX)
 	{
 		MD rotationMatrixX{ I4 };
 		rotationMatrixX.Set(1, 1, cos(angleX));
@@ -58,7 +62,7 @@ namespace Algebra
 		return rotationMatrixX;
 	}
 
-	inline MD GetRotationY(double angleY)
+	inline static  MD GetRotationY(double angleY)
 	{
 		MD rotationMatrixY{ I4 };
 		rotationMatrixY.Set(0, 0, cos(angleY));
@@ -68,7 +72,7 @@ namespace Algebra
 		return rotationMatrixY;
 	}
 
-	inline MD GetScale(VD scale)
+	inline static  MD GetScale(const VD& scale)
 	{
 		MD scaleMatrix{ I4 };
 		scaleMatrix.Set(0, 0, scale[0]);
@@ -78,7 +82,7 @@ namespace Algebra
 	}
 
 	//Returns the inverse of a transformation matrix
-	inline MD GetInverseTransformation(MD m)
+	inline static MD GetInverseTransformation(MD m)
 	{
 		//	//http://www.info.hiroshima-cu.ac.jp/~miyazaki/knowledge/teche0053.html#:~:text=and%20translation%20matrix)-,Inverse%20matrix%20of%20transformation%20matrix%20(rotation%20and%20translation%20matrix),R%7Ct%5D%20transformation%20matrix.&text=The%20inverse%20of%20transformation%20matrix%20%5BR%7Ct%5D%20is%20%5B,%2D%20R%5ET%20t%5D.
 		MD RT = m.FindSubMatrix(3, 3).Transpose();

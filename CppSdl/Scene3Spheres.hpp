@@ -28,17 +28,17 @@ namespace GL::Examples
 		_objects.push_back(std::make_shared<Sphere>( Sphere(
 				/*basecolor*/ VD{ 64.0, 128.0, 200.0 },
 				Transform(
-					/*translation*/VD{ -1.5,0.0,0.0 },	/*rotation*/Algebra::Zero,	/*scale*/	VD{ 0.5,0.5,0.75 }
+					/*translation*/VD{ -1.5,0.0,0.0 },	/*rotation*/VDs::Zero,	/*scale*/	VD{ 0.5,0.5,0.75 }
 		))));
 		_objects.push_back(std::make_shared<Sphere>( Sphere(
 				/*basecolor*/ VD{ 255.0, 128.0, 0.0 },
 				Transform(
-					/*translation*/ Algebra::Zero, /*rotation*/ Algebra::Zero, /*scale*/ VD{ 0.75, 0.5, 0.5 }
+					/*translation*/ VDs::Zero, /*rotation*/ VDs::Zero, /*scale*/ VD{ 0.75, 0.5, 0.5 }
 		))));
 		_objects.push_back(std::make_shared<Sphere>(Sphere(
 			/*basecolor*/ VD{ 255.0, 200.0, 0.0 },
 			Transform(
-				/*translation*/ VD{ 1.5,0.0,0.0 }, /*rotation*/ Algebra::Zero, /*scale*/ VD{ 0.75,0.75,0.75 }
+				/*translation*/ VD{ 1.5,0.0,0.0 }, /*rotation*/ VDs::Zero, /*scale*/ VD{ 0.75,0.75,0.75 }
 		))));
 
 
@@ -48,9 +48,9 @@ namespace GL::Examples
 
 		////modify the spheres
 		//Transform m1, m2, m3;
-		//m1.Set(VD{ -1.5,0.0,0.0 }, Algebra::Zero, VD{ 0.5,0.5,0.75 });
-		//m2.Set(Algebra::Zero, Algebra::Zero, VD{ 0.75,0.5,0.5 });
-		//m3.Set(VD{ 1.5,0.0,0.0 }, Algebra::Zero, VD{ 0.75,0.75,0.75 });
+		//m1.Set(VD{ -1.5,0.0,0.0 }, VDs::Zero, VD{ 0.5,0.5,0.75 });
+		//m2.Set(VDs::Zero, VDs::Zero, VD{ 0.75,0.5,0.5 });
+		//m3.Set(VD{ 1.5,0.0,0.0 }, VDs::Zero, VD{ 0.75,0.75,0.75 });
 		//_objects[0]->SetTransformMatrix(m1);
 		//_objects[1]->SetTransformMatrix(m2);
 		//_objects[2]->SetTransformMatrix(m3);

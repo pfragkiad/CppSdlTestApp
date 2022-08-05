@@ -52,8 +52,8 @@ namespace GL
 	private:
 		//void Print(const MD& matrix);
 
-		MD _fwdtfm{ Algebra::I4 };
-		MD _bcktfm{ Algebra::I4 };
+		MD _fwdtfm{ MDs::I4 };
+		MD _bcktfm{ MDs::I4 };
 
 	};
 
