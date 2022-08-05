@@ -55,20 +55,20 @@ int QR(const Matrix<T>& A, Matrix<T>& Q, Matrix<T>& R)
 		return QR_MATRIXNOTSQUARE;
 
 	// Determine the number of columns (and rows, since the matrix is square).
-	int numCols = inputMatrix.ColsCount();
+	size_t numCols = inputMatrix.ColsCount();
 
 	// Create a vector to store the P matrices for each column.
 	std::vector<Matrix<T>> Plist;
 
 	// Loop through each column.
-	for (int j = 0; j < numCols - 1; ++j)
+	for (size_t j = 0; j < numCols - 1; ++j)
 	{
 		// Create the a1 and b1 vectors.
 		// a1 is the column vector from A.
 		// b1 is the vector onto which we wish to reflect a1.
 		Vector<T> a1(numCols - j);
 		Vector<T> b1(numCols - j);
-		for (int i = j; i < numCols; ++i)
+		for (size_t i = j; i < numCols; ++i)
 		{
 			a1.Set(i - j, inputMatrix.Get(i, j));
 			b1.Set(i - j, static_cast<T>(0.0));
@@ -79,19 +79,17 @@ int QR(const Matrix<T>& A, Matrix<T>& Q, Matrix<T>& R)
 		T a1norm = a1.norm();
 
 		// Compute the sign we will use.
-		int sgn = -1;
-		if (a1.Get(0) < static_cast<T>(0.0))
-			sgn = 1;
+		int	sgn = a1.Get(0) < static_cast<T>(0.0)? 1 : -1;
 
 		// Compute the u-vector.
-		Vector<T> u = a1 - (sgn * a1norm * b1);
+		Vector<T> u = a1 - sgn * a1norm * b1;
 
 		// Compute the n-vector.
-		Vector<T> n = u.Normalized();
+		Vector<T> n = !u;
 
 		// Convert n to a matrix so that we can transpose it.
 		Matrix<T> nMat(numCols - j, 1);
-		for (int i = 0; i < (numCols - j); ++i)
+		for (size_t i = 0; i < numCols - j; ++i)
 			nMat.Set(i, 0, n.Get(i));
 
 		// Transpose nMat.
@@ -107,13 +105,9 @@ int QR(const Matrix<T>& A, Matrix<T>& Q, Matrix<T>& R)
 		// Form the P matrix with the original dimensions.
 		Matrix<T> P(numCols, numCols);
 		P.SetToIdentity();
-		for (int row = j; row < numCols; ++row)
-		{
-			for (int col = j; col < numCols; ++col)
-			{
+		for (size_t row = j; row < numCols; ++row)
+			for (size_t col = j; col < numCols; ++col)
 				P.Set(row, col, Ptemp.Get(row - j, col - j));
-			}
-		}
 
 		// Store the result into the Plist vector.
 		Plist.push_back(P);
@@ -125,7 +119,7 @@ int QR(const Matrix<T>& A, Matrix<T>& Q, Matrix<T>& R)
 
 	// Compute Q.
 	Matrix<T> Qmat = Plist.at(0);
-	for (int i = 1; i < (numCols - 1); ++i)
+	for (size_t i = 1; i < numCols - 1; ++i)
 	{
 		Qmat = Qmat * Plist.at(i).Transpose();
 	}
@@ -134,12 +128,11 @@ int QR(const Matrix<T>& A, Matrix<T>& Q, Matrix<T>& R)
 	Q = Qmat;
 
 	// Compute R.
-	int numElements = Plist.size();
+	size_t numElements = Plist.size();
 	Matrix<T> Rmat = Plist.at(numElements - 1);
-	for (int i = (numElements - 2); i >= 0; --i)
-	{
-		Rmat = Rmat * Plist.at(i);
-	}
+	for (size_t i = numElements - 1; i-- > 0;) //starts from numElements-2
+		Rmat  *= Plist.at(i);
+	
 	Rmat = Rmat * A;
 
 	// And return the R matrix.

@@ -11,11 +11,13 @@ namespace GL
 	public:
 		//constructor and destructor
 		Shape();
+		//useful for static images
+		Shape(VD baseColor, Transform transformMatrix);
 
 		virtual ~Shape();
 
 		//function to test for intersections
-		virtual bool TestIntersection(const Ray& castRay, VectorD& intPoint, VectorD& localNormal, VectorD& localColor);
+		virtual bool TestIntersection(const Ray& castRay, VD& intPoint, VD& localNormal, VD& localColor);
 
 		//function to set the transform matrix
 		void SetTransformMatrix(const Transform& transform);
@@ -26,7 +28,7 @@ namespace GL
 		//public member variables:
 	public:
 		//the base color of the object
-		VectorD _baseColor;
+		VD _baseColor;
 
 		//geometric transform applied to the object
 		Transform _transformMatrix;

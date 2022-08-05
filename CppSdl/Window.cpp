@@ -1,5 +1,4 @@
 #include "Window.hpp"
-#include "Examples.hpp"
 #include "../Algebra/Vector.h"
 
 using namespace GL;
@@ -12,10 +11,13 @@ Window::Window()
 	pRenderer = nullptr;
 }
 
-//bool App::OnInit()
-//{
-//	return OnInit(1280, 720);
-//}
+Window::Window(Scene scene)
+{
+	isRunning = true;
+	pWindow = nullptr;
+	pRenderer = nullptr;
+	_scene = scene;
+}
 
 bool Window::OnInit(int width, int height)
 {
@@ -37,26 +39,40 @@ bool Window::OnInit(int width, int height)
 	return true;
 }
 
-int Window::Run()
+int Window::Run(bool isImageStatic)
 {
-	return Run(1280, 720);
+	return Run(1280, 720, isImageStatic);
 }
 
-int Window::Run(int width, int height)
+int Window::Run(int width, int height, bool isImageStatic)
 {
 	//failure
-	if (!OnInit(width,height)) return -1;
+	if (!OnInit(width, height)) return -1;
 
-	//OnRender(); //render once
-
-	while (isRunning)
+	if (isImageStatic)
 	{
-		SDL_Event event;
-		while (SDL_PollEvent(&event) != 0)
-			OnEvent(&event);
+		OnRender(); //render once
 
-		OnLoop();
-		OnRender();
+		while (isRunning)
+		{
+			SDL_Event event;
+			while (SDL_PollEvent(&event) != 0)
+				OnEvent(&event);
+
+			OnLoop();
+		}
+	}
+	else
+	{
+		while (isRunning)
+		{
+			SDL_Event event;
+			while (SDL_PollEvent(&event) != 0)
+				OnEvent(&event);
+
+			OnLoop();
+			OnRender();
+		}
 	}
 	//success
 	return 0;
@@ -84,7 +100,7 @@ void Window::OnRender()
 
 	//display the image
 	_image.Display();
-	
+
 	//show the result
 	SDL_RenderPresent(pRenderer);
 }

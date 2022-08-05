@@ -9,7 +9,7 @@
 
 int main()
 {
-	//AlgebraTests::MatrixDeterminantTests();
+	//AlgebraTests::MDeterminantTests();
 	//AlgebraTests::EIGTests();
 	//AlgebraTests::LinearSolveTests();
 	//AlgebraTests::LSQTests(); //problematic

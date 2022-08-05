@@ -13,9 +13,9 @@ namespace GL
 		Camera();
 
 		//function to set camera parameters
-		void SetPosition(const VectorD& newPosition);
-		void SetLookAt(const VectorD& newLookAt);
-		void SetUp(const VectorD& upVector);
+		void SetPosition(const VD& newPosition);
+		void SetLookAt(const VD& newLookAt);
+		void SetUp(const VD& upVector);
 
 		//distange of the projection screen from the pinhole
 		void SetLength(double newLength);
@@ -23,12 +23,12 @@ namespace GL
 		void SetAspectRatio(double newAspect);
 
 		//functions to return camera parameters
-		VectorD GetPosition();
-		VectorD GetLookAt();
-		VectorD GetUp();
-		VectorD GetU(); //projectionScreenU
-		VectorD GetV(); //projectionScreenV
-		VectorD GetScreenCenter(); //projectionScreenCenter
+		VD GetPosition();
+		VD GetLookAt();
+		VD GetUp();
+		VD GetU(); //projectionScreenU
+		VD GetV(); //projectionScreenV
+		VD GetScreenCenter(); //projectionScreenCenter
 		double GetLength();
 		double GetHorizontalSize();
 		double GetAspectRatio();
@@ -41,18 +41,18 @@ namespace GL
 		void UpdateCameraGeometry();
 
 	private:
-		VectorD _position;
-		VectorD _lookAt;
-		VectorD _up;
+		VD _position;
+		VD _lookAt;
+		VD _up;
 		double _length;
 		double _horizontalSize;
 		double _aspectRatio;
 
-		VectorD _alignmentVector;
+		VD _alignmentVector;
 		//projection screen parameters (U, V, center)
-		VectorD _u;
-		VectorD _v;
-		VectorD _screenCenter;
+		VD _u;
+		VD _v;
+		VD _screenCenter;
 
 	};
 

@@ -8,14 +8,14 @@ namespace GL
 	{
 	public:
 		Ray();
-		Ray(const VectorD& point1, const VectorD& point2);
+		Ray(const VD& point1, const VD& point2);
 
-		VectorD GetPoint1() const;
-		VectorD GetPoint2() const;
+		VD GetPoint1() const;
+		VD GetPoint2() const;
 
-		VectorD _point1;
-		VectorD _point2;
-		VectorD _lab;
+		VD _point1;
+		VD _point2;
+		VD _lab;
 	};
 }
 

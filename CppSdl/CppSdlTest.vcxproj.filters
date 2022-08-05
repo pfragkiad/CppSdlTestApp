@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Examples">
+      <UniqueIdentifier>{79579309-352e-4b40-add9-d6be3d0d4a2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Examples">
+      <UniqueIdentifier>{487b1c8a-4308-40b4-81de-5941666769e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -23,9 +29,6 @@
     </ClCompile>
     <ClCompile Include="Image.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Examples.hpp">
-      <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
@@ -53,6 +56,12 @@
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Examples.hpp">
+      <Filter>Header Files\Examples</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneSphere.cpp">
+      <Filter>Source Files\Examples</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +94,12 @@
     </ClInclude>
     <ClInclude Include="Transform.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene3Spheres.hpp">
+      <Filter>Header Files\Examples</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneSphere.h">
+      <Filter>Header Files\Examples</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

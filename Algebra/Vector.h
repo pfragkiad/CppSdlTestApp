@@ -16,7 +16,7 @@ public:
 	Vector();
 
 	// With a single integer specifying the number of dimensions.
-	Vector(int numDims);
+	Vector(size_t numDims);
 
 	// With input data (std::vector).
 	Vector(std::vector<T> inputData);
@@ -30,8 +30,8 @@ public:
 	size_t DimsCount() const;
 
 	// Functions to handle elements of the vector.
-	T Get(int index) const;
-	void Set(int index, T value);
+	T Get(size_t index) const;
+	void Set(size_t index, T value);
 
 	// Functions to perform computations on the vector.
 	// Return the length of the vector.
@@ -61,6 +61,9 @@ public:
 	//normalize e.g. !v1
 	template <class T> friend Vector<T> operator! (const Vector<T>& rhs);
 	template <class T> friend Vector<T> operator^ (const Vector<T>& lhs, const Vector<T>& rhs);
+	template <class T> friend Vector<T> operator- ( const Vector<T>& rhs);
+	template <class T> friend Vector<T> operator/ (const T& lhs, const Vector<T>& rhs);
+
 
 	// Static functions.
 	static T dot(const Vector<T>& a, const Vector<T>& b);
@@ -71,18 +74,18 @@ public:
 	void inline Print() const
 	{
 		for (int row = 0; row < _nDims; ++row)
-			std::cout << _vectorData.at(row) << std::endl;
+			std::cout << _VData.at(row) << std::endl;
 	}
 
 	void inline Print(int precision) const
 	{
 		for (int row = 0; row < _nDims; ++row)
-			std::cout << std::fixed << std::setprecision(precision) << _vectorData.at(row) << std::endl;
+			std::cout << std::fixed << std::setprecision(precision) << _VData.at(row) << std::endl;
 	}
 
 
 private:
-	std::vector<T> _vectorData;
+	std::vector<T> _VData;
 	size_t _nDims;
 };
 
@@ -99,9 +102,9 @@ private:
 template<class T>
 std::ostream& operator << (std::ostream& os, const Vector<T>& v)
 {
-	for (int row = 0; row < v._nDims; ++row)
+	for (size_t row = 0; row < v._nDims; ++row)
 		//os << std::fixed << std::setprecision(6) << v.GetElement(row) << std::endl;
-		os << std::fixed << std::setprecision(6) << v._vectorData[row] << std::endl;
+		os << std::fixed << std::setprecision(6) << v._VData[row] << std::endl;
 	return os;
 }
 
@@ -113,28 +116,28 @@ template <class T>
 Vector<T>::Vector()
 {
 	_nDims = 0;
-	_vectorData = std::vector<T>();
+	_VData = std::vector<T>();
 }
 
 template <class T>
-Vector<T>::Vector(int numDims)
+Vector<T>::Vector(size_t numDims)
 {
 	_nDims = numDims;
-	_vectorData = std::vector<T>(numDims, static_cast<T>(0.0));
+	_VData = std::vector<T>(numDims, static_cast<T>(0.0));
 }
 
 template <class T>
 Vector<T>::Vector(std::vector<T> inputData)
 {
 	_nDims = inputData.size();
-	_vectorData = inputData;
+	_VData = inputData;
 }
 
 template <class T>
 Vector<T>::Vector(std::initializer_list<T> data)
 {
 	_nDims = data.size();
-	_vectorData = std::vector<T>(data);
+	_VData = std::vector<T>(data);
 }
 
 
@@ -157,15 +160,15 @@ size_t Vector<T>::DimsCount() const
 FUNCTIONS TO HANDLE ELEMENTS OF THE VECTOR
 /* *************************************************************************************************/
 template <class T>
-T Vector<T>::Get(int index) const
+T Vector<T>::Get(size_t index) const
 {
-	return _vectorData[index];
+	return _VData[index];
 }
 
 template <class T>
-void Vector<T>::Set(int index, T value)
+void Vector<T>::Set(size_t index, T value)
 {
-	_vectorData[index] = value;
+	_VData[index] = value;
 }
 
 /* **************************************************************************************************
@@ -177,7 +180,7 @@ T Vector<T>::norm()
 {
 	T cumulativeSum = static_cast<T>(0.0);
 	for (int i = 0; i < _nDims; ++i)
-		cumulativeSum += _vectorData.at(i) * _vectorData.at(i);
+		cumulativeSum += _VData.at(i) * _VData.at(i);
 
 	return sqrt(cumulativeSum);
 }
@@ -190,9 +193,9 @@ Vector<T> Vector<T>::Normalized()
 	//T length = norm();
 
 	//// Compute the normalized version of the vector.
-	//Vector<T> result(_vectorData);
+	//Vector<T> result(_VData);
 	//return result * (static_cast<T>(1.0) / vecNorm);
-	return Vector<T>(_vectorData) / norm();
+	return Vector<T>(_VData) / norm();
 }
 
 // Normalize the vector in place.
@@ -205,9 +208,9 @@ void Vector<T>::Normalize()
 	// Compute the elements of the normalized version of the vector.
 	for (int i = 0; i < _nDims; ++i)
 	{
-		//T temp = _vectorData.at(i) / vecNorm; //;* (static_cast<T>(1.0) / vecNorm);
-		//_vectorData.at(i) = temp;
-		_vectorData.at(i) /= length;
+		//T temp = _VData.at(i) / vecNorm; //;* (static_cast<T>(1.0) / vecNorm);
+		//_VData.at(i) = temp;
+		_VData.at(i) /= length;
 	}
 }
 
@@ -223,10 +226,10 @@ Vector<T> Vector<T>::operator+ (const Vector<T>& rhs) const
 
 	//std::vector<T> resultData;
 	//for (int i = 0; i < m_nDims; ++i)
-	//	resultData.push_back(m_vectorData.at(i) + rhs.m_vectorData.at(i));
-	std::vector<T> resultData(_vectorData);
+	//	resultData.push_back(m_VData.at(i) + rhs.m_VData.at(i));
+	std::vector<T> resultData(_VData);
 	for (int i = 0; i < _nDims; ++i)
-		resultData.at(i) += rhs._vectorData.at(i);
+		resultData.at(i) += rhs._VData.at(i);
 
 	Vector<T> result(resultData);
 	return result;
@@ -241,10 +244,10 @@ Vector<T> Vector<T>::operator- (const Vector<T>& rhs) const
 
 	//std::vector<T> resultData;
 	//for (int i = 0; i < _nDims; ++i)
-	//	resultData.push_back(_vectorData.at(i) - rhs._vectorData.at(i));
-	std::vector<T> resultData(_vectorData);
+	//	resultData.push_back(_VData.at(i) - rhs._VData.at(i));
+	std::vector<T> resultData(_VData);
 	for (int i = 0; i < _nDims; ++i)
-		resultData.at(i) -= rhs._vectorData.at(i);
+		resultData.at(i) -= rhs._VData.at(i);
 
 	Vector<T> result(resultData);
 	return result;
@@ -256,8 +259,8 @@ Vector<T> Vector<T>::operator* (const T& rhs) const
 	// Perform scalar multiplication.
 	//std::vector<T> resultData;
 	//for (int i = 0; i < _nDims; ++i)
-	//	resultData.push_back(_vectorData.at(i) * rhs);
-	std::vector<T> resultData(_vectorData);
+	//	resultData.push_back(_VData.at(i) * rhs);
+	std::vector<T> resultData(_VData);
 	for (int i = 0; i < _nDims; ++i)
 		resultData.at(i) *= rhs;
 
@@ -273,7 +276,7 @@ T Vector<T>::operator*(const Vector<T>& rhs) const //dot product
 template <class T>
 Vector<T> Vector<T>::operator/ (const T& rhs) const
 {
-	std::vector<T> resultData(_vectorData);
+	std::vector<T> resultData(_VData);
 	for (int i = 0; i < _nDims; ++i)
 		resultData.at(i) /= rhs;
 
@@ -288,7 +291,7 @@ void Vector<T>::operator*= (const T& rhs) ///////////
 {
 	// Perform scalar multiplication.
 	for (int i = 0; i < _nDims; ++i)
-		_vectorData.at(i) *= rhs;
+		_VData.at(i) *= rhs;
 }
 
 template <class T>
@@ -296,15 +299,16 @@ void Vector<T>::operator/= (const T& rhs) ///////////
 {
 	// Perform scalar multiplication.
 	for (int i = 0; i < _nDims; ++i)
-		_vectorData.at(i) /= rhs;
+		_VData.at(i) /= rhs;
 }
+
 
 //https://stackoverflow.com/questions/11066564/overload-bracket-operators-to-get-and-set
 template <class T>
-T Vector<T>::operator [](int i) const { return _vectorData[i]; }
+T Vector<T>::operator [](int i) const { return _VData[i]; }
 
 template<class T>
-T& Vector<T>::operator[](int i) { return _vectorData[i]; }
+T& Vector<T>::operator[](int i) { return _VData[i]; }
 
 
 //--
@@ -318,10 +322,24 @@ Vector<T> operator* (const T& lhs, const Vector<T>& rhs)
 	// Perform scalar multiplication.
 	//std::vector<T> resultData;
 	//for (int i=0; i<rhs.m_nDims; ++i)
-	//	resultData.push_back(lhs * rhs.m_vectorData.at(i))
-	std::vector<T> resultData(rhs._vectorData);
+	//	resultData.push_back(lhs * rhs.m_VData.at(i))
+	std::vector<T> resultData(rhs._VData);
 	for (int i = 0; i < rhs._nDims; ++i)
 		resultData.at(i) *= lhs;
+
+	return Vector<T>(resultData);
+}
+
+template <class T>
+Vector<T> operator/ (const T& lhs, const Vector<T>& rhs)
+{
+	// Perform scalar multiplication.
+	//std::vector<T> resultData;
+	//for (int i=0; i<rhs.m_nDims; ++i)
+	//	resultData.push_back(lhs * rhs.m_VData.at(i))
+	std::vector<T> resultData(rhs._VData);
+	for (int i = 0; i < rhs._nDims; ++i)
+		resultData.at(i) = lhs / resultData.at(i);
 
 	return Vector<T>(resultData);
 }
@@ -340,6 +358,12 @@ Vector<T> operator^ (const Vector<T>& lhs, const Vector<T>& rhs)
 	return Vector<T>::cross(lhs, rhs);
 }
 
+template <class T>
+Vector<T> operator- (const Vector<T>& rhs)
+{
+	return -1.0*rhs;
+}
+
 /* **************************************************************************************************
 STATIC FUNCTIONS
 /* *************************************************************************************************/
@@ -353,7 +377,7 @@ T Vector<T>::dot(const Vector<T>& a, const Vector<T>& b)
 	// Compute the dot product.
 	T cumulativeSum = static_cast<T>(0.0);
 	for (int i = 0; i < a._nDims; ++i)
-		cumulativeSum += a._vectorData.at(i) * b._vectorData.at(i);
+		cumulativeSum += a._VData.at(i) * b._VData.at(i);
 
 	return cumulativeSum;
 }
@@ -373,9 +397,9 @@ Vector<T> Vector<T>::cross(const Vector<T>& a, const Vector<T>& b)
 
 	// Compute the cross product.
 	std::vector<T> resultData(3);
-	resultData.at(0) = a._vectorData.at(1) * b._vectorData.at(2) - a._vectorData.at(2) * b._vectorData.at(1);
-	resultData.at(1) = -a._vectorData.at(0) * b._vectorData.at(2) - a._vectorData.at(2) * b._vectorData.at(0);
-	resultData.at(2) = a._vectorData.at(0) * b._vectorData.at(1) - a._vectorData.at(1) * b._vectorData.at(0);
+	resultData.at(0) = a._VData.at(1) * b._VData.at(2) - a._VData.at(2) * b._VData.at(1);
+	resultData.at(1) = -a._VData.at(0) * b._VData.at(2) - a._VData.at(2) * b._VData.at(0);
+	resultData.at(2) = a._VData.at(0) * b._VData.at(1) - a._VData.at(1) * b._VData.at(0);
 
 	return Vector<T>(resultData);
 }

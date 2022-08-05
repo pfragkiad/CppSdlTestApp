@@ -21,11 +21,8 @@ namespace GL
 		//function to perform the rendering
 		bool Render(Image& outputImage);
 
-	private:
-		Camera _camera; 
-
-		////a unit sphere on the origin
-		//Sphere _testSphere;
+	protected: // <-- to be accessible from Scene subclasses
+		Camera _camera;
 
 		//The list of objects in the scene
 		//std::vector<std::shared_ptr<GL::Shape>> _objects;

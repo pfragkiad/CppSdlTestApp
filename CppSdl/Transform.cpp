@@ -1,6 +1,8 @@
 
 #include "Transform.hpp"
 
+#include <tuple>
+
 GL::Transform::Transform()
 {
 
@@ -11,7 +13,7 @@ GL::Transform::~Transform()
 }
 
 //construct from a pair of matrices
-GL::Transform::Transform(const MatrixD& fwd, const MatrixD& bck)
+GL::Transform::Transform(const MD& fwd, const MD& bck)
 {
 	//verify that the inputs are 4x4
 	if (fwd.RowsCount() != 4 || fwd.ColsCount() != 4 ||
@@ -23,31 +25,41 @@ GL::Transform::Transform(const MatrixD& fwd, const MatrixD& bck)
 	_bcktfm = bck;
 }
 
-void GL::Transform::SetTransform(const VectorD& translation, const VectorD& rotation, const VectorD& scale)
+void GL::Transform::Set(const VD& translation, const VD& rotation, const VD& scale)
 {
 	//define a matrix for each component of the transform
+	tuple<VD,VD,VD> par(translation, rotation, scale);
 
-	MatrixD translationMatrix = Algebra::GetTranslation(translation);
-	MatrixD rotationMatrixX = Algebra::GetRotationX(rotation[0]);
-	MatrixD rotationMatrixY = Algebra::GetRotationY(rotation[1]);
-	MatrixD rotationMatrixZ = Algebra::GetRotationZ(rotation[2]);
-	MatrixD scaleMatrix = Algebra::GetScale(scale);
+	MD translationMatrix = Algebra::GetTranslation(translation);
+	MD rotationMatrixX = Algebra::GetRotationX(rotation[0]);
+	MD rotationMatrixY = Algebra::GetRotationY(rotation[1]);
+	MD rotationMatrixZ = Algebra::GetRotationZ(rotation[2]);
+	MD scaleMatrix = Algebra::GetScale(scale);
 
 	//combine to give the final forward transform matrix
-	_fwdtfm = translationMatrix * scaleMatrix * rotationMatrixX * rotationMatrixY * rotationMatrixZ;
 
-	//_bcktfm = _fwdtfm;
+	//SRT (scale rotate translate)
+	//https://docs.microsoft.com/en-us/dotnet/desktop/winforms/advanced/why-transformation-order-is-significant?view=netframeworkdesktop-4.8
+	_fwdtfm = translationMatrix * scaleMatrix * rotationMatrixX * rotationMatrixY * rotationMatrixZ;
+	//_fwdtfm = translationMatrix  * rotationMatrixX * rotationMatrixY * rotationMatrixZ* scaleMatrix;
+
+	//_bcktfm = Algebra::GetScale(1.0/scale)
+	//	* Algebra::GetRotationZ(rotation[2])
+	//	* Algebra::GetRotationY(-rotation[1]) 
+	//	* Algebra::GetRotationX(-rotation[0])
+	//	* Algebra::GetTranslation(-translation); //possibly correct
+	_bcktfm = _fwdtfm; _bcktfm.Inverse();
 	//http://www.info.hiroshima-cu.ac.jp/~miyazaki/knowledge/teche0053.html#:~:text=and%20translation%20matrix)-,Inverse%20matrix%20of%20transformation%20matrix%20(rotation%20and%20translation%20matrix),R%7Ct%5D%20transformation%20matrix.&text=The%20inverse%20of%20transformation%20matrix%20%5BR%7Ct%5D%20is%20%5B,%2D%20R%5ET%20t%5D.
-	//_bcktfm.Inverse(); //faster should be by getting the matrices above!
-	_bcktfm = Algebra::GetInverseTransformation(_fwdtfm);
+	// //faster should be by getting the matrices above!
+	//_bcktfm = Algebra::GetInverseTransformation(_fwdtfm); //incorrect
 }
 
-MatrixD GL::Transform::GetForward()
+MD GL::Transform::GetForward()
 {
 	return _fwdtfm;
 }
 
-MatrixD GL::Transform::GetBackward()
+MD GL::Transform::GetBackward()
 {
 	return _bcktfm;
 }
@@ -62,25 +74,25 @@ GL::Ray GL::Transform::Apply(const Ray& inputRay, bool isForward)
 	return outputRay;
 }
 
-VectorD GL::Transform::Apply(const VectorD& inputVector, bool isForward)
+VD GL::Transform::Apply(const VD& inputVector, bool isForward)
 {
 	//convert inputVector to a 4-element vector
-	VectorD tempVector{ inputVector[0],inputVector[1],inputVector[2],inputVector[3],1.0 };
+	VD tempVector{ inputVector[0],inputVector[1],inputVector[2],1.0 };
 
 	//create a vector for the result
-	VectorD resultVector = (isForward ? _fwdtfm : _bcktfm) * tempVector;
+	VD resultVector = (isForward ? _fwdtfm : _bcktfm) * tempVector;
 	
 	//reform the output as a 3-element vector (ignore the last 1!)
-	return VectorD{ resultVector[0],resultVector[1],resultVector[2] };
+	return VD{ resultVector[0],resultVector[1],resultVector[2] };
 }
 GL::Transform GL::operator*(const Transform& lhs, const Transform& rhs)
 {
 	//form the product of the two forward transforms
-	MatrixD fwdResult = lhs._fwdtfm * rhs._fwdtfm;
+	MD fwdResult = lhs._fwdtfm * rhs._fwdtfm;
 
 	//cimpute the backward transform as the inverse of the forward transform
-	//MatrixD bckResult = fwdResult; bckResult.Inverse();
-	MatrixD bckResult = Algebra::GetInverseTransformation(fwdResult);
+	MD bckResult = fwdResult; bckResult.Inverse();
+	//MD bckResult = Algebra::GetInverseTransformation(fwdResult);
 
 	//form the final result
 	return Transform(fwdResult, bckResult);
@@ -101,12 +113,12 @@ GL::Transform GL::Transform::operator=(const Transform& rhs)
 //	Print(isForward ? _fwdtfm : _bcktfm);
 //}
 //
-//void GL::Transform::PrintVector(const VectorD& vector)
+//void GL::Transform::PrintVector(const VD& vector)
 //{
 //	std::cout << vector <<std::endl;
 //}
 //
-//void GL::Transform::Print(const MatrixD& matrix)
+//void GL::Transform::Print(const MD& matrix)
 //{
 //	matrix.Print(3); std::cout << endl;
 //}

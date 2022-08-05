@@ -3,9 +3,9 @@
 
 GL::Camera::Camera()
 {
-	_position = -10.0 * Algebra::Uy; //VectorD{ {0.0,-10.0,0.0} };
-	_lookAt = Algebra::Zero; //VectorD{ {0.0,0.0,0.0} };
-	_up = Algebra::Uz; // VectorD{ {0.0,0.0,1.0} };
+	_position = VD{ {0.0,-10.0,0.0} };
+	_lookAt = Algebra::Zero; //VD{ {0.0,0.0,0.0} };
+	_up = Algebra::Uz; // VD{ {0.0,0.0,1.0} };
 
 	_length = 1.0;
 	_horizontalSize = 1.0;
@@ -14,17 +14,17 @@ GL::Camera::Camera()
 	UpdateCameraGeometry();
 }
 
-void GL::Camera::SetPosition(const VectorD& newPosition)
+void GL::Camera::SetPosition(const VD& newPosition)
 {
 	_position = newPosition;
 }
 
-void GL::Camera::SetLookAt(const VectorD& newLookAt)
+void GL::Camera::SetLookAt(const VD& newLookAt)
 {
 	_lookAt = newLookAt;
 }
 
-void GL::Camera::SetUp(const VectorD& upVector)
+void GL::Camera::SetUp(const VD& upVector)
 {
 	_up = upVector;
 }
@@ -44,32 +44,32 @@ void GL::Camera::SetAspectRatio(double newAspect)
 	_aspectRatio = newAspect;
 }
 
-VectorD GL::Camera::GetPosition()
+VD GL::Camera::GetPosition()
 {
 	return _position;
 }
 
-VectorD GL::Camera::GetLookAt()
+VD GL::Camera::GetLookAt()
 {
 	return _lookAt;
 }
 
-VectorD GL::Camera::GetUp()
+VD GL::Camera::GetUp()
 {
 	return _up;
 }
 
-VectorD GL::Camera::GetU()
+VD GL::Camera::GetU()
 {
 	return _u;
 }
 
-VectorD GL::Camera::GetV()
+VD GL::Camera::GetV()
 {
 	return _v;
 }
 
-VectorD GL::Camera::GetScreenCenter()
+VD GL::Camera::GetScreenCenter()
 {
 	return _screenCenter;
 }
@@ -89,10 +89,10 @@ double GL::Camera::GetAspectRatio()
 	return _aspectRatio;
 }
 
-bool GL::Camera::GenerateRay(float projectionScreenX, float projectionScreenY, GL::Ray &cameraRay)
+bool GL::Camera::GenerateRay(float projectionScreenX, float projectionScreenY, GL::Ray& cameraRay)
 {
 	//compute the location of the screen piont in world coordinates
-	VectorD screenWorldCoordinate =
+	VD screenWorldCoordinate =
 		_screenCenter +
 		_u * projectionScreenX +
 		_v * projectionScreenY;
@@ -109,17 +109,17 @@ bool GL::Camera::GenerateRay(float projectionScreenX, float projectionScreenY, G
 void GL::Camera::UpdateCameraGeometry()
 {
 	//first compute the vector from the camera position to the LookAt position
-	_alignmentVector = _lookAt - _position;
-	_alignmentVector.Normalize();
+	_alignmentVector = !(_lookAt - _position);
+	//_alignmentVector.Normalize();
 
 	//u, v, up correspond to x (horizontal), y (in-screen), z(up-vertical)
 
 	//compute the U and V vectors
 	//_up is not normalized and is not vertical to the _aligmentVector
-	//_u = VectorD::cross(_alignmentVector, _up);
-	_u = _alignmentVector ^ _up;
-	_u.Normalize();
-	_v = _u ^ _alignmentVector; //VectorD::cross(_u, _alignmentVector)
+	//_u = VD::cross(_alignmentVector, _up);
+	_u = !(_alignmentVector ^ _up);
+	//_u.Normalize();
+	_v = _u ^ _alignmentVector; //VD::cross(_u, _alignmentVector)
 	//_v.Normalize();
 	//_v = _up.Normalized(); //this should be if the _up is vertical to the alignment
 	_screenCenter = _position + _length * _alignmentVector;

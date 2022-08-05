@@ -1,25 +1,10 @@
 #include "Scene.hpp"
-#include "Examples.hpp"
 
 using namespace GL;
 
+//Each Scene subclass has its own 
 Scene::Scene() {
-	//configure the camera
-	_camera.SetPosition(VectorD{0.0, -10.0, 0.0});
-	_camera.SetLookAt(VectorD{0.0, 0.0, 0.0});
-	_camera.SetUp(VectorD{0.0, 0.0, 1.0});
-	_camera.SetHorizontalSize(0.25);
-	_camera.SetAspectRatio(1280.0 / 720.0);
-	_camera.UpdateCameraGeometry();
 
-	//construct a test sphere
-	_objects.push_back(std::make_shared<Sphere>(Sphere()));
-
-	//construct a test light
-	_lights.push_back(std::make_shared<PointLight>(PointLight()));
-	_lights.at(0)->_location = VectorD{ 0.0,0.0,10.0 };//VectorD{ 10.0,-5.0,10.0 };
-	_lights.at(0)->_color = VectorD{ 255.0,255.0,255.0 };
-	_lights.at(0)->_intensity = 1.0;
 }
 
 //function to perform the rendering
@@ -41,12 +26,12 @@ bool Scene::Render(Image& outputImage)
 
 	//loop over each pixel in our image
 	Ray cameraRay;
-	VectorD intersectionPoint(3);
-	VectorD localNormal(3);
-	VectorD localColor(3);
+	VD intersectionPoint(3);
+	VD localNormal(3);
+	VD localColor(3);
 
-	double xFact = 2.0 / xSize; //0 to 2
-	double yFact = 2.0 / ySize; //0 to 2
+	float xFact = 2.0f / xSize; //0 to 2
+	float yFact = 2.0f / ySize; //0 to 2
 	double minDist = 1e6;
 	double maxDist = 0.0;
 
@@ -54,13 +39,13 @@ bool Scene::Render(Image& outputImage)
 		for (int y = 0; y < ySize; y++)
 		{
 			//normalize the x and y coordinates
-			double normX = x * xFact - 1.0; //-1 to 1
-			double normY = y * yFact - 1.0; //-1 to 1
+			float normX = x * xFact - 1.0f; //-1 to 1
+			float normY = y * yFact - 1.0f; //-1 to 1
 
 			//generate the ray for this pixel
 			_camera.GenerateRay(normX, normY, cameraRay);
 
-			for (auto currentObject : _objects)
+			for (pShape currentObject : _objects)
 			{
 				//test if we have a valid intersection
 				bool validIntersection = currentObject->TestIntersection(
@@ -70,7 +55,7 @@ bool Scene::Render(Image& outputImage)
 				{
 					//compute intensity of illumination
 					double intensity;
-					VectorD color;
+					VD color;
 					bool validIllumination = false;
 					for (auto currentLight : _lights)
 					{
@@ -80,28 +65,31 @@ bool Scene::Render(Image& outputImage)
 						//std::cout << "Intensity: " << intensity << std::endl;
 					}
 
-					//compute the distance between the camera and the point of intersection
-					double distance = (intersectionPoint - cameraRay._point1).norm();
-					if (distance > maxDist) maxDist = distance;
-					else if (distance < minDist) minDist = distance;
+					////compute the distance between the camera and the point of intersection
+					//double distance = (intersectionPoint - cameraRay._point1).norm();
+					//if (distance > maxDist) maxDist = distance;
+					//else if (distance < minDist) minDist = distance;
 
 					//double ratio = (distance - 9.0) / 0.94605; // = (distance - minDistance)/ (maxDistance-minDistance)
 					//outputImage.SetPixel(x, y, 255.0 - 255 * ratio, 0, 0.0);
 					if (validIllumination)
-						outputImage.SetPixel(x,y,255.0*intensity,0.0,10.0);
-					
-					else 
-						outputImage.SetPixel(x, y, 0.0, 0.0, 0.0);
+						//outputImage.SetPixel(x, y, 255.0 * intensity, 0.0, 10.0);
+						outputImage.SetPixel(x, y,
+							localColor[0] * intensity,
+							localColor[1] * intensity,
+							localColor[2] * intensity);
+					//else //leave pixel unchanged
+					//	outputImage.SetPixel(x, y, 0.0, 0.0, 0.0);
 				}
-				else
-					outputImage.SetPixel(x, y, 0.0, 0.0, 0.0);
+				//else //leave pixel unchanged
+				//	outputImage.SetPixel(x, y, 0.0, 0.0, 0.0);
 			}
 		}
 
-	//minimum is 9.0
-	//maximum is 9.94605
-	std::cout << "Minimum distance: " << minDist << std::endl;
-	std::cout << "Maximum distance: " << maxDist << std::endl;
+	////minimum is 9.0
+	////maximum is 9.94605
+	//std::cout << "Minimum distance: " << minDist << std::endl;
+	//std::cout << "Maximum distance: " << maxDist << std::endl;
 
 	return true;
 }

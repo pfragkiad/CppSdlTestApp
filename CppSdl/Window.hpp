@@ -1,9 +1,9 @@
-#ifndef App_H
-#define App_H
+#pragma once
 
 //#pragma comment(lib,"SDL2.lib")
 //#pragma comment(lib,"SDL2main.lib")
 //#pragma comment(lib,"SDL2test.lib")
+
 #include <SDL.h>
 #include "Image.hpp"
 #include "Scene.hpp"
@@ -16,9 +16,10 @@ namespace GL
 	{
 	public:
 		Window();
+		Window(Scene scene);
 
-		int Run();
-		int Run(int width, int height);
+		int Run(bool isImageStatic);
+		int Run(int width, int height, bool isImageStatic);
 		//bool OnInit();
 		bool OnInit(int width, int height);
 		void OnEvent(SDL_Event* event);
@@ -41,5 +42,3 @@ namespace GL
 		SDL_Renderer* pRenderer;
 	};
 }
-
-#endif

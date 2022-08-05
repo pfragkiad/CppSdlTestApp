@@ -37,7 +37,7 @@ using namespace std;
 
 namespace AlgebraTests
 {
-	inline int MatrixDeterminantTests()
+	inline int MDeterminantTests()
 	{
 		cout << "Testing implementation of determinant calculation." << endl;
 		cout << endl;

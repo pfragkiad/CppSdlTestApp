@@ -15,17 +15,18 @@ namespace GL
 		virtual ~LightBase();
 
 		//function to compute illumination contribution
-		virtual bool ComputeIllumination(const VectorD& intPoint, const VectorD& localNormal,
+		virtual bool ComputeIllumination(const VD& intPoint, const VD& localNormal,
 			const pShapesVector& objectList, const pShape& currentObject,
-			VectorD& color, double& intensity);
+			VD& color, double& intensity);
 
-		VectorD _color{ 0.0,0.0,0.0 };
-		VectorD _location{ 0.0,0.0,0.0 };
+		VD _color{ Algebra::Zero };
+		VD _location{ Algebra::Zero };
 		double _intensity = 1.0;
 	};
 
 
 }
 
-typedef std::vector<std::shared_ptr<GL::LightBase>> pLightsVector;
+typedef std::shared_ptr<GL::LightBase> pLightBase;
+typedef std::vector<pLightBase> pLightsVector;
 

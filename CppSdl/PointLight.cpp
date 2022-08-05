@@ -10,19 +10,19 @@ GL::PointLight::~PointLight()
 {
 }
 
-bool GL::PointLight::ComputeIllumination(const VectorD& intPoint, const VectorD& localNormal, 
+bool GL::PointLight::ComputeIllumination(const VD& intPoint, const VD& localNormal, 
     const pShapesVector& objectList, const pShape& currentObject,
-    VectorD& color, double& intensity)
+    VD& color, double& intensity)
 {
     //construct the vector pointing from the intersection point to the light
-    VectorD lightDir = !(_location - intPoint);
+    VD lightDir = !(_location - intPoint);
 
     //compute a starting point (not useful yet)
-    VectorD startPoint = intPoint;
+    VD startPoint = intPoint;
 
     //compute the angle between the local normal and the light ray
     //assume that localNormal is a unit vector
-    double angle =  M_PI -  acos(localNormal * lightDir);
+    double angle = acos(localNormal * lightDir); //should be M_PI-...
 
     //if the normal is pointing away from the light then we have no illumination
     //_USE_MATH_DEFINES must be defined

@@ -8,25 +8,33 @@ GL::Sphere::~Sphere()
 {
 }
 
-bool GL::Sphere::TestIntersection(const Ray& castRay, VectorD& intersectionPoint, VectorD& localNormal, VectorD& localColor)
+bool GL::Sphere::TestIntersection(const Ray& castRay, VD& intersectionPoint, VD& localNormal, VD& localColor)
 {
+	//castRay is in the world coordinate system
+	//we transform it in the local coordinate system of the sphere!
+	//APPLY THE BACKWARDS TRANSFORM because we go from WORLD -> LOCAL!
+	Ray bckRay = _transformMatrix.Apply(castRay, false);
+
 	//compute the values of a, b, c
 
-	VectorD vhat = !castRay._lab;
+	VD vhat = !bckRay._lab;
 
 	//note that a is equal to the squared magnitude of the direction of the case ray.
 	//as this iwll be a unit vector, we can conclude that the value of 'a' will always be 1
 	//a = 1.0;
-	
+
 	//calculate b
-	double b = 2.0 * (castRay._point1 * vhat);
-	
+	double b = 2.0 * bckRay._point1 * vhat;
+
 	//calculate c
-	double c = castRay._point1 * castRay._point1 - 1.0;
+	double c = bckRay._point1 * bckRay._point1 - 1.0;
 
 	//test whether we actually have an intersection!
 	double intTest = b * b - 4.0 * c;
-	bool tested =  intTest >= 0.0;
+
+	VD poi; //point of intersection
+
+	bool tested = intTest >= 0.0;
 	if (!tested) return false;
 
 	double sqr = sqrt(intTest);
@@ -38,13 +46,24 @@ bool GL::Sphere::TestIntersection(const Ray& castRay, VectorD& intersectionPoint
 	if (t1 < 0.0 || t2 < 0.0) return false;
 
 	//determine which point of intersection was closest to the camera!
-	if (t1 < t2) //t1 is closest to the camera (we are not interested in t2)
-		intersectionPoint = castRay._point1 + vhat * t1;
-	else
-		intersectionPoint = castRay._point1 + vhat * t2;
+	//t1 is closest to the camera (we are not interested in t2)
+	poi = bckRay._point1 + vhat * (t1 < t2 ? t1 : t2);
+	//if (t1 < t2) 
+	//	poi = bckRay._point1 + vhat * t1;
+	//else
+	//	poi = bckRay._point1 + vhat * t2;
+
+	//transform the intersection point back into world coordinates!
+	intersectionPoint = _transformMatrix.Apply(poi, true);
+
+	VD objOrigin = Algebra::Zero;
+	VD newObjOrigin = _transformMatrix.Apply(objOrigin, true);
 
 	//compute the local normal
-	localNormal = !intersectionPoint;
- 
+	localNormal = !(intersectionPoint - newObjOrigin);
+
+	//return the base color
+	localColor = _baseColor;
+
 	return true;
 }

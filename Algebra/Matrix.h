@@ -9,6 +9,7 @@
 #include <vector>
 #include <exception>
 #include "Vector.h"
+#include <algorithm> //fill
 
 template <class T>
 class Matrix
@@ -16,23 +17,23 @@ class Matrix
 public:
 	// Define the various constructors.
 	Matrix();
-	Matrix(int nRows, int nCols);
-	Matrix(int nRows, int nCols, const T* inputData);
+	Matrix(size_t nRows, size_t nCols);
+	Matrix(size_t nRows, size_t nCols, const T* inputData);
 	Matrix(const Matrix<T>& inputMatrix);
-	Matrix(int nRows, int nCols, const std::vector<T>& inputData);
+	Matrix(size_t nRows, size_t nCols, const std::vector<T>& inputData);
 
 	// And the destructor.
 	~Matrix();
 
 	// Configuration methods.
-	bool Resize(int numRows, int numCols);
+	bool Resize(size_t numRows, size_t numCols);
 	void SetToIdentity();
 
 	// Element access methods.
-	T Get(int row, int col) const;
-	bool Set(int row, int col, T elementValue);
-	int RowsCount() const;
-	int ColsCount() const;
+	T Get(size_t row, size_t col) const;
+	bool Set(size_t row, size_t col, T elementValue);
+	size_t RowsCount() const;
+	size_t ColsCount() const;
 
 	// Manipulation methods.
 	// Compute matrix inverse.
@@ -51,6 +52,10 @@ public:
 
 	// Overload the assignment operator.
 	Matrix<T> operator= (const Matrix<T>& rhs);
+	//xtra
+	Matrix<T> operator*= (const T& rhs);
+	Matrix<T> operator*= (const Matrix<T>& rhs);
+
 
 	// Overload +, - and * operators (friends).
 	template <class T> friend Matrix<T> operator+ (const Matrix<T>& lhs, const Matrix<T>& rhs);
@@ -68,33 +73,33 @@ public:
 	// Matrix * Vector.
 	template <class T> friend Vector<T> operator* (const Matrix<T>& lhs, const Vector<T>& rhs);
 
-	
-	bool Separate(Matrix<T>& matrix1, Matrix<T>& matrix2, int colNum);
+
+	bool Separate(Matrix<T>& matrix1, Matrix<T>& matrix2, size_t colNum);
 	bool Join(const Matrix<T>& matrix2);
-	Matrix<T> FindSubMatrix(int rowNum, int colNum);
+	Matrix<T> FindSubMatrix(size_t rowNum, size_t colNum);
 
 	// Function to return the rank of the matrix.
-	int Rank();
+	size_t Rank();
 
 	bool IsSquare();
 	bool IsRowEchelon();
 	bool IsNonZero();
 	bool IsSymmetric();
-	void Print () const;
+	void Print() const;
 	void Print(int precision) const;
-	
+
 	template <class T> friend std::ostream& operator << (std::ostream& os, const Matrix& m);
 private:
-	int Sub2Ind(int row, int col) const;
+	size_t Sub2Ind(size_t row, size_t col) const;
 	bool CloseEnough(T f1, T f2);
-	void SwapRow(int i, int j);
-	void MultAdd(int i, int j, T multFactor);
-	void MultRow(int i, T multFactor);
-	int FindRowWithMaxElement(int colNumber, int startingRow);
+	void SwapRow(size_t i, size_t j);
+	void MultAdd(size_t i, size_t j, T multFactor);
+	void MultRow(size_t i, T multFactor);
+	size_t FindRowWithMaxElement(size_t colNumber, size_t startingRow);
 
-    //fields
-	T* _matrixData;
-	int _nRows, _nCols, _nElements;
+	//fields
+	T* _MData;
+	size_t _nRows, _nCols, _nElements;
 };
 
 //// A simple function to print a matrix to stdout.
@@ -117,10 +122,10 @@ private:
 template <class T>
 std::ostream& operator<<(std::ostream& os, const Matrix<T>& m)
 {
-	int _nRows = m.RowsCount(), _nCols = m.ColsCount();
-	for (int row = 0; row < _nRows; ++row)
+	size_t _nRows = m.RowsCount(), _nCols = m.ColsCount();
+	for (size_t row = 0; row < _nRows; ++row)
 	{
-		for (int col = 0; col < _nCols; ++col)
+		for (size_t col = 0; col < _nCols; ++col)
 			os << std::fixed << std::setprecision(6) << m.Get(row, col) << "  ";
 		os << std::endl;
 	}
@@ -138,31 +143,31 @@ Matrix<T>::Matrix()
 	_nRows = 1;
 	_nCols = 1;
 	_nElements = 1;
-	_matrixData = nullptr;
+	_MData = nullptr;
 }
 
 // Construct empty matrix (all elements 0)
 template <class T>
-Matrix<T>::Matrix(int nRows, int nCols)
+Matrix<T>::Matrix(size_t nRows, size_t nCols)
 {
 	_nRows = nRows;
 	_nCols = nCols;
 	_nElements = _nRows * _nCols;
-	_matrixData = new T[_nElements];
-	for (int i = 0; i < _nElements; i++)
-		_matrixData[i] = 0.0;
+	_MData = new T[_nElements];
+	for (size_t i = 0; i < _nElements; i++)
+		_MData[i] = 0.0;
 }
 
 // Construct from const linear array.
 template <class T>
-Matrix<T>::Matrix(int nRows, int nCols, const T* inputData)
+Matrix<T>::Matrix(size_t nRows, size_t nCols, const T* inputData)
 {
 	_nRows = nRows;
 	_nCols = nCols;
 	_nElements = _nRows * _nCols;
-	_matrixData = new T[_nElements];
-	for (int i = 0; i < _nElements; i++)
-		_matrixData[i] = inputData[i];
+	_MData = new T[_nElements];
+	for (size_t i = 0; i < _nElements; i++)
+		_MData[i] = inputData[i];
 }
 
 // The copy constructor.
@@ -173,48 +178,50 @@ Matrix<T>::Matrix(const Matrix<T>& inputMatrix)
 	_nCols = inputMatrix._nCols;
 	_nElements = inputMatrix._nElements;
 
-	_matrixData = new T[_nElements];
-	for (int i = 0; i < _nElements; i++)
-		_matrixData[i] = inputMatrix._matrixData[i];
+	_MData = new T[_nElements];
+	for (size_t i = 0; i < _nElements; i++)
+		_MData[i] = inputMatrix._MData[i];
 }
 
 // Construct from std::vector.
 template <class T>
-Matrix<T>::Matrix(int nRows, int nCols, const std::vector<T>& inputData)
+Matrix<T>::Matrix(size_t nRows, size_t nCols, const std::vector<T>& inputData)
 {
 	_nRows = nRows;
 	_nCols = nCols;
 	_nElements = _nRows * _nCols;
-	_matrixData = new T[_nElements];
-	for (int i = 0; i < _nElements; ++i)
-		_matrixData[i] = inputData.at(i);
+	_MData = new T[_nElements];
+	for (size_t i = 0; i < _nElements; ++i)
+		_MData[i] = inputData.at(i);
 }
 
 template <class T>
 Matrix<T>::~Matrix()
 {
 	// Destructor.
-	if (_matrixData)
-		delete[] _matrixData;
+	if (_MData)
+		delete[] _MData;
 
-	_matrixData = nullptr;
+	_MData = nullptr;
 }
 
 /* **************************************************************************************************
 CONFIGURATION FUNCTIONS
 /* *************************************************************************************************/
 template <class T>
-bool Matrix<T>::Resize(int numRows, int numCols)
+bool Matrix<T>::Resize(size_t numRows, size_t numCols)
 {
 	_nRows = numRows;
 	_nCols = numCols;
-	_nElements = (_nRows * _nCols);
-	delete[] _matrixData;
-	_matrixData = new T[_nElements];
-	if (_matrixData == nullptr) return false;
+	_nElements = _nRows * _nCols;
+	delete[] _MData;
+	_MData = new T[_nElements];
+	if (_MData == nullptr) return false;
 
-	for (int i = 0; i < _nElements; i++)
-		_matrixData[i] = 0.0;
+	
+	std::fill(_MData, _MData + _nElements, static_cast<T>(0.0));
+	//for (size_t i = 0; i < _nElements; i++)
+	//	_MData[i] = 0.0;
 
 	return true;
 
@@ -227,55 +234,49 @@ void Matrix<T>::SetToIdentity()
 	if (!IsSquare())
 		throw std::invalid_argument("Cannot form an identity matrix that is not square.");
 
-	for (int row = 0; row < _nRows; ++row)
-	{
-		for (int col = 0; col < _nCols; ++col)
-		{
-			if (col == row)
-				_matrixData[Sub2Ind(row, col)] = 1.0;
-			else
-				_matrixData[Sub2Ind(row, col)] = 0.0;
-		}
-	}
+	for (size_t row = 0; row < _nRows; ++row)
+		for (size_t col = 0; col < _nCols; ++col)
+			_MData[Sub2Ind(row, col)] = col == row ? static_cast<T>(1.0) : static_cast<T>(0.0);
 }
 
 /* **************************************************************************************************
 ELEMENT FUNCTIONS
 /* *************************************************************************************************/
 template <class T>
-T Matrix<T>::Get(int row, int col) const
+T Matrix<T>::Get(size_t row, size_t col) const
 {
-	int linearIndex = Sub2Ind(row, col);
-	if (linearIndex >= 0)
-		return _matrixData[linearIndex];
-	else
-		return 0.0;
+	size_t linearIndex = Sub2Ind(row, col);
+	//if (linearIndex >= 0)
+	return _MData[linearIndex];
 
+	//return 0.0;
 }
 
 template <class T>
-bool Matrix<T>::Set(int row, int col, T elementValue)
+bool Matrix<T>::Set(size_t row, size_t col, T elementValue)
 {
-	int linearIndex = Sub2Ind(row, col);
-	if (linearIndex >= 0)
+	try
 	{
-		_matrixData[linearIndex] = elementValue;
+		size_t linearIndex = Sub2Ind(row, col);
+		//if (linearIndex >= 0)
+
+		_MData[linearIndex] = elementValue;
 		return true;
+
 	}
-	else
-	{
+	catch (std::invalid_argument exc) {
 		return false;
 	}
 }
 
 template <class T>
-int Matrix<T>::RowsCount() const
+size_t Matrix<T>::RowsCount() const
 {
 	return _nRows;
 }
 
 template <class T>
-int Matrix<T>::ColsCount() const
+size_t Matrix<T>::ColsCount() const
 {
 	return _nCols;
 }
@@ -284,24 +285,22 @@ template <class T>
 bool Matrix<T>::Compare(const Matrix<T>& matrix1, double tolerance)
 {
 	// First, check that the matrices have the same dimensions.
-	int numRows1 = matrix1._nRows;
-	int numCols1 = matrix1._nCols;
-	if ((numRows1 != _nRows) || (numCols1 != _nCols))
+	size_t numRows1 = matrix1._nRows;
+	size_t numCols1 = matrix1._nCols;
+	if (numRows1 != _nRows || numCols1 != _nCols)
 		return false;
 
 	// Loop over all the elements and compute the sum-of-squared-differences.
 	double cumulativeSum = 0.0;
-	for (int i = 0; i < _nElements; ++i)
+	for (size_t i = 0; i < _nElements; ++i)
 	{
-		T element1 = matrix1._matrixData[i];
-		T element2 = _matrixData[i];
+		T element1 = matrix1._MData[i];
+		T element2 = _MData[i];
 		cumulativeSum += ((element1 - element2) * (element1 - element2));
 	}
 	double finalValue = sqrt(cumulativeSum / ((numRows1 * numCols1) - 1));
-	if (finalValue < tolerance)
-		return true;
-	else
-		return false;
+
+	return finalValue < tolerance;
 }
 
 /* **************************************************************************************************
@@ -315,12 +314,12 @@ THE + OPERATOR
 template <class T>
 Matrix<T> operator+ (const Matrix<T>& lhs, const Matrix<T>& rhs)
 {
-	int numRows = lhs._nRows;
-	int numCols = lhs._nCols;
-	int numElements = numRows * numCols;
+	size_t numRows = lhs._nRows;
+	size_t numCols = lhs._nCols;
+	size_t numElements = numRows * numCols;
 	T* tempResult = new T[numElements];
-	for (int i = 0; i < numElements; i++)
-		tempResult[i] = lhs._matrixData[i] + rhs._matrixData[i];
+	for (size_t i = 0; i < numElements; i++)
+		tempResult[i] = lhs._MData[i] + rhs._MData[i];
 
 	Matrix<T> result(numRows, numCols, tempResult);
 	delete[] tempResult;
@@ -331,12 +330,12 @@ Matrix<T> operator+ (const Matrix<T>& lhs, const Matrix<T>& rhs)
 template <class T>
 Matrix<T> operator+ (const T& lhs, const Matrix<T>& rhs)
 {
-	int numRows = rhs._nRows;
-	int numCols = rhs._nCols;
-	int numElements = numRows * numCols;
+	size_t numRows = rhs._nRows;
+	size_t numCols = rhs._nCols;
+	size_t numElements = numRows * numCols;
 	T* tempResult = new T[numElements];
-	for (int i = 0; i < numElements; ++i)
-		tempResult[i] = lhs + rhs._matrixData[i];
+	for (size_t i = 0; i < numElements; ++i)
+		tempResult[i] = lhs + rhs._MData[i];
 
 	Matrix<T> result(numRows, numCols, tempResult);
 	delete[] tempResult;
@@ -347,12 +346,12 @@ Matrix<T> operator+ (const T& lhs, const Matrix<T>& rhs)
 template <class T>
 Matrix<T> operator+ (const Matrix<T>& lhs, const T& rhs)
 {
-	int numRows = lhs._nRows;
-	int numCols = lhs._nCols;
-	int numElements = numRows * numCols;
+	size_t numRows = lhs._nRows;
+	size_t numCols = lhs._nCols;
+	size_t numElements = numRows * numCols;
 	T* tempResult = new T[numElements];
-	for (int i = 0; i < numElements; ++i)
-		tempResult[i] = lhs._matrixData[i] + rhs;
+	for (size_t i = 0; i < numElements; ++i)
+		tempResult[i] = lhs._MData[i] + rhs;
 
 	Matrix<T> result(numRows, numCols, tempResult);
 	delete[] tempResult;
@@ -366,12 +365,12 @@ THE - OPERATOR
 template <class T>
 Matrix<T> operator- (const Matrix<T>& lhs, const Matrix<T>& rhs)
 {
-	int numRows = lhs._nRows;
-	int numCols = lhs._nCols;
-	int numElements = numRows * numCols;
+	size_t numRows = lhs._nRows;
+	size_t numCols = lhs._nCols;
+	size_t numElements = numRows * numCols;
 	T* tempResult = new T[numElements];
-	for (int i = 0; i < numElements; i++)
-		tempResult[i] = lhs._matrixData[i] - rhs._matrixData[i];
+	for (size_t i = 0; i < numElements; i++)
+		tempResult[i] = lhs._MData[i] - rhs._MData[i];
 
 	Matrix<T> result(numRows, numCols, tempResult);
 	delete[] tempResult;
@@ -382,12 +381,12 @@ Matrix<T> operator- (const Matrix<T>& lhs, const Matrix<T>& rhs)
 template <class T>
 Matrix<T> operator- (const T& lhs, const Matrix<T>& rhs)
 {
-	int numRows = rhs._nRows;
-	int numCols = rhs._nCols;
-	int numElements = numRows * numCols;
+	size_t numRows = rhs._nRows;
+	size_t numCols = rhs._nCols;
+	size_t numElements = numRows * numCols;
 	T* tempResult = new T[numElements];
-	for (int i = 0; i < numElements; ++i)
-		tempResult[i] = lhs - rhs._matrixData[i];
+	for (size_t i = 0; i < numElements; ++i)
+		tempResult[i] = lhs - rhs._MData[i];
 
 	Matrix<T> result(numRows, numCols, tempResult);
 	delete[] tempResult;
@@ -398,12 +397,12 @@ Matrix<T> operator- (const T& lhs, const Matrix<T>& rhs)
 template <class T>
 Matrix<T> operator- (const Matrix<T>& lhs, const T& rhs)
 {
-	int numRows = lhs._nRows;
-	int numCols = lhs._nCols;
-	int numElements = numRows * numCols;
+	size_t numRows = lhs._nRows;
+	size_t numCols = lhs._nCols;
+	size_t numElements = numRows * numCols;
 	T* tempResult = new T[numElements];
-	for (int i = 0; i < numElements; ++i)
-		tempResult[i] = lhs._matrixData[i] - rhs;
+	for (size_t i = 0; i < numElements; ++i)
+		tempResult[i] = lhs._MData[i] - rhs;
 
 	Matrix<T> result(numRows, numCols, tempResult);
 	delete[] tempResult;
@@ -425,13 +424,11 @@ Vector<T> operator* (const Matrix<T>& lhs, const Vector<T>& rhs)
 	Vector<T> result(lhs._nRows);
 
 	// Loop over rows and columns and perform the multiplication operation element-by-element.
-	for (int row = 0; row < lhs._nRows; ++row)
+	for (size_t row = 0; row < lhs._nRows; ++row)
 	{
 		T cumulativeSum = static_cast<T>(0.0);
-		for (int col = 0; col < lhs._nCols; ++col)
-		{
+		for (size_t col = 0; col < lhs._nCols; ++col)
 			cumulativeSum += (lhs.Get(row, col) * rhs.Get(col));
-		}
 		result.Set(row, cumulativeSum);
 	}
 
@@ -442,12 +439,12 @@ Vector<T> operator* (const Matrix<T>& lhs, const Vector<T>& rhs)
 template <class T>
 Matrix<T> operator* (const T& lhs, const Matrix<T>& rhs)
 {
-	int numRows = rhs._nRows;
-	int numCols = rhs._nCols;
-	int numElements = numRows * numCols;
+	size_t numRows = rhs._nRows;
+	size_t numCols = rhs._nCols;
+	size_t numElements = numRows * numCols;
 	T* tempResult = new T[numElements];
-	for (int i = 0; i < numElements; ++i)
-		tempResult[i] = lhs * rhs._matrixData[i];
+	for (size_t i = 0; i < numElements; ++i)
+		tempResult[i] = lhs * rhs._MData[i];
 
 	Matrix<T> result(numRows, numCols, tempResult);
 	delete[] tempResult;
@@ -458,12 +455,12 @@ Matrix<T> operator* (const T& lhs, const Matrix<T>& rhs)
 template <class T>
 Matrix<T> operator* (const Matrix<T>& lhs, const T& rhs)
 {
-	int numRows = lhs._nRows;
-	int numCols = lhs._nCols;
-	int numElements = numRows * numCols;
+	size_t numRows = lhs._nRows;
+	size_t numCols = lhs._nCols;
+	size_t numElements = numRows * numCols;
 	T* tempResult = new T[numElements];
-	for (int i = 0; i < numElements; ++i)
-		tempResult[i] = lhs._matrixData[i] * rhs;
+	for (size_t i = 0; i < numElements; ++i)
+		tempResult[i] = lhs._MData[i] * rhs;
 
 	Matrix<T> result(numRows, numCols, tempResult);
 	delete[] tempResult;
@@ -474,10 +471,10 @@ Matrix<T> operator* (const Matrix<T>& lhs, const T& rhs)
 template <class T>
 Matrix<T> operator* (const Matrix<T>& lhs, const Matrix<T>& rhs)
 {
-	int r_numRows = rhs._nRows;
-	int r_numCols = rhs._nCols;
-	int l_numRows = lhs._nRows;
-	int l_numCols = lhs._nCols;
+	size_t r_numRows = rhs._nRows;
+	size_t r_numCols = rhs._nCols;
+	size_t l_numRows = lhs._nRows;
+	size_t l_numCols = lhs._nCols;
 
 	if (l_numCols == r_numRows)
 	{
@@ -486,28 +483,28 @@ Matrix<T> operator* (const Matrix<T>& lhs, const Matrix<T>& rhs)
 		T* tempResult = new T[lhs._nRows * rhs._nCols];
 
 		// Loop through each row of the LHS.
-		for (int lhsRow = 0; lhsRow < l_numRows; lhsRow++)
+		for (size_t lhsRow = 0; lhsRow < l_numRows; lhsRow++)
 		{
 			// Loop through each column on the RHS.
-			for (int rhsCol = 0; rhsCol < r_numCols; rhsCol++)
+			for (size_t rhsCol = 0; rhsCol < r_numCols; rhsCol++)
 			{
 				T elementResult = static_cast<T>(0.0);
 				// Loop through each element of this LHS row.
-				for (int lhsCol = 0; lhsCol < l_numCols; lhsCol++)
+				for (size_t lhsCol = 0; lhsCol < l_numCols; lhsCol++)
 				{
 					// Compute the LHS linear index.
-					int lhsLinearIndex = (lhsRow * l_numCols) + lhsCol;
+					size_t lhsLinearIndex = (lhsRow * l_numCols) + lhsCol;
 
 					// Compute the RHS linear index (based on LHS col).
 					// rhs row number equal to lhs column number.
-					int rhsLinearIndex = (lhsCol * r_numCols) + rhsCol;
+					size_t rhsLinearIndex = (lhsCol * r_numCols) + rhsCol;
 
 					// Perform the calculation on these elements.
-					elementResult += (lhs._matrixData[lhsLinearIndex] * rhs._matrixData[rhsLinearIndex]);
+					elementResult += (lhs._MData[lhsLinearIndex] * rhs._MData[rhsLinearIndex]);
 				}
 
 				// Store the result.
-				int resultLinearIndex = (lhsRow * r_numCols) + rhsCol;
+				size_t resultLinearIndex = (lhsRow * r_numCols) + rhsCol;
 				tempResult[resultLinearIndex] = elementResult;
 			}
 		}
@@ -529,18 +526,17 @@ template <class T>
 bool Matrix<T>::operator== (const Matrix<T>& rhs)
 {
 	// Check if the matricies are the same size, if not return false.
-	if ((this->_nRows != rhs._nRows) && (this->_nCols != rhs._nCols))
+	if (this->_nRows != rhs._nRows && this->_nCols != rhs._nCols)
 		return false;
 
 	// Check if the elements are equal.
-	bool flag = true;
-	for (int i = 0; i < this->_nElements; ++i)
+	for (size_t i = 0; i < this->_nElements; ++i)
 	{
-		//if (this->m_matrixData[i] != rhs.m_matrixData[i])
-		if (!CloseEnough(this->_matrixData[i], rhs._matrixData[i]))
-			flag = false;
+		//if (this->m_MData[i] != rhs.m_MData[i])
+		if (!CloseEnough(this->_MData[i], rhs._MData[i]))
+			return false;
 	}
-	return flag;
+	return true;
 }
 
 /* **************************************************************************************************
@@ -556,16 +552,31 @@ Matrix<T> Matrix<T>::operator= (const Matrix<T>& rhs)
 		_nCols = rhs._nCols;
 		_nElements = rhs._nElements;
 
-		if (_matrixData)
-			delete[] _matrixData;
+		if (_MData)
+			delete[] _MData;
 
-		_matrixData = new T[_nElements];
-		for (int i = 0; i < _nElements; i++)
-			_matrixData[i] = rhs._matrixData[i];
+		_MData = new T[_nElements];
+		for (size_t i = 0; i < _nElements; i++)
+			_MData[i] = rhs._MData[i];
 	}
 
 	return *this;
 
+}
+
+template<class T>
+Matrix<T> Matrix<T>::operator*=(const T& rhs)
+{
+	size_t count = _nElements;
+	for (size_t i = 0; i < _nElements;i++)
+		_MData[i] *= rhs;
+	return *this;
+}
+
+template<class T>
+inline Matrix<T> Matrix<T>::operator*=(const Matrix<T>& rhs)
+{
+	return (*this) * rhs;
 }
 
 /* **************************************************************************************************
@@ -573,12 +584,12 @@ SEPARATE THE MATRIX INTO TWO PARTS, AROUND THE COLUMN NUMBER PROVIDED
 (Note that the output is returned into the two Matrix<T> pointers in the input argument list)
 /* *************************************************************************************************/
 template <class T>
-bool Matrix<T>::Separate(Matrix<T>& matrix1, Matrix<T>& matrix2, int colNum)
+bool Matrix<T>::Separate(Matrix<T>& matrix1, Matrix<T>& matrix2, size_t colNum)
 {
 	// Compute the sizes of the new matrices.
-	int numRows = _nRows;
-	int numCols1 = colNum;
-	int numCols2 = _nCols - colNum;
+	size_t numRows = _nRows;
+	size_t numCols1 = colNum;
+	size_t numCols2 = _nCols - colNum;
 
 	// Resize the two matrices to the proper dimensions.
 	matrix1.Resize(numRows, numCols1);
@@ -586,9 +597,9 @@ bool Matrix<T>::Separate(Matrix<T>& matrix1, Matrix<T>& matrix2, int colNum)
 
 	// Loop over the original matrix and store data into the appropriate elements of the two
 	// output matrices.
-	for (int row = 0; row < _nRows; ++row)
+	for (size_t row = 0; row < _nRows; ++row)
 	{
-		for (int col = 0; col < _nCols; ++col)
+		for (size_t col = 0; col < _nCols; ++col)
 		{
 			if (col < colNum)
 				matrix1.Set(row, col, this->Get(row, col));
@@ -606,10 +617,10 @@ template <class T>
 bool Matrix<T>::Join(const Matrix<T>& matrix2)
 {
 	// Extract the information that we need from both matrices
-	int numRows1 = _nRows;
-	int numRows2 = matrix2._nRows;
-	int numCols1 = _nCols;
-	int numCols2 = matrix2._nCols;
+	size_t numRows1 = _nRows;
+	size_t numRows2 = matrix2._nRows;
+	size_t numCols1 = _nCols;
+	size_t numCols2 = matrix2._nCols;
 
 	// If the matrices have different numbers of rows, then this operation makes no sense.
 	if (numRows1 != numRows2)
@@ -617,13 +628,13 @@ bool Matrix<T>::Join(const Matrix<T>& matrix2)
 
 	// Allocate memory for the result.
 	// Note that only the number of columns increases.
-	T* newMatrixData = new T[numRows1 * (numCols1 + numCols2)];
+	T* newMData = new T[numRows1 * (numCols1 + numCols2)];
 
 	// Copy the two matrices into the new one.
-	int linearIndex, resultLinearIndex;
-	for (int i = 0; i < numRows1; ++i)
+	size_t linearIndex, resultLinearIndex;
+	for (size_t i = 0; i < numRows1; ++i)
 	{
-		for (int j = 0; j < (numCols1 + numCols2); ++j)
+		for (size_t j = 0; j < numCols1 + numCols2; ++j)
 		{
 			resultLinearIndex = (i * (numCols1 + numCols2)) + j;
 
@@ -631,13 +642,13 @@ bool Matrix<T>::Join(const Matrix<T>& matrix2)
 			if (j < numCols1)
 			{
 				linearIndex = (i * numCols1) + j;
-				newMatrixData[resultLinearIndex] = _matrixData[linearIndex];
+				newMData[resultLinearIndex] = _MData[linearIndex];
 			}
 			// Otherwise, j must be in the right hand matrix, so we get data from there...
 			else
 			{
 				linearIndex = (i * numCols2) + (j - numCols1);
-				newMatrixData[resultLinearIndex] = matrix2._matrixData[linearIndex];
+				newMData[resultLinearIndex] = matrix2._MData[linearIndex];
 			}
 		}
 	}
@@ -645,12 +656,12 @@ bool Matrix<T>::Join(const Matrix<T>& matrix2)
 	// Update the stored data.
 	_nCols = numCols1 + numCols2;
 	_nElements = _nRows * _nCols;
-	delete[] _matrixData;
-	_matrixData = new T[_nElements];
-	for (int i = 0; i < _nElements; ++i)
-		_matrixData[i] = newMatrixData[i];
+	delete[] _MData;
+	_MData = new T[_nElements];
+	for (size_t i = 0; i < _nElements; ++i)
+		_MData[i] = newMData[i];
 
-	delete[] newMatrixData;
+	delete[] newMData;
 	return true;
 }
 
@@ -668,7 +679,7 @@ T Matrix<T>::Determinant()
 	T determinant;
 	if (_nRows == 2)
 	{
-		determinant = (_matrixData[0] * _matrixData[3]) - (_matrixData[1] * _matrixData[2]);
+		determinant = (_MData[0] * _MData[3]) - (_MData[1] * _MData[2]);
 	}
 	else
 	{
@@ -679,7 +690,7 @@ T Matrix<T>::Determinant()
 			// So, loop over each column.
 		T cumulativeSum = 0.0;
 		T sign = 1.0;
-		for (int j = 0; j < _nCols; ++j)
+		for (size_t j = 0; j < _nCols; ++j)
 		{
 			// And find the sub-matrix for each element.
 			Matrix<T> subMatrix = this->FindSubMatrix(0, j);
@@ -714,24 +725,24 @@ bool Matrix<T>::Inverse()
 	identityMatrix.SetToIdentity();
 
 	// Join the identity matrix to the existing matrix.	
-	int originalNumCols = _nCols;
+	size_t originalNumCols = _nCols;
 	Join(identityMatrix);
 
 	// Begin the main part of the process.
-	int cRow, cCol;
+	size_t cRow, cCol;
 	int maxCount = 100;
 	int count = 0;
 	bool completeFlag = false;
 	while ((!completeFlag) && (count < maxCount))
 	{
-		for (int diagIndex = 0; diagIndex < _nRows; ++diagIndex)
+		for (size_t diagIndex = 0; diagIndex < _nRows; ++diagIndex)
 		{
 			// Loop over the diagonal of the matrix and ensure all diagonal elements are equal to one.
 			cRow = diagIndex;
 			cCol = diagIndex;
 
 			// Find the index of the maximum element in the current column.
-			int maxIndex = FindRowWithMaxElement(cCol, cRow);
+			size_t maxIndex = FindRowWithMaxElement(cCol, cRow);
 
 			// If this isn't the current row, then swap.
 			if (maxIndex != cRow)
@@ -740,29 +751,29 @@ bool Matrix<T>::Inverse()
 				SwapRow(cRow, maxIndex);
 			}
 			// Make sure the value at (cRow,cCol) is equal to one.
-			if (_matrixData[Sub2Ind(cRow, cCol)] != 1.0)
+			if (_MData[Sub2Ind(cRow, cCol)] != 1.0)
 			{
-				T multFactor = 1.0 / _matrixData[Sub2Ind(cRow, cCol)];
+				T multFactor = 1.0 / _MData[Sub2Ind(cRow, cCol)];
 				MultRow(cRow, multFactor);
 				//std::cout << "Multiply row " << cRow << " by " << multFactor << std::endl;
 			}
 
 			// Consider the column.
-			for (int rowIndex = cRow + 1; rowIndex < _nRows; ++rowIndex)
+			for (size_t rowIndex = cRow + 1; rowIndex < _nRows; ++rowIndex)
 			{
 				// If the element is already zero, move on.
-				if (!CloseEnough(_matrixData[Sub2Ind(rowIndex, cCol)], 0.0))
+				if (!CloseEnough(_MData[Sub2Ind(rowIndex, cCol)], 0.0))
 				{
 					// Obtain the element to work with from the matrix diagonal.
 					// As we aim to set all the diagonal elements to one, this should
 					// always be valid for a matrix that can be inverted.
-					int rowOneIndex = cCol;
+					size_t rowOneIndex = cCol;
 
 					// Get the value stored at the current element.
-					T currentElementValue = _matrixData[Sub2Ind(rowIndex, cCol)];
+					T currentElementValue = _MData[Sub2Ind(rowIndex, cCol)];
 
 					// Get the value stored at (rowOneIndex, cCol)
-					T rowOneValue = _matrixData[Sub2Ind(rowOneIndex, cCol)];
+					T rowOneValue = _MData[Sub2Ind(rowOneIndex, cCol)];
 
 					// If this is equal to zero, then just move on.
 					if (!CloseEnough(rowOneValue, 0.0))
@@ -780,21 +791,21 @@ bool Matrix<T>::Inverse()
 			}
 
 			// Consider the row.			
-			for (int colIndex = cCol + 1; colIndex < originalNumCols; ++colIndex)
+			for (size_t colIndex = cCol + 1; colIndex < originalNumCols; ++colIndex)
 			{
 				// If the element is already zero, move on.
-				if (!CloseEnough(_matrixData[Sub2Ind(cRow, colIndex)], 0.0))
+				if (!CloseEnough(_MData[Sub2Ind(cRow, colIndex)], 0.0))
 				{
 					// Obtain the element to work with from the matrix diagonal.
 					// As we aim to set all the diagonal elements to one, this should
 					// always be valid for a matrix that can be inverted.
-					int rowOneIndex = colIndex;
+					size_t rowOneIndex = colIndex;
 
 					// Get the value stored at the current element.
-					T currentElementValue = _matrixData[Sub2Ind(cRow, colIndex)];
+					T currentElementValue = _MData[Sub2Ind(cRow, colIndex)];
 
 					// Get the value stored at (rowOneIndex, colIndex)
-					T rowOneValue = _matrixData[Sub2Ind(rowOneIndex, colIndex)];
+					T rowOneValue = _MData[Sub2Ind(rowOneIndex, colIndex)];
 
 					// If this is equal to zero, then just move on.
 					if (!CloseEnough(rowOneValue, 0.0))
@@ -829,10 +840,10 @@ bool Matrix<T>::Inverse()
 			// Rebuild the matrix with just the right half, which now contains the result.			
 			_nCols = originalNumCols;
 			_nElements = _nRows * _nCols;
-			delete[] _matrixData;
-			_matrixData = new T[_nElements];
-			for (int i = 0; i < _nElements; ++i)
-				_matrixData[i] = rightHalf._matrixData[i];
+			delete[] _MData;
+			_MData = new T[_nElements];
+			for (size_t i = 0; i < _nElements; ++i)
+				_MData[i] = rightHalf._MData[i];
 		}
 
 		// Increment the counter.
@@ -854,13 +865,9 @@ Matrix<T> Matrix<T>::Transpose() const
 	Matrix<T> resultMatrix(_nCols, _nRows);
 
 	// Now loop through the elements and copy in the appropriate order.
-	for (int i = 0; i < _nRows; ++i)
-	{
-		for (int j = 0; j < _nCols; ++j)
-		{
+	for (size_t i = 0; i < _nRows; ++i)
+		for (size_t j = 0; j < _nCols; ++j)
 			resultMatrix.Set(j, i, this->Get(i, j));
-		}
-	}
 
 	return resultMatrix;
 }
@@ -882,41 +889,41 @@ Matrix<T> Matrix<T>::RowEchelon()
 		will make changes to the stored matrix data (it operates 'in place') and we don't want
 		this behaviour. Therefore we take a copy at the beginning and then we will replace the
 		modified matrix data with this copied data at the end, thus preserving the original. */
-	T* tempMatrixData;
-	tempMatrixData = new T[_nRows * _nCols];
-	for (int i = 0; i < (_nRows * _nCols); ++i)
-		tempMatrixData[i] = _matrixData[i];
+	T* tempMData;
+	tempMData = new T[_nRows * _nCols];
+	for (size_t i = 0; i < (_nRows * _nCols); ++i)
+		tempMData[i] = _MData[i];
 
 	// Begin the main part of the process.
-	int cRow, cCol;
+	size_t cRow, cCol;
 	int maxCount = 100;
 	int count = 0;
 	bool completeFlag = false;
-	while ((!completeFlag) && (count < maxCount))
+	while (!completeFlag && count < maxCount)
 	{
-		for (int diagIndex = 0; diagIndex < _nRows; ++diagIndex)
+		for (size_t diagIndex = 0; diagIndex < _nRows; ++diagIndex)
 		{
 			// Loop over the diagonal of the matrix and ensure all diagonal elements are equal to one.
 			cRow = diagIndex;
 			cCol = diagIndex;
 
 			// Find the index of the maximum element in the current column.
-			int maxIndex = FindRowWithMaxElement(cCol, cRow);
+			size_t maxIndex = FindRowWithMaxElement(cCol, cRow);
 
 			// Now consider the column.
 			// Our aim is to set all elements BELOW the diagonal to zero.
-			for (int rowIndex = cRow + 1; rowIndex < _nRows; ++rowIndex)
+			for (size_t rowIndex = cRow + 1; rowIndex < _nRows; ++rowIndex)
 			{
 				// If the element is already zero, move on.
-				if (!CloseEnough(_matrixData[Sub2Ind(rowIndex, cCol)], 0.0))
+				if (!CloseEnough(_MData[Sub2Ind(rowIndex, cCol)], 0.0))
 				{
-					int rowOneIndex = cCol;
+					size_t rowOneIndex = cCol;
 
 					// Get the value stored at the current element.
-					T currentElementValue = _matrixData[Sub2Ind(rowIndex, cCol)];
+					T currentElementValue = _MData[Sub2Ind(rowIndex, cCol)];
 
 					// Get the value stored at (rowOneIndex, cCol)
-					T rowOneValue = _matrixData[Sub2Ind(rowOneIndex, cCol)];
+					T rowOneValue = _MData[Sub2Ind(rowOneIndex, cCol)];
 
 					// If this is equal to zero, then just move on.
 					if (!CloseEnough(rowOneValue, 0.0))
@@ -939,14 +946,14 @@ Matrix<T> Matrix<T>::RowEchelon()
 	}
 
 	// Form the output matrix.
-	Matrix<T> outputMatrix(_nRows, _nCols, _matrixData);
+	Matrix<T> outputMatrix(_nRows, _nCols, _MData);
 
 	// Restore the original matrix data from the copy.
-	for (int i = 0; i < (_nRows * _nCols); ++i)
-		_matrixData[i] = tempMatrixData[i];
+	for (size_t i = 0; i < (_nRows * _nCols); ++i)
+		_MData[i] = tempMData[i];
 
 	// Delete the copy.
-	delete[] tempMatrixData;
+	delete[] tempMData;
 
 	return outputMatrix;
 }
@@ -955,7 +962,7 @@ Matrix<T> Matrix<T>::RowEchelon()
 COMPUTE THE RANK OF THE PROVIDED MATRIX
 /* *************************************************************************************************/
 template <class T>
-int Matrix<T>::Rank()
+size_t Matrix<T>::Rank()
 {
 	// Convert the matrix to row-echelon form.
 	Matrix<T> matrixCopy = this->RowEchelon();
@@ -965,7 +972,7 @@ int Matrix<T>::Rank()
 
 		Note that this method is slower for large matrices and therefore
 		it is better to use the RowEchelon method if possible. */
-	int numNonZeroRows = 0;
+	size_t numNonZeroRows = 0;
 	if (!matrixCopy.IsRowEchelon())
 	{
 		// Setup a std::vector to store the sub-matrices as we go.
@@ -988,8 +995,8 @@ int Matrix<T>::Rank()
 			if (currentMatrix.IsNonZero())
 			{
 				// If the determinant is non-zero, then we have our result.
-				T currentMatrixDet = currentMatrix.Determinant();
-				if (!CloseEnough(currentMatrixDet, 0.0))
+				T currentMDet = currentMatrix.Determinant();
+				if (!CloseEnough(currentMDet, 0.0))
 				{
 					completeFlag = true;
 					numNonZeroRows = currentMatrix.RowsCount();
@@ -1021,15 +1028,15 @@ int Matrix<T>::Rank()
 				in row-echelon form and we can compute the rank quite easily
 				as simply the number of non-zero rows. */
 
-		int nRows = matrixCopy.RowsCount();
-		int nCols = matrixCopy.ColsCount();
+		size_t nRows = matrixCopy.RowsCount();
+		size_t nCols = matrixCopy.ColsCount();
 
 		// Loop over each row and test whether it has at least one non-zero element.
-		for (int i = 0; i < nRows; ++i)
+		for (size_t i = 0; i < nRows; ++i)
 		{
 			// Loop over the columns of this row.
-			int colSum = 0;
-			for (int j = 0; j < nCols; ++j)
+			size_t colSum = 0;
+			for (size_t j = 0; j < nCols; ++j)
 			{
 				if (!CloseEnough(matrixCopy.Get(i, j), 0.0))
 					colSum++;
@@ -1050,22 +1057,20 @@ PRIVATE FUNCTIONS
 /* *************************************************************************************************/
 // Function to return the linear index corresponding to the supplied row and column values.
 template <class T>
-int Matrix<T>::Sub2Ind(int row, int col) const
+size_t Matrix<T>::Sub2Ind(size_t row, size_t col) const
 {
-	if ((row < _nRows) && (row >= 0) && (col < _nCols) && (col >= 0))
-		return (row * _nCols) + col;
-	else
-		return -1;
+	if (row < _nRows && col < _nCols)
+		return row * _nCols + col;
+
+	throw std::invalid_argument("row and col are too large");
+	//return -1;
 }
 
 // Function to test whether the matrix is square.
 template <class T>
 bool Matrix<T>::IsSquare()
 {
-	if (_nCols == _nRows)
-		return true;
-	else
-		return false;
+	return _nCols == _nRows;
 }
 
 // Function to test whether the matrix is non-zero.
@@ -1074,18 +1079,18 @@ bool Matrix<T>::IsNonZero()
 {
 	// Loop over every element.
 	int numNonZero = 0;
-	for (int i = 0; i < _nElements; ++i)
+	for (size_t i = 0; i < _nElements; ++i)
 	{
 		// If this element is close enough to zero, then
 		// increment our numNonZero counter.
-		if (!CloseEnough(_matrixData[i], 0.0))
+		if (!CloseEnough(_MData[i], 0.0))
 			numNonZero++;
 	}
 
 	/* If the numNonZero counter is still equal to zero, then
 		the matrix must be all zeros, hence we return false.
 		Otherwise we return true. */
-	return (numNonZero != 0);
+	return numNonZero != 0;
 }
 
 // Function to test whether the matrix is in row-echelon form.
@@ -1096,14 +1101,14 @@ bool Matrix<T>::IsRowEchelon()
 		lower triangular matrix is zero. */
 		// Loop over each row, except the first one (which doesn't need to have any zero elements).
 	T cumulativeSum = static_cast<T>(0.0);
-	for (int i = 1; i < _nRows; ++i)
+	for (size_t i = 1; i < _nRows; ++i)
 	{
 		/* Loop over the columns that correspond to the lower triangular
 			matrix according to the current row. */
-		for (int j = 0; j < i; ++j)
+		for (size_t j = 0; j < i; ++j)
 		{
 			// Add this element to the cumulative sum.
-			cumulativeSum += _matrixData[Sub2Ind(i, j)];
+			cumulativeSum += _MData[Sub2Ind(i, j)];
 		}
 	}
 
@@ -1154,20 +1159,20 @@ bool Matrix<T>::IsSymmetric()
 
 // Function to swap rows i and j (in place).
 template <class T>
-void Matrix<T>::SwapRow(int i, int j)
+void Matrix<T>::SwapRow(size_t i, size_t j)
 {
 	// Store a tempory copy of row i.
 	T* tempRow = new T[_nCols];
-	for (int k = 0; k < _nCols; ++k)
-		tempRow[k] = _matrixData[Sub2Ind(i, k)];
+	for (size_t k = 0; k < _nCols; ++k)
+		tempRow[k] = _MData[Sub2Ind(i, k)];
 
 	// Replace row i with row j.
-	for (int k = 0; k < _nCols; ++k)
-		_matrixData[Sub2Ind(i, k)] = _matrixData[Sub2Ind(j, k)];
+	for (size_t k = 0; k < _nCols; ++k)
+		_MData[Sub2Ind(i, k)] = _MData[Sub2Ind(j, k)];
 
 	// Replace row k with the tempory copy of the original row i.
-	for (int k = 0; k < _nCols; ++k)
-		_matrixData[Sub2Ind(j, k)] = tempRow[k];
+	for (size_t k = 0; k < _nCols; ++k)
+		_MData[Sub2Ind(j, k)] = tempRow[k];
 
 	// Tidy up after ourselves.
 	delete[] tempRow;
@@ -1175,25 +1180,25 @@ void Matrix<T>::SwapRow(int i, int j)
 
 // Function to add a multiple of row j to row i (in place).
 template <class T>
-void Matrix<T>::MultAdd(int i, int j, T multFactor)
+void Matrix<T>::MultAdd(size_t i, size_t j, T multFactor)
 {
-	for (int k = 0; k < _nCols; ++k)
-		_matrixData[Sub2Ind(i, k)] += (_matrixData[Sub2Ind(j, k)] * multFactor);
+	for (size_t k = 0; k < _nCols; ++k)
+		_MData[Sub2Ind(i, k)] += (_MData[Sub2Ind(j, k)] * multFactor);
 }
 
 // Function to the find the row with the maximum element at the column given.
 // Returns the row index.
 template <class T>
-int Matrix<T>::FindRowWithMaxElement(int colNumber, int startingRow)
+size_t Matrix<T>::FindRowWithMaxElement(size_t colNumber, size_t startingRow)
 {
-	T tempValue = _matrixData[Sub2Ind(startingRow, colNumber)];
-	int rowIndex = startingRow;
-	for (int k = startingRow + 1; k < _nRows; ++k)
+	T tempValue = _MData[Sub2Ind(startingRow, colNumber)];
+	size_t rowIndex = startingRow;
+	for (size_t k = startingRow + 1; k < _nRows; ++k)
 	{
-		if (fabs(_matrixData[Sub2Ind(k, colNumber)]) > fabs(tempValue))
+		if (fabs(_MData[Sub2Ind(k, colNumber)]) > fabs(tempValue))
 		{
 			rowIndex = k;
-			tempValue = _matrixData[Sub2Ind(k, colNumber)];
+			tempValue = _MData[Sub2Ind(k, colNumber)];
 		}
 	}
 	return rowIndex;
@@ -1201,22 +1206,21 @@ int Matrix<T>::FindRowWithMaxElement(int colNumber, int startingRow)
 
 // Function to multiply a row by the given value.
 template <class T>
-void Matrix<T>::MultRow(int i, T multFactor)
+void Matrix<T>::MultRow(size_t i, T multFactor)
 {
-	for (int k = 0; k < _nCols; ++k)
-		_matrixData[Sub2Ind(i, k)] *= multFactor;
+	for (size_t k = 0; k < _nCols; ++k)
+		_MData[Sub2Ind(i, k)] *= multFactor;
 }
 
 // A simple function to print a matrix to stdout.
 template <class T>
 void Matrix<T>::Print() const
 {
-	for (int row = 0; row < _nRows; ++row)
+	for (size_t row = 0; row < _nRows; ++row)
 	{
-		for (int col = 0; col < _nCols; ++col)
-		{
+		for (size_t col = 0; col < _nCols; ++col)
 			std::cout << std::fixed << std::setprecision(6) << this->Get(row, col) << "  ";
-		}
+
 		std::cout << std::endl;
 	}
 }
@@ -1225,12 +1229,11 @@ void Matrix<T>::Print() const
 template <class T>
 void Matrix<T>::Print(int precision) const
 {
-	for (int row = 0; row < _nRows; ++row)
+	for (size_t row = 0; row < _nRows; ++row)
 	{
-		for (int col = 0; col < _nCols; ++col)
-		{
+		for (size_t col = 0; col < _nCols; ++col)
 			std::cout << std::fixed << std::setprecision(precision) << this->Get(row, col) << "  ";
-		}
+
 		std::cout << std::endl;
 	}
 }
@@ -1243,7 +1246,7 @@ bool Matrix<T>::CloseEnough(T f1, T f2)
 
 // Function to find the sub-matrix for the given element.
 template <class T>
-Matrix<T> Matrix<T>::FindSubMatrix(int rowNum, int colNum)
+Matrix<T> Matrix<T>::FindSubMatrix(size_t rowNum, size_t colNum)
 {
 	// Create a new matrix to store the sub-matrix.
 	// Note that this is one row and one column smaller than the original.
@@ -1251,14 +1254,14 @@ Matrix<T> Matrix<T>::FindSubMatrix(int rowNum, int colNum)
 
 	// Loop over the elements of the existing matrix and copy to sub-matrix as appropriate.
 	int count = 0;
-	for (int i = 0; i < _nRows; ++i)
+	for (size_t i = 0; i < _nRows; ++i)
 	{
-		for (int j = 0; j < _nCols; ++j)
+		for (size_t j = 0; j < _nCols; ++j)
 		{
 			// If i or j correspond to rowNum or colNum, then ignore this element.
 			if ((i != rowNum) && (j != colNum))
 			{
-				subMatrix._matrixData[count] = this->Get(i, j);
+				subMatrix._MData[count] = this->Get(i, j);
 				count++;
 			}
 		}

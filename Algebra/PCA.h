@@ -24,17 +24,17 @@ template <typename T>
 std::vector<T> ComputeColumnMeans(const Matrix<T> &inputData)
 {
 	// Determine the size of the input data.
-	int numRows = inputData.RowsCount();
-	int numCols = inputData.ColsCount();
+	size_t numRows = inputData.RowsCount();
+	size_t numCols = inputData.ColsCount();
 	
 	// Create a vector for output.
 	std::vector<T> output;	
 	
 	// Loop through and compute means.
-	for (int j=0; j<numCols; ++j)
+	for (size_t j=0; j<numCols; ++j)
 	{
 		T cumulativeSum = static_cast<T>(0.0);
-		for (int i=0; i<numRows; ++i)
+		for (size_t i=0; i<numRows; ++i)
 			cumulativeSum += inputData.Get(i,j);
 			
 		output.push_back(cumulativeSum / static_cast<T>(numRows));
@@ -48,13 +48,13 @@ template <typename T>
 void SubtractColumnMeans(Matrix<T> &inputData, std::vector<T> &columnMeans)
 {
 	// Determine the size of the input data.
-	int numRows = inputData.RowsCount();
-	int numCols = inputData.ColsCount();
+	size_t numRows = inputData.RowsCount();
+	size_t numCols = inputData.ColsCount();
 	
 	// Loop through and subtract the means.
-	for (int j=0; j<numCols; ++j)
+	for (size_t j=0; j<numCols; ++j)
 	{
-		for (int i=0; i<numRows; ++i)
+		for (size_t i=0; i<numRows; ++i)
 			inputData.Set(i,j, inputData.Get(i,j) - columnMeans.at(j));
 	}	
 }
@@ -70,7 +70,7 @@ Matrix<T> ComputeCovariance(const Matrix<T> &X)
 		we computed XX', the result would be a [k x k] matrix. The covariance
 		matrix should be [p x p], so we need to transpose, hence the use of
 		X'X. */
-	int numRows = X.RowsCount();
+	size_t numRows = X.RowsCount();
 	Matrix<T> covX = (static_cast<T>(1.0) / static_cast<T>(numRows - 1)) * (X.Transpose() * X);
 	return covX;
 }

@@ -8,10 +8,10 @@ GL::LightBase::~LightBase()
 {
 }
 
-bool GL::LightBase::ComputeIllumination(const VectorD& intPoint,
-    const VectorD& localNormal, 
+bool GL::LightBase::ComputeIllumination(const VD& intPoint,
+    const VD& localNormal, 
     const pShapesVector& objectList,   const pShape& currentObject,
-    VectorD& color, double& intensity)
+    VD& color, double& intensity)
 {
     return false;
 }

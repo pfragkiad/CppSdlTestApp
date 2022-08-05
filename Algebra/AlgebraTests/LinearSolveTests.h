@@ -63,8 +63,8 @@ namespace AlgebraTests
 		cout << "We setup the equations in the form of Ax = b, where A = " << endl << aMat << endl;
 
 		// Define a vector to hold the RHS of our system of linear equations.
-		std::vector<double> vectorData{ 13.0, 9.0, -6.0 };
-		Vector<double> bVec{ vectorData };
+		std::vector<double> VData{ 13.0, 9.0, -6.0 };
+		Vector<double> bVec{ VData };
 		cout << "And b = " << endl << bVec << endl;
 
 		// Call the qbLinSolve function.

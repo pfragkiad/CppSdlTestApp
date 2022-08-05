@@ -23,8 +23,8 @@ void GL::Examples::Example2SimpleSphere(Image& image, Camera& camera, Sphere& sp
 	Vector<double> localNormal(3);
 	Vector<double> localColor(3);
 
-	double xFact = 2.0 / xSize; //0 to 2
-	double yFact = 2.0 / ySize; //0 to 2
+	float xFact = 2.0f / xSize; //0 to 2
+	float yFact = 2.0f / ySize; //0 to 2
 	double minDist = 1e6;
 	double maxDist = 0.0;
 
@@ -36,8 +36,8 @@ void GL::Examples::Example2SimpleSphere(Image& image, Camera& camera, Sphere& sp
 		for (int y = 0; y < ySize; y++)
 		{
 			//normalize the x and y coordinates
-			double normX = x * xFact - 1.0; //-1 to 1
-			double normY = y * yFact - 1.0; //-1 to 1
+			float normX = x * xFact - 1.0f; //-1 to 1
+			float normY = y * yFact - 1.0f; //-1 to 1
 
 			//generate the ray for this pixel
 			camera.GenerateRay(normX, normY, cameraRay);

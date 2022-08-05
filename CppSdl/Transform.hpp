@@ -14,23 +14,30 @@ namespace GL
 		~Transform();
 
 		//construct from a pair of matrices
-		Transform(const MatrixD& fwd, const MatrixD& bck);
+		Transform(const MD& fwd, const MD& bck);
+		
+		//useful for static images
+		Transform(const VD& translation,
+			const VD& rotation,
+			const VD& scale) {
+			Set(translation, rotation, scale);
+		}
 
 		//function to set translation, rotation and scale components
-		void SetTransform(
-			const VectorD& translation,
-			const VectorD& rotation,
-			const VectorD& scale
+		void Set(
+			const VD& translation,
+			const VD& rotation,
+			const VD& scale
 		);
 
 		//function to return the transform matrices
-		MatrixD GetForward();
-		MatrixD GetBackward();
+		MD GetForward();
+		MD GetBackward();
 
 		//function to apply the transform
 		Ray Apply(const Ray& inputRay, bool isForward);
 
-		VectorD Apply(const VectorD& inputVector, bool isForward);
+		VD Apply(const VD& inputVector, bool isForward);
 
 		//overload operators
 		friend Transform operator*(const Transform& lhs, const Transform& rhs);
@@ -40,13 +47,13 @@ namespace GL
 		//void PrintMatrix(bool isForward);
 
 		////function to allow printing of vectors
-		//static void PrintVector(const VectorD& vector);
+		//static void PrintVector(const VD& vector);
 
 	private:
-		//void Print(const MatrixD& matrix);
+		//void Print(const MD& matrix);
 
-		MatrixD _fwdtfm{ Algebra::I4 };
-		MatrixD _bcktfm{ Algebra::I4 };
+		MD _fwdtfm{ Algebra::I4 };
+		MD _bcktfm{ Algebra::I4 };
 
 	};
 

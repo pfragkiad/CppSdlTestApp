@@ -9,10 +9,12 @@ namespace GL
 	{
 	public:
 		Sphere();
+		Sphere(VD baseColor, Transform transformMatrix)
+			: Shape(baseColor, transformMatrix) {}
 
 		virtual ~Sphere() override;
 
-		virtual bool TestIntersection(const Ray& castRay, VectorD& intPoint, VectorD& localNormal, VectorD& localColor) override;
+		virtual bool TestIntersection(const Ray& castRay, VD& intPoint, VD& localNormal, VD& localColor) override;
 
 	private:
 

@@ -8,11 +8,19 @@ GL::Shape::Shape()
 {
 }
 
+GL::Shape::Shape(VD baseColor, Transform transformMatrix)
+{
+    _baseColor = baseColor;
+    _transformMatrix = transformMatrix;
+}
+
 GL::Shape::~Shape()
 {
 }
 
-bool GL::Shape::TestIntersection(const Ray& castRay, Vector<double>& intPoint, Vector<double>& localNormal, Vector<double>& localColor)
+//bool TestIntersection(const Ray& castRay, VectorD& intPoint, VectorD& localNormal, VectorD& localColor)
+
+bool GL::Shape::TestIntersection(const Ray& castRay, VD& intPoint, VD& localNormal, VD& localColor)
 {
     return false;
 }
