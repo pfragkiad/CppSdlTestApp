@@ -10,6 +10,7 @@ GL::PointLight::~PointLight()
 {
 }
 
+
 bool GL::PointLight::ComputeIllumination(const VD& intPoint, const VD& localNormal, 
     const pShapesVector& objectList, const pShape& currentObject,
     VD& color, double& intensity)
@@ -26,8 +27,8 @@ bool GL::PointLight::ComputeIllumination(const VD& intPoint, const VD& localNorm
 
     //if the normal is pointing away from the light then we have no illumination
     //_USE_MATH_DEFINES must be defined (M_PI conflicts with SDL declaration of M_PI)
-    constexpr double M_PI_2= 1.57079632679489661923132169163975144;
-    if (angle > M_PI_2)
+        constexpr double PI_2= 1.57079632679489661923132169163975144;
+if (angle > PI_2)
     {
         color = _color;
         intensity = 0.0;
@@ -37,7 +38,7 @@ bool GL::PointLight::ComputeIllumination(const VD& intPoint, const VD& localNorm
     {
         //we do have illumination
         color = _color;
-        intensity = _intensity * (1.0 - angle / M_PI_2);
+        intensity = _intensity * (1.0 - angle / PI_2);
         //intensity = _intensity * angle / M_PI_2;
         return true;
     }

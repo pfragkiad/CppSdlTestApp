@@ -63,7 +63,7 @@ int LinSolve(const Matrix<T>& aMatrix, const Vector<T>& bVector, Vector<T>& resu
 		row-echelon form. */
 
 		// Extract data from bVector.
-	size_t numDims = bVector.DimsCount();
+	size_t numDims = bVector.Count();
 	std::vector<T> bVecData;
 	for (size_t i = 0; i < numDims; ++i)
 		bVecData.push_back(bVector.Get(i));

@@ -417,7 +417,7 @@ template <class T>
 Vector<T> operator* (const Matrix<T>& lhs, const Vector<T>& rhs)
 {
 	// Verify the dimensions of the inputs.
-	if (lhs._nCols != rhs.DimsCount())
+	if (lhs._nCols != rhs.Count())
 		throw std::invalid_argument("Number of columns in matrix must equal number of rows in vector.");
 
 	// Setup the vector for the output.

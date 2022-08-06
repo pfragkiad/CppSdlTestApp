@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#undef M_PI //it conflicts with SDL M_PI
 
 #include "Vector.h"
 #include "Matrix.h"

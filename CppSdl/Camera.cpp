@@ -44,48 +44,48 @@ void GL::Camera::SetAspectRatio(double newAspect)
 	_aspectRatio = newAspect;
 }
 
-VD GL::Camera::GetPosition()
+VD GL::Camera::GetPosition() const
 {
 	return _position;
 }
 
-VD GL::Camera::GetLookAt()
+VD GL::Camera::GetLookAt() const
 {
 	return _lookAt;
 }
 
-VD GL::Camera::GetUp()
+VD GL::Camera::GetUp() const
 {
 	return _up;
 }
 
-VD GL::Camera::GetU()
+VD GL::Camera::GetU() const
 {
 	return _u;
 }
 
-VD GL::Camera::GetV()
+VD GL::Camera::GetV() const
 {
 	return _v;
 }
 
-VD GL::Camera::GetScreenCenter()
+VD GL::Camera::GetScreenCenter() const
 {
 	return _screenCenter;
 }
 
-double GL::Camera::GetLength()
+double GL::Camera::GetLength() const
 {
 	return _length;
 }
 
-double GL::Camera::GetHorizontalSize()
+double GL::Camera::GetHorizontalSize() const
 {
 	return _horizontalSize;
 }
 
-double GL::Camera::GetAspectRatio()
-{
+double GL::Camera::GetAspectRatio() const
+{ 
 	return _aspectRatio;
 }
 
@@ -97,9 +97,7 @@ bool GL::Camera::GenerateRay(float projectionScreenX, float projectionScreenY, G
 		_u * projectionScreenX +
 		_v * projectionScreenY;
 
-	cameraRay._point1 = _position;
-	cameraRay._point2 = screenWorldCoordinate;
-	cameraRay._lab = screenWorldCoordinate - _position;
+	cameraRay.SetPoints(_position,screenWorldCoordinate);
 
 	////use this point along with the camera position to compute the ray
 	//return GL::Ray(_position, screenWorldCoordinate);

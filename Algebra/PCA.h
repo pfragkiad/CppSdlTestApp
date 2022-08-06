@@ -105,7 +105,7 @@ int ComputeEigenvectors(const Matrix<T> &covarianceMatrix, Matrix<T> &eigenvecto
 	{
 		T eig = eigenValues.at(j);
 		int returnStatus2 = InvPIt<T>(X, eig, eV);
-		for (int i=0; i<eV.DimsCount(); ++i)
+		for (int i=0; i<eV.Count(); ++i)
 			eVM.Set(i, j, eV.Get(i));
 	}
 	

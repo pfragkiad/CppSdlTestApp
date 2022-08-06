@@ -26,8 +26,8 @@ public:
 	// And the destructor.
 	~Vector();
 
-	// Functions to return parameters of the vector.
-	size_t DimsCount() const;
+	// Returns the number of the vector elements.
+	size_t Count() const;
 
 	// Functions to handle elements of the vector.
 	T Get(size_t index) const;
@@ -35,10 +35,10 @@ public:
 
 	// Functions to perform computations on the vector.
 	// Return the length of the vector.
-	T norm();
+	T norm() const;
 
 	// Return a normalized copy of the vector.
-	Vector<T> Normalized();
+	Vector<T> Normalized() const;
 
 	// Normalize the vector in place.
 	void Normalize();
@@ -64,6 +64,8 @@ public:
 	template <class T> friend Vector<T> operator- ( const Vector<T>& rhs);
 	template <class T> friend Vector<T> operator/ (const T& lhs, const Vector<T>& rhs);
 
+	Vector<T> RotateAround(const Vector<T>& vref, T angle);
+
 
 	// Static functions.
 	static T dot(const Vector<T>& a, const Vector<T>& b);
@@ -73,20 +75,20 @@ public:
 
 	void inline Print() const
 	{
-		for (int row = 0; row < _nDims; ++row)
+		for (int row = 0; row < _size; ++row)
 			std::cout << _VData.at(row) << std::endl;
 	}
 
 	void inline Print(int precision) const
 	{
-		for (int row = 0; row < _nDims; ++row)
+		for (int row = 0; row < _size; ++row)
 			std::cout << std::fixed << std::setprecision(precision) << _VData.at(row) << std::endl;
 	}
 
 
 private:
 	std::vector<T> _VData;
-	size_t _nDims;
+	size_t _size;
 };
 
 
@@ -102,7 +104,7 @@ private:
 template<class T>
 std::ostream& operator << (std::ostream& os, const Vector<T>& v)
 {
-	for (size_t row = 0; row < v._nDims; ++row)
+	for (size_t row = 0; row < v._size; ++row)
 		//os << std::fixed << std::setprecision(6) << v.GetElement(row) << std::endl;
 		os << std::fixed << std::setprecision(6) << v._VData[row] << std::endl;
 	return os;
@@ -115,28 +117,28 @@ CONSTRUCTOR / DESTRUCTOR FUNCTIONS
 template <class T>
 Vector<T>::Vector()
 {
-	_nDims = 0;
+	_size = 0;
 	_VData = std::vector<T>();
 }
 
 template <class T>
 Vector<T>::Vector(size_t numDims)
 {
-	_nDims = numDims;
+	_size = numDims;
 	_VData = std::vector<T>(numDims, static_cast<T>(0.0));
 }
 
 template <class T>
 Vector<T>::Vector(std::vector<T> inputData)
 {
-	_nDims = inputData.size();
+	_size = inputData.size();
 	_VData = inputData;
 }
 
 template <class T>
 Vector<T>::Vector(std::initializer_list<T> data)
 {
-	_nDims = data.size();
+	_size = data.size();
 	_VData = std::vector<T>(data);
 }
 
@@ -151,9 +153,9 @@ Vector<T>::~Vector()
 FUNCTIONS TO RETURN PARAMETERS
 /* *************************************************************************************************/
 template <class T>
-size_t Vector<T>::DimsCount() const
+size_t Vector<T>::Count() const
 {
-	return _nDims;
+	return _size;
 }
 
 /* **************************************************************************************************
@@ -176,10 +178,10 @@ FUNCTIONS TO PERFORM COMPUTATIONS ON THE VECTOR
 /* *************************************************************************************************/
 // Compute the length of the vector, known as the 'norm'.
 template <class T>
-T Vector<T>::norm()
+T Vector<T>::norm() const
 {
 	T cumulativeSum = static_cast<T>(0.0);
-	for (int i = 0; i < _nDims; ++i)
+	for (size_t i = 0; i < _size; ++i)
 		cumulativeSum += _VData.at(i) * _VData.at(i);
 
 	return sqrt(cumulativeSum);
@@ -187,7 +189,7 @@ T Vector<T>::norm()
 
 // Return a normalized copy of the vector.
 template <class T>
-Vector<T> Vector<T>::Normalized()
+Vector<T> Vector<T>::Normalized() const
 {
 	// Compute the vector norm.
 	//T length = norm();
@@ -206,7 +208,7 @@ void Vector<T>::Normalize()
 	T length = norm();
 
 	// Compute the elements of the normalized version of the vector.
-	for (int i = 0; i < _nDims; ++i)
+	for (size_t i = 0; i < _size; ++i)
 	{
 		//T temp = _VData.at(i) / vecNorm; //;* (static_cast<T>(1.0) / vecNorm);
 		//_VData.at(i) = temp;
@@ -221,14 +223,14 @@ template <class T>
 Vector<T> Vector<T>::operator+ (const Vector<T>& rhs) const
 {
 	// Check that the number of dimensions match.
-	if (_nDims != rhs._nDims)
+	if (_size != rhs._size)
 		throw std::invalid_argument("Vector dimensions do not match.");
 
 	//std::vector<T> resultData;
-	//for (int i = 0; i < m_nDims; ++i)
+	//for (int i = 0; i < m_size; ++i)
 	//	resultData.push_back(m_VData.at(i) + rhs.m_VData.at(i));
 	std::vector<T> resultData(_VData);
-	for (int i = 0; i < _nDims; ++i)
+	for (size_t i = 0; i < _size; ++i)
 		resultData.at(i) += rhs._VData.at(i);
 
 	Vector<T> result(resultData);
@@ -239,14 +241,14 @@ template <class T>
 Vector<T> Vector<T>::operator- (const Vector<T>& rhs) const
 {
 	// Check that the number of dimensions match.
-	if (_nDims != rhs._nDims)
+	if (_size != rhs._size)
 		throw std::invalid_argument("Vector dimensions do not match.");
 
 	//std::vector<T> resultData;
-	//for (int i = 0; i < _nDims; ++i)
+	//for (int i = 0; i < _size; ++i)
 	//	resultData.push_back(_VData.at(i) - rhs._VData.at(i));
 	std::vector<T> resultData(_VData);
-	for (int i = 0; i < _nDims; ++i)
+	for (size_t i = 0; i < _size; ++i)
 		resultData.at(i) -= rhs._VData.at(i);
 
 	Vector<T> result(resultData);
@@ -258,10 +260,10 @@ Vector<T> Vector<T>::operator* (const T& rhs) const
 {
 	// Perform scalar multiplication.
 	//std::vector<T> resultData;
-	//for (int i = 0; i < _nDims; ++i)
+	//for (int i = 0; i < _size; ++i)
 	//	resultData.push_back(_VData.at(i) * rhs);
 	std::vector<T> resultData(_VData);
-	for (int i = 0; i < _nDims; ++i)
+	for (size_t i = 0; i < _size; ++i)
 		resultData.at(i) *= rhs;
 
 	return Vector<T>(resultData);
@@ -277,7 +279,7 @@ template <class T>
 Vector<T> Vector<T>::operator/ (const T& rhs) const
 {
 	std::vector<T> resultData(_VData);
-	for (int i = 0; i < _nDims; ++i)
+	for (size_t i = 0; i < _size; ++i)
 		resultData.at(i) /= rhs;
 
 	//Vector<T> result(resultData);
@@ -290,7 +292,7 @@ template <class T>
 void Vector<T>::operator*= (const T& rhs) ///////////
 {
 	// Perform scalar multiplication.
-	for (int i = 0; i < _nDims; ++i)
+	for (size_t i = 0; i < _size; ++i)
 		_VData.at(i) *= rhs;
 }
 
@@ -298,7 +300,7 @@ template <class T>
 void Vector<T>::operator/= (const T& rhs) ///////////
 {
 	// Perform scalar multiplication.
-	for (int i = 0; i < _nDims; ++i)
+	for (size_t i = 0; i < _size; ++i)
 		_VData.at(i) /= rhs;
 }
 
@@ -321,10 +323,10 @@ Vector<T> operator* (const T& lhs, const Vector<T>& rhs)
 {
 	// Perform scalar multiplication.
 	//std::vector<T> resultData;
-	//for (int i=0; i<rhs.m_nDims; ++i)
+	//for (int i=0; i<rhs.m_size; ++i)
 	//	resultData.push_back(lhs * rhs.m_VData.at(i))
 	std::vector<T> resultData(rhs._VData);
-	for (int i = 0; i < rhs._nDims; ++i)
+	for (size_t i = 0; i < rhs._size; ++i)
 		resultData.at(i) *= lhs;
 
 	return Vector<T>(resultData);
@@ -335,10 +337,10 @@ Vector<T> operator/ (const T& lhs, const Vector<T>& rhs)
 {
 	// Perform scalar multiplication.
 	//std::vector<T> resultData;
-	//for (int i=0; i<rhs.m_nDims; ++i)
+	//for (int i=0; i<rhs.m_size; ++i)
 	//	resultData.push_back(lhs * rhs.m_VData.at(i))
 	std::vector<T> resultData(rhs._VData);
-	for (int i = 0; i < rhs._nDims; ++i)
+	for (size_t i = 0; i < rhs._size; ++i)
 		resultData.at(i) = lhs / resultData.at(i);
 
 	return Vector<T>(resultData);
@@ -364,6 +366,24 @@ Vector<T> operator- (const Vector<T>& rhs)
 	return -1.0*rhs;
 }
 
+template<class T>
+inline Vector<T> Vector<T>::RotateAround(const Vector<T>& vref, T angle)
+{
+	Vector<T> e_vref = !vref;
+	Vector<T> projectedOnVRef = dot(*this, e_vref) * e_vref;
+	Vector<T> verticalToVRef = *this - projectedOnVRef;
+
+	T verticalToVRefLength = verticalToVRef.norm();
+
+	Vector<T> ex = !verticalToVRef;
+	Vector<T> ey = e_vref ^ ex;
+
+	T x = static_cast<T>(verticalToVRefLength * cos(angle));
+	T y = static_cast<T>(verticalToVRefLength * sin(angle));
+
+	return x * ex + y * ey + projectedOnVRef;
+}
+
 /* **************************************************************************************************
 STATIC FUNCTIONS
 /* *************************************************************************************************/
@@ -371,12 +391,12 @@ template <class T>
 T Vector<T>::dot(const Vector<T>& a, const Vector<T>& b)
 {
 	// Check that the number of dimensions match.
-	if (a._nDims != b._nDims)
+	if (a._size != b._size)
 		throw std::invalid_argument("Vector dimensions must match for the dot-product to be computed.");
 
 	// Compute the dot product.
 	T cumulativeSum = static_cast<T>(0.0);
-	for (int i = 0; i < a._nDims; ++i)
+	for (size_t i = 0; i < a._size; ++i)
 		cumulativeSum += a._VData.at(i) * b._VData.at(i);
 
 	return cumulativeSum;
@@ -385,21 +405,17 @@ T Vector<T>::dot(const Vector<T>& a, const Vector<T>& b)
 template <class T>
 Vector<T> Vector<T>::cross(const Vector<T>& a, const Vector<T>& b)
 {
-	// Check that the number of dimensions match.
-	if (a._nDims != b._nDims)
+	if (a._size != b._size)
 		throw std::invalid_argument("Vector dimensions must match for the cross-product to be computed.");
 
-	// Check that the number of dimensions is 3.
-	/* Although the cross-product is also defined for 7 dimensions, we are
-		not going to consider that case at this time. */
-	if (a._nDims != 3)
+	if (a._size != 3)
 		throw std::invalid_argument("The cross-product can only be computed for three-dimensional vectors.");
 
 	// Compute the cross product.
 	std::vector<T> resultData(3);
-	resultData.at(0) = a._VData.at(1) * b._VData.at(2) - a._VData.at(2) * b._VData.at(1);
-	resultData.at(1) = -a._VData.at(0) * b._VData.at(2) - a._VData.at(2) * b._VData.at(0);
-	resultData.at(2) = a._VData.at(0) * b._VData.at(1) - a._VData.at(1) * b._VData.at(0);
+	resultData.at(0) = a._VData[1] * b._VData[2] - a._VData[2] * b._VData[1];
+	resultData.at(1) = -a._VData[0] * b._VData[2] + a._VData[2] * b._VData[0]; //qb had wrong sign!
+	resultData.at(2) = a._VData[0] * b._VData[1] - a._VData[1] * b._VData[0];
 
 	return Vector<T>(resultData);
 }

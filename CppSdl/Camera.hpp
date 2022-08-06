@@ -23,15 +23,15 @@ namespace GL
 		void SetAspectRatio(double newAspect);
 
 		//functions to return camera parameters
-		VD GetPosition();
-		VD GetLookAt();
-		VD GetUp();
-		VD GetU(); //projectionScreenU
-		VD GetV(); //projectionScreenV
-		VD GetScreenCenter(); //projectionScreenCenter
-		double GetLength();
-		double GetHorizontalSize();
-		double GetAspectRatio();
+		VD GetPosition() const;
+		VD GetLookAt() const;
+		VD GetUp() const;
+		VD GetU() const; //projectionScreenU
+		VD GetV() const; //projectionScreenV
+		VD GetScreenCenter() const; //projectionScreenCenter
+		double GetLength() const;
+		double GetHorizontalSize() const;
+		double GetAspectRatio() const;
 
 		//function to generate a ray
 		//projectionScreenX/Y [-1.0f to 1.0f]

@@ -17,17 +17,17 @@ bool GL::Sphere::TestIntersection(const Ray& castRay, VD& intersectionPoint, VD&
 
 	//compute the values of a, b, c
 
-	VD vhat = !bckRay._lab;
+	VD vhat = !bckRay.GetLab();
 
 	//note that a is equal to the squared magnitude of the direction of the case ray.
 	//as this iwll be a unit vector, we can conclude that the value of 'a' will always be 1
 	//a = 1.0;
 
 	//calculate b
-	double b = 2.0 * bckRay._point1 * vhat;
+	double b = 2.0 * bckRay.GetPoint1() * vhat;
 
 	//calculate c
-	double c = bckRay._point1 * bckRay._point1 - 1.0;
+	double c = bckRay.GetPoint1() * bckRay.GetPoint1() - 1.0;
 
 	//test whether we actually have an intersection!
 	double intTest = b * b - 4.0 * c;
@@ -47,7 +47,7 @@ bool GL::Sphere::TestIntersection(const Ray& castRay, VD& intersectionPoint, VD&
 
 	//determine which point of intersection was closest to the camera!
 	//t1 is closest to the camera (we are not interested in t2)
-	poi = bckRay._point1 + vhat * (t1 < t2 ? t1 : t2);
+	poi = bckRay.GetPoint1() + vhat * (t1 < t2 ? t1 : t2);
 	//if (t1 < t2) 
 	//	poi = bckRay._point1 + vhat * t1;
 	//else

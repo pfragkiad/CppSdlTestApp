@@ -66,24 +66,20 @@ MD GL::Transform::GetBackward()
 
 GL::Ray GL::Transform::Apply(const Ray& inputRay, bool isForward)
 {
-	Ray outputRay;
-	outputRay._point1 = Apply(inputRay._point1, isForward);
-	outputRay._point2 = Apply(inputRay._point2, isForward);
-	outputRay._lab = outputRay._point2 - outputRay._point1;
-
-	return outputRay;
+	return Ray(Apply(inputRay.GetPoint1(), isForward), Apply(inputRay.GetPoint2(), isForward));
 }
 
 VD GL::Transform::Apply(const VD& inputVector, bool isForward)
 {
 	//convert inputVector to a 4-element vector
-	VD tempVector{ inputVector[0],inputVector[1],inputVector[2],1.0 };
+	//VD tempVector{ inputVector[0],inputVector[1],inputVector[2],1.0 };
 
 	//create a vector for the result
-	VD resultVector = (isForward ? _fwdtfm : _bcktfm) * tempVector;
+	//VD resultVector = (isForward ? _fwdtfm : _bcktfm) * tempVector;
 	
 	//reform the output as a 3-element vector (ignore the last 1!)
-	return VD{ resultVector[0],resultVector[1],resultVector[2] };
+	//return VD{ resultVector[0],resultVector[1],resultVector[2] };
+	return VDs::FromHomogeneous((isForward ? _fwdtfm : _bcktfm) * VDs::ToHomogeneous(inputVector));
 }
 GL::Transform GL::operator*(const Transform& lhs, const Transform& rhs)
 {

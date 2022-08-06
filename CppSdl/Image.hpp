@@ -25,8 +25,8 @@ namespace GL
 
 		void Display();
 
-		inline int GetXSize() { return _xSize; }
-		inline int GetYSize() { return _ySize; }
+		inline int GetXSize() const { return _xSize; }
+		inline int GetYSize() const { return _ySize; }
 
 	private:
 		Uint32 ConvertColor(const double red, const double green, const double blue);
