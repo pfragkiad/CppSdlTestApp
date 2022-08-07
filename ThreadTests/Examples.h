@@ -42,7 +42,7 @@ namespace Examples
 			std::this_thread::sleep_for(interval);
 		}
 	}
-	void runThread2()
+	void runThreadWithArgument()
 	{
 		std::thread t(printStuff2, 100ms);
 
@@ -53,8 +53,6 @@ namespace Examples
 		t.join();
 		std::cout << "Finished!\n";
 	}
-
-
 	//-----
 
 	int longCalc1(int returnValue)
@@ -63,7 +61,6 @@ namespace Examples
 		std::this_thread::sleep_for(3s);
 		return returnValue;
 	}
-
 
 	void runAsync1()
 	{
@@ -82,5 +79,44 @@ namespace Examples
 			int r = results[i].get();
 			std::cout << "Async result = " << r << std::endl;
 		}
+	}
+
+
+	class Item
+	{
+	public:
+		Item() {}
+		Item(const Item& oldItem) {
+			std::cout << "COPY IS CALLED!\n";
+			continuePrinting = oldItem.continuePrinting;
+		}
+
+		bool continuePrinting = true;
+
+		void printStuff()
+		{
+			while (this->continuePrinting)
+			{
+				std::cout << "Continue: " << continuePrinting << ". Working...\n";
+				std::this_thread::sleep_for(500ms);
+			}
+		}
+	};
+
+	void runThreadClass1()
+	{
+		Item item;
+		//if we do NOT pass ref then it will copy the item!
+		std::thread t(&Item::printStuff, std::ref(item));
+		//std::thread t(&Item::printStuff, std::reference_wrapper(item)); //this is the same with std::ref
+		//std::thread t(&Item::printStuff, item); //COPY IS CALLED HERE!
+		
+		//wait for enter
+		std::cin.get();
+		//on enter inform the thread to quit!
+		item.continuePrinting = false;
+
+		t.join();
+		std::cout << "Finished!\n";
 	}
 }
