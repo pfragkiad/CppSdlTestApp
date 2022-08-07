@@ -412,12 +412,11 @@ Vector<T> Vector<T>::cross(const Vector<T>& a, const Vector<T>& b)
 		throw std::invalid_argument("The cross-product can only be computed for three-dimensional vectors.");
 
 	// Compute the cross product.
-	std::vector<T> resultData(3);
-	resultData.at(0) = a._VData[1] * b._VData[2] - a._VData[2] * b._VData[1];
-	resultData.at(1) = -a._VData[0] * b._VData[2] + a._VData[2] * b._VData[0]; //qb had wrong sign!
-	resultData.at(2) = a._VData[0] * b._VData[1] - a._VData[1] * b._VData[0];
+	T a0 = a._VData[1] * b._VData[2] - a._VData[2] * b._VData[1];
+	T a1 = -a._VData[0] * b._VData[2] + a._VData[2] * b._VData[0];
+	T a2 = a._VData[0] * b._VData[1] - a._VData[1] * b._VData[0];
 
-	return Vector<T>(resultData);
+	return Vector<T>(std::vector<T>{a0,a1,a2});
 }
 
 

@@ -105,11 +105,7 @@ void testTransforms()
 	std::cout << "(Z) Rotated once:\n" << vr1 << std::endl;
 	std::cout << "(Z) Rotated twice:\n" << vr2 << std::endl;
 
-
-
 	exit(0);
-
-
 }
 
 int main(int argc, char** argv)
@@ -121,8 +117,5 @@ int main(int argc, char** argv)
 	GL::Window app{ Examples::Scene3Spheres() };
 	//GL::Window app{ Examples::SceneSphere() };
 	return app.Run(true);
-
-
-
 }
 

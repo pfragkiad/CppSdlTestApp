@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{52f53afe-ea7b-4baa-ada3-0d3c32f24554}</ProjectGuid>
-    <RootNamespace>CppSdlTest</RootNamespace>
+    <ProjectGuid>{d25e476a-3430-44bb-81b6-bf9e4a5aa483}</ProjectGuid>
+    <RootNamespace>ThreadTests</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -71,14 +71,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\libraries\sdl2\SDL2-2.0.22\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\libraries\sdl2\SDL2-2.0.22\lib\x64;$(LibraryPath)</LibraryPath>
-    <ExecutablePath>C:\libraries\sdl2\SDL2-2.0.22\lib\x64;$(ExecutablePath)</ExecutablePath>
+    <ManagedAssembly>true</ManagedAssembly>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath);C:\libraries\sdl2\SDL2-2.0.22\lib\x64</ExecutablePath>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\libraries\sdl2\SDL2-2.0.22\include;</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);C:\libraries\sdl2\SDL2-2.0.22\lib\x64</LibraryPath>
+    <ManagedAssembly>true</ManagedAssembly>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -112,15 +108,13 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_USE_MATH_DEFINES;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>sdl2.lib;sdl2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -138,36 +132,13 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);sdl2.lib;sdl2main.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="LightBase.cpp" />
-    <ClCompile Include="PointLight.cpp" />
-    <ClCompile Include="Window.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Image.cpp" />
-    <ClCompile Include="Shape.cpp" />
-    <ClCompile Include="Ray.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="Examples.hpp" />
-    <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="ThreadTests.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Scene3Spheres.hpp" />
-    <ClInclude Include="SceneSphere.h" />
-    <ClInclude Include="Transform.hpp" />
-    <ClInclude Include="LightBase.hpp" />
-    <ClInclude Include="PointLight.hpp" />
-    <ClInclude Include="Window.hpp" />
-    <ClInclude Include="Camera.hpp" />
-    <ClInclude Include="Image.hpp" />
-    <ClInclude Include="Shape.hpp" />
-    <ClInclude Include="Ray.hpp" />
-    <ClInclude Include="Scene.hpp" />
-    <ClInclude Include="Sphere.hpp" />
+    <ClInclude Include="Examples.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
