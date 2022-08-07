@@ -6,8 +6,13 @@
 
 int main()
 {
-    //Examples::runThread1();
-   // Examples::runThread2();
-    //Examples::runAsync1();
-    Examples::runThreadClass1();
+	//Examples::runThread1();
+	//Examples::runThreadWithArgument();
+    //Examples::runThreadWithClass();
+
+    //Examples::runThreadClassWithArg();
+	//Examples::runThreadClassWithRefArg();
+	//Examples::runThreadClassWithPArg();
+
+	Examples::runThreadClassWithRefArgWithinClass();
 }

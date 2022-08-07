@@ -81,6 +81,11 @@ namespace Examples
 		}
 	}
 
+	class SubItem
+	{
+	public:
+		std::chrono::milliseconds _duration;
+	};
 
 	class Item
 	{
@@ -101,16 +106,65 @@ namespace Examples
 				std::this_thread::sleep_for(500ms);
 			}
 		}
+
+		void printStuffArg(std::chrono::milliseconds t)
+		{
+			while (this->continuePrinting)
+			{
+				std::cout << "Continue: " << continuePrinting << ". Working...\n";
+				std::this_thread::sleep_for(t);
+			}
+
+		}
+
+		void printStuffRefArg(SubItem& item)
+		{
+			while (this->continuePrinting)
+			{
+				std::cout << "Continue: " << continuePrinting << ". Working...\n";
+				std::this_thread::sleep_for(item._duration);
+			}
+
+		}
+
+		void printStuffPArg(SubItem* item)
+		{
+			while (this->continuePrinting)
+			{
+				std::cout << "Continue: " << continuePrinting << ". Working...\n";
+				std::this_thread::sleep_for(item->_duration);
+			}
+
+		}
+
+		void runThreadClassWithRefArg()
+		{
+			continuePrinting = true;
+			SubItem subItem; subItem._duration = 5000s;
+			//if we do NOT pass ref then it will copy the item!
+			//the function address operator is MUST
+			std::thread t(&Item::printStuffRefArg, std::ref(*this), std::ref(subItem)); //ref to subItem is needed or WILL NOT compile!
+			subItem._duration = 1000ms; //change it in order to check if the correct subitem or a copy of it is passed!
+
+			//wait for enter
+			std::cin.get();
+			//on enter inform the thread to quit!
+			continuePrinting = false;
+
+			t.join();
+			std::cout << "Finished!\n";
+		}
 	};
 
-	void runThreadClass1()
+	void runThreadWithClass()
 	{
 		Item item;
 		//if we do NOT pass ref then it will copy the item!
+		//the function address operator is MUST
 		std::thread t(&Item::printStuff, std::ref(item));
 		//std::thread t(&Item::printStuff, std::reference_wrapper(item)); //this is the same with std::ref
 		//std::thread t(&Item::printStuff, item); //COPY IS CALLED HERE!
-		
+
 		//wait for enter
 		std::cin.get();
 		//on enter inform the thread to quit!
@@ -118,5 +172,64 @@ namespace Examples
 
 		t.join();
 		std::cout << "Finished!\n";
+	}
+
+	void runThreadClassWithArg()
+	{
+		Item item;
+		//if we do NOT pass ref then it will copy the item!
+		//the function address operator is MUST
+		std::thread t(&Item::printStuffArg, std::ref(item),500ms);
+
+		//wait for enter
+		std::cin.get();
+		//on enter inform the thread to quit!
+		item.continuePrinting = false;
+
+		t.join();
+		std::cout << "Finished!\n";
+	}
+
+	void runThreadClassWithRefArg()
+	{
+		Item item;
+		SubItem subItem; subItem._duration = 5000s;
+		//if we do NOT pass ref then it will copy the item!
+		//the function address operator is MUST
+		std::thread t(&Item::printStuffRefArg, std::ref(item), std::ref(subItem)); //ref to subItem is needed or WILL NOT compile!
+		subItem._duration = 1000ms; //change it in order to check if the correct subitem or a copy of it is passed!
+
+		//wait for enter
+		std::cin.get();
+		//on enter inform the thread to quit!
+		item.continuePrinting = false;
+
+		t.join();
+		std::cout << "Finished!\n";
+	}
+	
+	void runThreadClassWithPArg()
+	{
+		Item item;
+		SubItem subItem; subItem._duration = 5000s;
+		//if we do NOT pass ref then it will copy the item!
+		//the function address operator is MUST
+		std::thread t(&Item::printStuffPArg, std::ref(item), &subItem); //ref to subItem is needed or WILL NOT compile!
+		subItem._duration = 1000ms; //change it in order to check if the correct subitem or a copy of it is passed!
+
+		//wait for enter
+		std::cin.get();
+		//on enter inform the thread to quit!
+		item.continuePrinting = false;
+
+		t.join();
+		std::cout << "Finished!\n";
+	}
+
+	void runThreadClassWithRefArgWithinClass()
+	{
+		Item item;
+
+		item.runThreadClassWithRefArg();
 	}
 }
