@@ -11,7 +11,6 @@
 
 namespace GL
 {
-
 	class Window
 	{
 	public:

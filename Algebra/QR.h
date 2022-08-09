@@ -76,7 +76,7 @@ int QR(const Matrix<T>& A, Matrix<T>& Q, Matrix<T>& R)
 		b1.Set(0, static_cast<T>(1.0));
 
 		// Compute the norm of the a1 vector.
-		T a1norm = a1.norm();
+		T a1norm = a1.Length();
 
 		// Compute the sign we will use.
 		int	sgn = a1.Get(0) < static_cast<T>(0.0)? 1 : -1;
@@ -118,10 +118,10 @@ int QR(const Matrix<T>& A, Matrix<T>& Q, Matrix<T>& R)
 	}
 
 	// Compute Q.
-	Matrix<T> Qmat = Plist.at(0);
+	Matrix<T> Qmat = Plist[0];
 	for (size_t i = 1; i < numCols - 1; ++i)
 	{
-		Qmat = Qmat * Plist.at(i).Transpose();
+		Qmat = Qmat * Plist[i].Transpose();
 	}
 
 	// Return the Q matrix.
@@ -129,9 +129,9 @@ int QR(const Matrix<T>& A, Matrix<T>& Q, Matrix<T>& R)
 
 	// Compute R.
 	size_t numElements = Plist.size();
-	Matrix<T> Rmat = Plist.at(numElements - 1);
+	Matrix<T> Rmat = Plist[numElements - 1];
 	for (size_t i = numElements - 1; i-- > 0;) //starts from numElements-2
-		Rmat  *= Plist.at(i);
+		Rmat  *= Plist[i];
 	
 	Rmat = Rmat * A;
 

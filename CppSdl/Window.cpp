@@ -32,9 +32,12 @@ bool Window::OnInit(int width, int height)
 
 	pRenderer = SDL_CreateRenderer(pWindow, -1, 0);
 
+
 	//initialize the Image instance
 	_image.Initialize(width, height, pRenderer);
 
+	//set the background color
+	SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
 
 	return true;
 }
@@ -89,14 +92,17 @@ void Window::OnLoop() {}
 
 void Window::OnRender()
 {
-	//set the background color
-	SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
 	SDL_RenderClear(pRenderer);
 
 	//render the scene
-	std::cout << "Rendering the scene...";
+	std::cout << "Rendering the scene...\n";
+
+#ifndef USE_RGB_VECTORS
+	_image.Reset(); //needed to reset the tempPixels
+#endif
+
 	_scene.Render(_image);
-	std::cout << "\nDone!\n";
+	std::cout << "Done!\n";
 
 	//display the image
 	_image.Display();

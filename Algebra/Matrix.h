@@ -192,7 +192,7 @@ Matrix<T>::Matrix(size_t nRows, size_t nCols, const std::vector<T>& inputData)
 	_nElements = _nRows * _nCols;
 	_MData = new T[_nElements];
 	for (size_t i = 0; i < _nElements; ++i)
-		_MData[i] = inputData.at(i);
+		_MData[i] = inputData[i];
 }
 
 template <class T>

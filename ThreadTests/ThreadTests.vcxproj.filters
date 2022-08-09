@@ -18,9 +18,15 @@
     <ClCompile Include="ThreadTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Examples2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Examples.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Examples2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

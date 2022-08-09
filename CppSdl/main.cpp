@@ -1,9 +1,8 @@
+#define USE_RGB_VECTORS
+
 #include "../Algebra/Algebra.h"
-
 #include "Window.hpp"
-
 #include "Examples.hpp"
-
 #include <iostream>
 
 using namespace GL;
@@ -108,14 +107,28 @@ void testTransforms()
 	exit(0);
 }
 
+void testVectors()
+{
+	VD v1{ VDs::Ux };
+	std::cout << v1 << std::endl;
+
+	VD v2{ {1,2,3} };
+	std::cout << v1+v2 << std::endl;
+
+	std::cout << (VD{ 1,2,3 } *VD{1,2,3}) << std::endl;
+
+	exit(0);
+}
+
 int main(int argc, char** argv)
 {
 	//testTransforms();
 	//testCamera();
 	//testUx();
+	//testVectors();
 
 	GL::Window app{ Examples::Scene3Spheres() };
 	//GL::Window app{ Examples::SceneSphere() };
-	return app.Run(true);
+	return app.Run(false);
 }
 

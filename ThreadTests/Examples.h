@@ -33,7 +33,6 @@ namespace Examples
 		std::cout << "Finished!\n";
 	}
 
-
 	void printStuff2(std::chrono::milliseconds interval)
 	{
 		while (!continuePrinting)
@@ -42,6 +41,7 @@ namespace Examples
 			std::this_thread::sleep_for(interval);
 		}
 	}
+	
 	void runThreadWithArgument()
 	{
 		std::thread t(printStuff2, 100ms);
@@ -179,7 +179,7 @@ namespace Examples
 		Item item;
 		//if we do NOT pass ref then it will copy the item!
 		//the function address operator is MUST
-		std::thread t(&Item::printStuffArg, std::ref(item),500ms);
+		std::thread t(&Item::printStuffArg, std::ref(item), 500ms);
 
 		//wait for enter
 		std::cin.get();
@@ -207,7 +207,7 @@ namespace Examples
 		t.join();
 		std::cout << "Finished!\n";
 	}
-	
+
 	void runThreadClassWithPArg()
 	{
 		Item item;

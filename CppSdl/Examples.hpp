@@ -76,7 +76,7 @@ namespace GL::Examples
 				if (validIntersection)
 				{
 					//compute the distance between the camera and the point of intersection
-					double distance = (intersectionPoint - cameraRay.GetPoint1()).norm();
+					double distance = (intersectionPoint - cameraRay.GetPoint1()).Length();
 					if (distance > maxDist) maxDist = distance;
 					else if (distance < minDist) minDist = distance;
 

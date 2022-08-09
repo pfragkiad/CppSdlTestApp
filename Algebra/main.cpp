@@ -32,7 +32,7 @@ int main()
 
 	std::vector<double> v2{ 1.0,1.0 };
 	std::vector<double> v3(v2);
-	v3.at(0) = 8.0;
+	v3[0] = 8.0;
 
-	std::cout << v2.at(0) << std::endl;
+	std::cout << v2[0] << std::endl;
 }

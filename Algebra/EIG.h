@@ -131,7 +131,7 @@ int InvPIt(const Matrix<T>& inputMatrix, const T& eigenValue, Vector<T>& eigenVe
 		v.Normalize();
 
 		// Compute delta.
-		delta = (v - prevVector).norm();
+		delta = (v - prevVector).Length();
 
 		// Increment iteration count.
 		iterationCount++;

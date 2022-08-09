@@ -55,7 +55,7 @@ void SubtractColumnMeans(Matrix<T> &inputData, std::vector<T> &columnMeans)
 	for (size_t j=0; j<numCols; ++j)
 	{
 		for (size_t i=0; i<numRows; ++i)
-			inputData.Set(i,j, inputData.Get(i,j) - columnMeans.at(j));
+			inputData.Set(i,j, inputData.Get(i,j) - columnMeans[j]);
 	}	
 }
 
@@ -103,7 +103,7 @@ int ComputeEigenvectors(const Matrix<T> &covarianceMatrix, Matrix<T> &eigenvecto
 	Matrix<T> eVM(X.RowsCount(), X.ColsCount());
 	for (int j=0; j<eigenValues.size(); ++j)
 	{
-		T eig = eigenValues.at(j);
+		T eig = eigenValues[j];
 		int returnStatus2 = InvPIt<T>(X, eig, eV);
 		for (int i=0; i<eV.Count(); ++i)
 			eVM.Set(i, j, eV.Get(i));

@@ -58,15 +58,13 @@ namespace GL::Examples
 		//_objects[1]->_baseColor = VD{ 255.0, 128.0, 0.0 };//VD{ 0.0, 255.0, 0.0 };
 		//_objects[2]->_baseColor =  VD{ 255.0, 200.0, 0.0 };//VD{ 0.0,0.0,255.0 };
 
-
-
 		//construct a test light
 		_lights.push_back(std::make_shared<PointLight>(PointLight()));
 		//X positive is towards left, Y positive is towards front (to the reader)
 		//Z positive is up (towards top)
-		_lights.at(0)->_location = VD{ 5.0,-10.0,-5.0 };
-		_lights.at(0)->_color = VD{ 255.0,255.0,255.0 };
-		_lights.at(0)->_intensity = 1.0;
+		_lights[0]->_location = VD{5.0,-10.0,-5.0};
+		_lights[0]->_color = VD{ 255.0,255.0,255.0 };
+		_lights[0]->_intensity = 1.0;
 	}
 
 }

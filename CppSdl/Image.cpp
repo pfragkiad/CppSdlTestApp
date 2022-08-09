@@ -1,4 +1,6 @@
 #include "Image.hpp"
+#include <iostream>
+#include <algorithm>
 
 using namespace GL;
 
@@ -8,22 +10,51 @@ Image::Image()
 	_ySize = 0;
 	_pTexture = nullptr;
 	_pRenderer = nullptr;
+	tempPixels = nullptr;
 }
 
 Image::~Image()
 {
+	if (tempPixels != nullptr)
+		delete[] tempPixels;
+
 	if (_pTexture != nullptr)
 		SDL_DestroyTexture(_pTexture);
 	_pTexture = nullptr;
 }
 
+//needed only if data is passed
+#ifndef USE_RGB_VECTORS
+void Image::Reset()
+{
+	if (tempPixels == nullptr)
+	{
+		//we assume that the size does not change 
+		//delete[] tempPixels;
+		tempPixels = new Uint32[(size_t)(_xSize * _ySize)];
+	}
+
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+	Uint32 pixelColor = 255u;
+#else
+	const Uint32 pixelColor = 255u << 24u; //he has bgr inversed here
+#endif
+
+	std::fill(tempPixels, tempPixels + _xSize * _ySize, pixelColor);
+	//memset(tempPixels, pixelColor, (size_t)(_xSize * _ySize)); //memset DOES NOT WORK
+
+}
+#endif
+
 //function to initialize
 void Image::Initialize(const int xSize, const int ySize, SDL_Renderer* pRenderer)
 {
+#ifdef USE_RGB_VECTORS
 	//resize the image arrays
 	_rChannel.resize(xSize, std::vector<double>(ySize, 0.0));
 	_gChannel.resize(xSize, std::vector<double>(ySize, 0.0));
 	_bChannel.resize(xSize, std::vector<double>(ySize, 0.0));
+#endif
 
 	//store the dimensions
 	_xSize = xSize; _ySize = ySize;
@@ -38,39 +69,55 @@ void Image::Initialize(const int xSize, const int ySize, SDL_Renderer* pRenderer
 //funtion to set the colour of a pixel
 void Image::SetPixel(const int x, const int y, const double red, const double green, const double blue)
 {
-	_rChannel.at(x).at(y) = red;
-	_gChannel.at(x).at(y) = green;
-	_bChannel.at(x).at(y) = blue;
+
+
+#ifdef USE_RGB_VECTORS
+	//_rChannel.at(x).at(y) = red;
+	//_gChannel.at(x).at(y) = green;
+	//_bChannel.at(x).at(y) = blue;	
+
+	_rChannel[x][y] = red;
+	_gChannel[x][y] = green;
+	_bChannel[x][y] = blue;
+#else
+	//tempPixels[y * _xSize + x] = TO_SDLCOLOR(red, green, blue); //ConvertColor(red, green, blue);
+	tempPixels[y * _xSize + x] = TO_SDLCOLOR(red, green, blue); //ConvertColor(red, green, blue);
+#endif
 }
 
 //function to generate the display
-void Image::Display()
+void Image::Display() const
 {
+#ifdef USE_RGB_VECTORS
 	//allocate memory for a pixel buffer
 	Uint32* tempPixels = new Uint32[(size_t)_xSize * (size_t)_ySize];
 
 	//clear the pixel buffer
 	memset(tempPixels, 0, (size_t)_xSize * (size_t)_ySize);
 
-	for (int x = 0; x < _xSize; ++x)
-		for (int y = 0; y < _ySize; ++y)
-			tempPixels[y * _xSize + x] = ConvertColor(
-				_rChannel.at(x).at(y),
-				_gChannel.at(x).at(y),
-				_bChannel.at(x).at(y));
+	std::cout << tempPixels[0] << std::endl;
+
+	for (size_t x = 0; x < _xSize; ++x)
+		for (size_t y = 0; y < _ySize; ++y)
+		{
+			size_t index = y * _xSize + x;
+			tempPixels[index] = ConvertColor(
+				_rChannel[x][y], _gChannel[x][y], _bChannel[x][y]);
+		}
+#endif
 
 	//update the texture with the pixel buffer
 	SDL_UpdateTexture(_pTexture, nullptr, tempPixels, _xSize * sizeof(Uint32));
 
-	//delete the pixel buffer
-	delete[] tempPixels;
+	////delete the pixel buffer
+	//delete[] tempPixels;
 
 	//copy the texture to the renderer
-	SDL_Rect srcRect, bounds;
-	srcRect.x = srcRect.y = 0;
-	srcRect.w = _xSize;
-	srcRect.h = _ySize;
-	bounds = srcRect;
+	SDL_Rect srcRect{ 0,0,_xSize,_ySize }, bounds{ srcRect };
+	//srcRect.x = srcRect.y = 0;
+	//srcRect.w = _xSize; srcRect.h = _ySize;
+	//bounds = srcRect;
+
 	SDL_RenderCopy(_pRenderer, _pTexture, &srcRect, &bounds);
 }
 
@@ -104,17 +151,11 @@ void Image::InitTexture()
 
 Uint32 Image::ConvertColor(const double red, const double green, const double blue)
 {
-	//convert the colours to unsigned integers
-	unsigned char r = static_cast<unsigned char>(red);
-	unsigned char g = static_cast<unsigned char>(green);
-	unsigned char b = static_cast<unsigned char>(blue);
-
-
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-	Uint32 pixelColor = (r << 24) + (g << 16) + (b << 8) + 255;
+	return ((unsigned char)red << 24u) + ((unsigned char)green << 16u) + ((unsigned char)blue << 8u) + 255u;
 #else
-	Uint32 pixelColor = (255 << 24) + (r << 16) + (g << 8) + b; //he has bgr inversed here
+	return (255u << 24u) + ((unsigned char)red << 16u) + ((unsigned char)green << 8u) + (unsigned char)blue; //he has bgr inversed here
 #endif
-	
-	return pixelColor;
+
+	//return pixelColor;
 }

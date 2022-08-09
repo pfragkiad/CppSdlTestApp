@@ -31,7 +31,7 @@ namespace GL
 		//list of lights in the scene
 		pLightsVector _lights;
 
-		void RunY(int x, int ySize, float xFact, float yFact, Image& outputImage);
+		void FillRow(int x, int ySize, float xFact, float yFact, Image& outputImage);
 	};
 }
 
