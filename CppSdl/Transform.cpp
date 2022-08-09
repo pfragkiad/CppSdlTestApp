@@ -40,36 +40,36 @@ void GL::Transform::Set(const VD& translation, const VD& rotation, const VD& sca
 
 	//SRT (scale rotate translate)
 	//https://docs.microsoft.com/en-us/dotnet/desktop/winforms/advanced/why-transformation-order-is-significant?view=netframeworkdesktop-4.8
-	_fwdtfm = translationMatrix * scaleMatrix * rotationMatrixX * rotationMatrixY * rotationMatrixZ;
-	//_fwdtfm = translationMatrix  * rotationMatrixX * rotationMatrixY * rotationMatrixZ* scaleMatrix;
+	//_fwdtfm = translationMatrix * scaleMatrix * rotationMatrixX * rotationMatrixY * rotationMatrixZ;
+	_fwdtfm = translationMatrix  * rotationMatrixX * rotationMatrixY * rotationMatrixZ * scaleMatrix;
 
-	//_bcktfm = Algebra::GetScale(1.0/scale)
-	//	* Algebra::GetRotationZ(rotation[2])
-	//	* Algebra::GetRotationY(-rotation[1]) 
-	//	* Algebra::GetRotationX(-rotation[0])
-	//	* Algebra::GetTranslation(-translation); //possibly correct
-	_bcktfm = _fwdtfm; _bcktfm.Inverse();
+	_bcktfm = MDs::GetScale(1.0/scale)
+		* MDs::GetRotationZ(rotation[2])
+		* MDs::GetRotationY(-rotation[1])
+		* MDs::GetRotationX(-rotation[0])
+		* MDs::GetTranslation(-translation); //possibly correct
+	//_bcktfm = _fwdtfm; _bcktfm.Inverse();
 	//http://www.info.hiroshima-cu.ac.jp/~miyazaki/knowledge/teche0053.html#:~:text=and%20translation%20matrix)-,Inverse%20matrix%20of%20transformation%20matrix%20(rotation%20and%20translation%20matrix),R%7Ct%5D%20transformation%20matrix.&text=The%20inverse%20of%20transformation%20matrix%20%5BR%7Ct%5D%20is%20%5B,%2D%20R%5ET%20t%5D.
 	// //faster should be by getting the matrices above!
 	//_bcktfm = Algebra::GetInverseTransformation(_fwdtfm); //incorrect
 }
 
-MD GL::Transform::GetForward()
+MD GL::Transform::GetForward() const
 {
 	return _fwdtfm;
 }
 
-MD GL::Transform::GetBackward()
+MD GL::Transform::GetBackward() const
 {
 	return _bcktfm;
 }
 
-GL::Ray GL::Transform::Apply(const Ray& inputRay, bool isForward)
+GL::Ray GL::Transform::Apply(const Ray& inputRay, bool isForward) const
 {
 	return Ray(Apply(inputRay.GetPoint1(), isForward), Apply(inputRay.GetPoint2(), isForward));
 }
 
-VD GL::Transform::Apply(const VD& inputVector, bool isForward)
+VD GL::Transform::Apply(const VD& inputVector, bool isForward) const
 {
 	//convert inputVector to a 4-element vector
 	//VD tempVector{ inputVector[0],inputVector[1],inputVector[2],1.0 };

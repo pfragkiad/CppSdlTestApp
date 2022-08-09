@@ -434,7 +434,7 @@ Vector<T> operator/ (const T& lhs, const Vector<T>& rhs)
 	//	resultData[i] = lhs / resultData[i];
 	//return Vector<T>(resultData);
 
-	Vector<T> result(rhs._size());
+	Vector<T> result(rhs._size);
 	for (size_t i = 0; i < rhs._size; ++i)
 		result._VData[i] = lhs / rhs._VData[i];
 	return result;

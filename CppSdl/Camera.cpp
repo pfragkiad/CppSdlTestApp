@@ -85,24 +85,35 @@ double GL::Camera::GetHorizontalSize() const
 }
 
 double GL::Camera::GetAspectRatio() const
-{ 
+{
 	return _aspectRatio;
 }
 
-bool GL::Camera::GenerateRay(float projectionScreenX, float projectionScreenY, GL::Ray& cameraRay)
+//bool GL::Camera::GenerateRay(float projectionScreenX, float projectionScreenY, GL::Ray& cameraRay)
+//{
+//	//compute the location of the screen piont in world coordinates
+//	VD screenWorldCoordinate =
+//		_screenCenter +
+//		_u * projectionScreenX +
+//		_v * projectionScreenY;
+//
+//	cameraRay.SetPoints(_position,screenWorldCoordinate);
+//
+//	////use this point along with the camera position to compute the ray
+//	//return GL::Ray(_position, screenWorldCoordinate);
+//	return true;
+//}
+//
+GL::Ray GL::Camera::GenerateRay(float projectionScreenX, float projectionScreenY) const
 {
-	//compute the location of the screen piont in world coordinates
-	VD screenWorldCoordinate =
-		_screenCenter +
-		_u * projectionScreenX +
-		_v * projectionScreenY;
-
-	cameraRay.SetPoints(_position,screenWorldCoordinate);
-
-	////use this point along with the camera position to compute the ray
-	//return GL::Ray(_position, screenWorldCoordinate);
-	return true;
+	//use this point along with the camera position to compute the ray
+	return GL::Ray(
+		_position,
+		_screenCenter + _u * projectionScreenX + _v * projectionScreenY //screenWorldCoordinate
+	);
 }
+
+
 
 void GL::Camera::UpdateCameraGeometry()
 {

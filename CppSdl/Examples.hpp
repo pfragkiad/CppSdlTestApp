@@ -44,11 +44,10 @@ namespace GL::Examples
 		////create some color variations
 		//Examples::Example1Simple2ColorImage(outputImage);
 
-		//loop over each pixel in our image
-		Ray cameraRay;
-		Vector<double> intersectionPoint(3);
-		Vector<double> localNormal(3);
-		Vector<double> localColor(3);
+		////loop over each pixel in our image
+		//Vector<double> intersectionPoint(3);
+		//Vector<double> localNormal(3);
+		//Vector<double> localColor(3);
 
 		float xFact = 2.0f / xSize; //0 to 2
 		float yFact = 2.0f / ySize; //0 to 2
@@ -59,24 +58,26 @@ namespace GL::Examples
 		int g = random(0, 255);
 		int b = random(0, 255);
 
-		for (int x = 0; x < xSize; x++)
+		for (int x = 0; x < xSize; x++) {
+			//normalize the x and y coordinates
+			float normX = x * xFact - 1.0f; //-1 to 1
+			
 			for (int y = 0; y < ySize; y++)
 			{
-				//normalize the x and y coordinates
-				float normX = x * xFact - 1.0f; //-1 to 1
 				float normY = y * yFact - 1.0f; //-1 to 1
 
-				//generate the ray for this pixel
-				camera.GenerateRay(normX, normY, cameraRay);
+				//Ray cameraRay;
+				////generate the ray for this pixel
+				//camera.GenerateRay(normX, normY, cameraRay);
+				Ray cameraRay = camera.GenerateRay(normX, normY);
 
 				//test if we have a valid intersection
-				bool validIntersection = sphere.TestIntersection(
-					cameraRay, intersectionPoint, localNormal, localColor);
+				IntersectionInfo intersection = sphere.TestIntersection(cameraRay);
 				//if we have a valid intersection, change pixel color to red
-				if (validIntersection)
+				if (intersection.Valid)
 				{
 					//compute the distance between the camera and the point of intersection
-					double distance = (intersectionPoint - cameraRay.GetPoint1()).Length();
+					double distance = (intersection.Point - cameraRay.GetPoint1()).Length();
 					if (distance > maxDist) maxDist = distance;
 					else if (distance < minDist) minDist = distance;
 
@@ -86,6 +87,7 @@ namespace GL::Examples
 				else
 					image.SetPixel(x, y, 0.0, 0.0, 0.0);
 			}
+		}
 
 		//minimum is 9.0
 		//maximum is 9.94605

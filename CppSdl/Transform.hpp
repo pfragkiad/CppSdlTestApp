@@ -31,13 +31,13 @@ namespace GL
 		);
 
 		//function to return the transform matrices
-		MD GetForward();
-		MD GetBackward();
+		MD GetForward() const;
+		MD GetBackward() const;
 
 		//function to apply the transform
-		Ray Apply(const Ray& inputRay, bool isForward);
+		Ray Apply(const Ray& inputRay, bool isForward) const;
 
-		VD Apply(const VD& inputVector, bool isForward);
+		VD Apply(const VD& inputVector, bool isForward) const;
 
 		//overload operators
 		friend Transform operator*(const Transform& lhs, const Transform& rhs);

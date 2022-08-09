@@ -95,14 +95,14 @@ void Window::OnRender()
 	SDL_RenderClear(pRenderer);
 
 	//render the scene
-	std::cout << "Rendering the scene...\n";
+	//std::cout << "Rendering the scene...\n";
 
 #ifndef USE_RGB_VECTORS
 	_image.Reset(); //needed to reset the tempPixels
 #endif
 
 	_scene.Render(_image);
-	std::cout << "Done!\n";
+	//std::cout << "Done!\n";
 
 	//display the image
 	_image.Display();

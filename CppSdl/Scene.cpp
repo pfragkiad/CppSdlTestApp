@@ -7,6 +7,8 @@
 #include <thread>
 #include <numeric> //accumulate
 
+#include "Timer.h"
+
 #define USE_PARALLEL
 
 using namespace GL;
@@ -17,42 +19,46 @@ Scene::Scene() {
 }
 
 
-void Scene::FillRow(int x, int ySize, float xFact, float yFact, Image& outputImage)
+void Scene::FillRow(int x, float normX, int ySize, float yFact, Image& outputImage)
 {
-	//float xFact = 2.0f / xSize; //0 to 2
-	//float yFact = 2.0f / ySize; //0 to 2
-
 	for (int y = 0; y < ySize; y++)
 	{
-		//normalize the x and y coordinates
-		float normX = static_cast<float>(x) * xFact - 1.0f; //-1 to 1
 		float normY = static_cast<float>(y) * yFact - 1.0f; //-1 to 1
-		Ray cameraRay;
 
+		//Ray cameraRay;
 		//generate the ray for this pixel
-		_camera.GenerateRay(normX, normY, cameraRay);
+		//_camera.GenerateRay(normX, normY, cameraRay);
+		Ray cameraRay = _camera.GenerateRay(normX, normY);
 
 		for (pShape currentObject : _objects)
 		{
-			VD intersectionPoint(3);
-			VD localNormal(3);
-			VD localColor(3);
-
+			//VD intersectionPoint(3);
+			//VD localNormal(3);
+			//VD localColor(3);
 			//test if we have a valid intersection
-			bool validIntersection = currentObject->TestIntersection(
-				cameraRay, intersectionPoint, localNormal, localColor);
+			//bool validIntersection = currentObject->TestIntersection(
+			//	cameraRay, intersectionPoint, localNormal, localColor);
+			IntersectionInfo intersection = currentObject->TestIntersection(cameraRay);
+
 			//if we have a valid intersection, change pixel color to red
-			if (validIntersection)
+			//if (validIntersection)
+			if (intersection.Valid)
 			{
 				//compute intensity of illumination
-				double intensity;
-				VD color;
+				double intensity; VD color;
 				bool validIllumination = false;
+
 				for (auto currentLight : _lights)
 				{
+					//validIllumination = currentLight ->
+					//	ComputeIllumination(intersectionPoint, localNormal,
+					//		_objects, currentObject, color, intensity);
 					validIllumination = currentLight ->
-						ComputeIllumination(intersectionPoint, localNormal,
-							_objects, currentObject, color, intensity);
+						ComputeIllumination(intersection, _objects, currentObject, color, intensity);
+
+					if (validIllumination)
+						intersection.Color *= intensity;
+
 					//std::cout << "Intensity: " << intensity << std::endl;
 				}
 
@@ -69,9 +75,9 @@ void Scene::FillRow(int x, int ySize, float xFact, float yFact, Image& outputIma
 
 #ifdef USE_RGB_VECTORS
 					outputImage.SetPixel(x, y,
-						localColor[0] * intensity,
-						localColor[1] * intensity,
-						localColor[2] * intensity);
+						intersection.Color[0],
+						intersection.Color[1],
+						intersection.Color[2]);
 #else
 					//outputImage.SetPixel(x, y,
 					//	localColor[0] * intensity,
@@ -79,9 +85,9 @@ void Scene::FillRow(int x, int ySize, float xFact, float yFact, Image& outputIma
 					//	localColor[2] * intensity);
 					outputImage.tempPixels[y * outputImage._xSize + x] =
 					TO_SDLCOLOR(
-						localColor[0] * intensity,
-						localColor[1] * intensity,
-						localColor[2] * intensity);
+						intersection.Color[0],
+						intersection.Color[1],
+						intersection.Color[2]);
 #endif
 				//else //leave pixel unchanged
 				//	outputImage.SetPixel(x, y, 0.0, 0.0, 0.0);
@@ -92,30 +98,12 @@ void Scene::FillRow(int x, int ySize, float xFact, float yFact, Image& outputIma
 	}
 }
 
-class Timer {
-	std::chrono::steady_clock::time_point start;
-
-	static inline std::vector<std::chrono::nanoseconds> _durations;
-public:
-	Timer() {
-		start = std::chrono::high_resolution_clock::now();
-	}
-	~Timer() {
-		auto duration = std::chrono::high_resolution_clock::now() - start;
-		_durations.push_back(duration);
-		//std::cout << std::chrono::duration_cast<std::chrono::seconds>(duration) << "\n";
-		std::cout << "Current: " << std::chrono::duration_cast<std::chrono::milliseconds>(duration) << "\n";
-
-		auto average = std::accumulate(_durations.cbegin(), _durations.cend(),
-			decltype(_durations)::value_type(0)) / _durations.size();
-		std::cout << "Average: " << std::chrono::duration_cast<std::chrono::milliseconds>(average) << "\n";
-
-	}
-};
 
 //function to perform the rendering
 bool Scene::Render(Image& outputImage)
 {
+	Timer<10> timer;
+
 	////create some color variations
 	//Examples::Example1Simple2ColorImage(outputImage);
 
@@ -138,21 +126,18 @@ bool Scene::Render(Image& outputImage)
 	//double maxDist = 0.0;
 
 	std::vector<std::thread> threads;
-
-	Timer timer;
-
 	for (int x = 0; x < xSize; x++)
 	{
 		//std::cout << x << " of " << xSize << std::endl;
 
-		//std::thread t([&] {RunY(x, ySize, xFact, yFact, outputImage); });
+		//normalize x coordinate
+		float normX = static_cast<float>(x) * xFact - 1.0f; //-1 to 1
 
-		//threads.emplace_back(t);
 #ifdef USE_PARALLEL
-		threads.push_back(thread(&Scene::FillRow, std::ref(*this), x, ySize, xFact, yFact, std::ref(outputImage)));
+		threads.push_back(thread(&Scene::FillRow, std::ref(*this), x, normX, ySize, yFact, std::ref(outputImage)));
 #else
-		 //19.8 sec in serial, 2.8 in parallel
-		FillRow(x, ySize, xFact, yFact, outputImage);
+		 //19.8 sec in serial, 2.8 in parallel, 0.2 in parallel + static array instead of std::vector within Vector<T>
+		FillRow(x, normX, ySize, yFact, outputImage);
 #endif
 
 	}

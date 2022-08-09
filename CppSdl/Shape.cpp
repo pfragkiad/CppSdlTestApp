@@ -8,10 +8,11 @@ GL::Shape::Shape()
 {
 }
 
-GL::Shape::Shape(VD baseColor, Transform transformMatrix)
+GL::Shape::Shape(VD baseColor, Transform transformMatrix) :
+	_baseColor(baseColor), _transformMatrix(transformMatrix)
+
 {
-    _baseColor = baseColor;
-    _transformMatrix = transformMatrix;
+
 }
 
 GL::Shape::~Shape()
@@ -20,17 +21,22 @@ GL::Shape::~Shape()
 
 //bool TestIntersection(const Ray& castRay, VectorD& intPoint, VectorD& localNormal, VectorD& localColor)
 
-bool GL::Shape::TestIntersection(const Ray& castRay, VD& intPoint, VD& localNormal, VD& localColor)
+//bool GL::Shape::TestIntersection(const Ray& castRay, VD& intPoint, VD& localNormal, VD& localColor)
+//{
+//	return false;
+//}
+
+GL::IntersectionInfo GL::Shape::TestIntersection(const Ray& castRay) const
 {
-    return false;
+	return GL::IntersectionInfo();
 }
 
 void GL::Shape::SetTransformMatrix(const Transform& transform)
 {
-    _transformMatrix = transform;
+	_transformMatrix = transform;
 }
 
 bool GL::Shape::CloseEnough(const double f1, const double f2)
 {
-    return fabs(f1-f2)<EPSILON;
+	return fabs(f1 - f2) < EPSILON;
 }

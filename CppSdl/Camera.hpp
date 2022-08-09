@@ -35,7 +35,8 @@ namespace GL
 
 		//function to generate a ray
 		//projectionScreenX/Y [-1.0f to 1.0f]
-		bool GenerateRay(float projectionScreenX, float projectionScreenY, Ray& cameraRay);
+		//bool GenerateRay(float projectionScreenX, float projectionScreenY, Ray& cameraRay);
+		Ray GenerateRay(float projectionScreenX, float projectionScreenY) const;
 
 
 		void UpdateCameraGeometry();

@@ -3,9 +3,11 @@
 #include "../Algebra/Algebra.h" 
 #include "Ray.hpp"
 #include "Transform.hpp"
+#include "IntersectionInfo.h"
 
 namespace GL
 {
+
 	class Shape
 	{
 	public:
@@ -17,7 +19,8 @@ namespace GL
 		virtual ~Shape();
 
 		//function to test for intersections
-		virtual bool TestIntersection(const Ray& castRay, VD& intPoint, VD& localNormal, VD& localColor);
+		//virtual bool TestIntersection(const Ray& castRay, VD& intersectionPoint, VD& localNormal, VD& localColor);
+		virtual IntersectionInfo TestIntersection(const Ray& castRay) const;
 
 		//function to set the transform matrix
 		void SetTransformMatrix(const Transform& transform);

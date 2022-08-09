@@ -92,5 +92,11 @@
     <ClInclude Include="SceneSphere.h">
       <Filter>Header Files\Examples</Filter>
     </ClInclude>
+    <ClInclude Include="IntersectionInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

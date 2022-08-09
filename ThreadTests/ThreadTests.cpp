@@ -2,7 +2,7 @@
 #include "Examples.h"
 
 #include "Examples2.h"
-void Test() { std::cout << "TEST!\n"; } //wow! you make this public if you declare it the Examples2 header (it can be called by other cpp modules)!!!!!
+void Valid() { std::cout << "TEST!\n"; } //wow! you make this public if you declare it the Examples2 header (it can be called by other cpp modules)!!!!!
 
 
 

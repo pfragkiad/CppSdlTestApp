@@ -1,4 +1,4 @@
 #pragma once
 
-void Test();
+void Valid();
 void CallTest();

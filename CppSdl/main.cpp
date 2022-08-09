@@ -1,9 +1,13 @@
-#define USE_RGB_VECTORS
+//#define USE_RGB_VECTORS
 
 #include "../Algebra/Algebra.h"
 #include "Window.hpp"
 #include "Examples.hpp"
 #include <iostream>
+#include "Timer.h"
+#include <thread>
+#include <chrono>
+using namespace std::chrono_literals;
 
 using namespace GL;
 
@@ -73,8 +77,8 @@ void testTransforms()
 	std::cout << "(X) Rotated once:\n" << vr1 << std::endl;
 	std::cout << "(X) Rotated twice:\n" << vr2 << std::endl;
 	std::cout << "ROT X TESTS (VECTOR)\n";
-	vr1 = v.RotateAround(VDs::Ux,M_PI/2.0);
-	vr2 = vr1.RotateAround(VDs::Ux,M_PI/2.0);
+	vr1 = v.RotateAround(VDs::Ux, M_PI / 2.0);
+	vr2 = vr1.RotateAround(VDs::Ux, M_PI / 2.0);
 	std::cout << "(X) Rotated once:\n" << vr1 << std::endl;
 	std::cout << "(X) Rotated twice:\n" << vr2 << std::endl;
 
@@ -113,10 +117,20 @@ void testVectors()
 	std::cout << v1 << std::endl;
 
 	VD v2{ {1,2,3} };
-	std::cout << v1+v2 << std::endl;
+	std::cout << v1 + v2 << std::endl;
 
-	std::cout << (VD{ 1,2,3 } *VD{1,2,3}) << std::endl;
+	std::cout << (VD{ 1,2,3 } *VD{ 1,2,3 }) << std::endl;
 
+	exit(0);
+}
+
+void testTimer()
+{
+	for (int i = 0; i < 100; i++)
+	{
+		Timer<7> timer;
+		std::this_thread::sleep_for(120ms);
+	}
 	exit(0);
 }
 
@@ -126,9 +140,9 @@ int main(int argc, char** argv)
 	//testCamera();
 	//testUx();
 	//testVectors();
+	//testTimer();
 
 	GL::Window app{ Examples::Scene3Spheres() };
-	//GL::Window app{ Examples::SceneSphere() };
-	return app.Run(false);
+	return app.Run(/*isImageStatic*/ false);
 }
 
