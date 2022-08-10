@@ -10,6 +10,8 @@ class VDs //static double 3d vectors
 {
 public:
 	inline static const VD Zero{ 0.0,0.0,0.0 };
+	inline static const VD One{ 1.0,1.0,1.0 };
+
 	//Unit X double vector in 3D.
 	inline static const VD Ux{ 1.0,0.0,0.0 };
 	//Unit Y double vector in 3D.

@@ -1,5 +1,3 @@
-//#define USE_RGB_VECTORS
-
 #include "../Algebra/Algebra.h"
 #include "Window.hpp"
 #include "Examples.hpp"
@@ -16,7 +14,7 @@ void testCamera()
 	Camera testCamera;
 	testCamera.SetPosition(VDs::Zero);
 	testCamera.SetLookAt(2.0 * VDs::Ux);
-	testCamera.SetUp(VDs::Uz);
+	testCamera.SetUpVector(VDs::Uz);
 	testCamera.SetLength(1.0);
 	testCamera.SetHorizontalSize(1.0);
 	testCamera.SetAspectRatio(1.0);
@@ -143,6 +141,7 @@ int main(int argc, char** argv)
 	//testTimer();
 
 	GL::Window app{ Examples::Scene3Spheres() };
+	//GL::Window app{ Examples::SceneSphere() };
 	return app.Run(/*isImageStatic*/ false);
 }
 

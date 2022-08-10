@@ -14,6 +14,8 @@ GL::IntersectionInfo GL::Sphere::TestIntersection(const Ray& castRay) const
 	//castRay is in the world coordinate system
 	//we transform it in the local coordinate system of the sphere!
 	//APPLY THE BACKWARDS TRANSFORM because we go from WORLD -> LOCAL!
+
+
 	Ray bckRay = _transformMatrix.Apply(castRay, false);
 
 	//compute the values of a, b, c
@@ -25,7 +27,7 @@ GL::IntersectionInfo GL::Sphere::TestIntersection(const Ray& castRay) const
 	//a = 1.0;
 
 	//calculate b
-	auto p1 = bckRay._point1;
+	VD& p1 = bckRay._point1;
 	double b = 2.0 * p1 * vhat;
 
 	//calculate c
@@ -40,7 +42,7 @@ GL::IntersectionInfo GL::Sphere::TestIntersection(const Ray& castRay) const
 	bool tested = discriminant >= 0.0;
 	if (!tested) 
 		//return false;
-		return GL::IntersectionInfo(); //return empty (= false tested)
+		return GL::IntersectionInfo(); //return empty (= false valid)
 
 	double sqr = sqrt(discriminant);
 	double t1 = (-b + sqr) / 2.0;
@@ -55,6 +57,7 @@ GL::IntersectionInfo GL::Sphere::TestIntersection(const Ray& castRay) const
 	//determine which point of intersection was closest to the camera!
 	//t1 is closest to the camera (we are not interested in t2)
 	poi = p1 + vhat * (t1 < t2 ? t1 : t2);
+
 	//if (t1 < t2) 
 	//	poi = bckRay._point1 + vhat * t1;
 	//else

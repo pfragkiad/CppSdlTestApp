@@ -24,8 +24,7 @@ namespace GL
 		virtual bool ComputeIllumination(const IntersectionInfo& intersectionInfo,
 			const pShapesVector& objectList, const pShape& currentObject, VD& color, double& intensity) const;
 
-
-		VD _color{ VDs::Zero };
+		VD _lightColor{ VDs::Zero };
 		VD _location{ VDs::Zero };
 		double _intensity = 1.0;
 	};

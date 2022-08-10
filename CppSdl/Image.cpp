@@ -10,13 +10,17 @@ Image::Image()
 	_ySize = 0;
 	_pTexture = nullptr;
 	_pRenderer = nullptr;
+#ifndef USE_RGB_VECTORS
 	tempPixels = nullptr;
+#endif
 }
 
 Image::~Image()
 {
+#ifndef USE_RGB_VECTORS
 	if (tempPixels != nullptr)
 		delete[] tempPixels;
+#endif
 
 	if (_pTexture != nullptr)
 		SDL_DestroyTexture(_pTexture);
@@ -80,8 +84,7 @@ void Image::SetPixel(const int x, const int y, const double red, const double gr
 	_gChannel[x][y] = green;
 	_bChannel[x][y] = blue;
 #else
-	//tempPixels[y * _xSize + x] = TO_SDLCOLOR(red, green, blue); //ConvertColor(red, green, blue);
-	tempPixels[y * _xSize + x] = TO_SDLCOLOR(red, green, blue); //ConvertColor(red, green, blue);
+	tempPixels[GET_PIXELS_INDEX(x,y,_xSize,_ySize)] = TO_SDLCOLOR(red, green, blue); //ConvertColor(red, green, blue);
 #endif
 }
 
@@ -93,14 +96,20 @@ void Image::Display() const
 	Uint32* tempPixels = new Uint32[(size_t)_xSize * (size_t)_ySize];
 
 	//clear the pixel buffer
-	memset(tempPixels, 0, (size_t)_xSize * (size_t)_ySize);
-
-	std::cout << tempPixels[0] << std::endl;
+	//memset(tempPixels, 0, (size_t)_xSize * (size_t)_ySize);
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+	Uint32 pixelColor = 255u;
+#else
+	const Uint32 pixelColor = 255u << 24u; //he has bgr inversed here
+#endif
+	std::fill(tempPixels, tempPixels + (size_t)(_xSize * _ySize),pixelColor);
 
 	for (size_t x = 0; x < _xSize; ++x)
 		for (size_t y = 0; y < _ySize; ++y)
 		{
-			size_t index = y * _xSize + x;
+			size_t index = GET_PIXELS_INDEX(x, y, _xSize, _ySize);
+			SDL_assert(index< (size_t)(_xSize* _ySize));
+
 			tempPixels[index] = ConvertColor(
 				_rChannel[x][y], _gChannel[x][y], _bChannel[x][y]);
 		}

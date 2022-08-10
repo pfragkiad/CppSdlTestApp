@@ -11,7 +11,7 @@
 #define TO_SDLCOLOR(r,g,b) (255u << 24u) + ((unsigned char)(r) << 16u) + ((unsigned char)(g) << 8u) + (unsigned char)(b); //he has bgr inversed here
 #endif
 
-#define GET_PIXELS_INDEX(x,y) y * _xSize + x
+#define GET_PIXELS_INDEX(x,y,_xSize,_ySize) ((_ySize-1-y) * _xSize + x)
 
 namespace GL
 {

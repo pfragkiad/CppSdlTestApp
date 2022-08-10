@@ -5,12 +5,12 @@ GL::LightBase::LightBase()
 }
 
 GL::LightBase::LightBase(VD color, double intensity):
-    _color(color), _intensity(intensity)
+    _lightColor(color), _intensity(intensity)
 {
 }
 
 GL::LightBase::LightBase(VD color,double intensity, VD location):
-    _color(color),_intensity(intensity), _location(location)
+    _lightColor(color),_intensity(intensity), _location(location)
 {
 }
 

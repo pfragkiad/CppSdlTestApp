@@ -8,6 +8,7 @@
 #include <numeric> //accumulate
 
 #include "Timer.h"
+#include <cmath>
 
 #define USE_PARALLEL
 
@@ -23,12 +24,19 @@ void Scene::FillRow(int x, float normX, int ySize, float yFact, Image& outputIma
 {
 	for (int y = 0; y < ySize; y++)
 	{
-		float normY = static_cast<float>(y) * yFact - 1.0f; //-1 to 1
+		//if (x == 1280 / 2 && y == 720 / 2)
+		//{
+		//	SDL_assert(false);
+		//}
+		float normY = static_cast<float>(y) * yFact - 0.5f; //-0.5 to 0.5 (changed by me)
 
 		//Ray cameraRay;
+
 		//generate the ray for this pixel
 		//_camera.GenerateRay(normX, normY, cameraRay);
 		Ray cameraRay = _camera.GenerateRay(normX, normY);
+
+		//SDL_assert(!(  abs(cameraRay.GetLab()[1]- 0.1)<=1e-3  && normX == 0.0f));
 
 		for (pShape currentObject : _objects)
 		{
@@ -56,8 +64,7 @@ void Scene::FillRow(int x, float normX, int ySize, float yFact, Image& outputIma
 					validIllumination = currentLight ->
 						ComputeIllumination(intersection, _objects, currentObject, color, intensity);
 
-					if (validIllumination)
-						intersection.Color *= intensity;
+					intersection.Color *= intensity;
 
 					//std::cout << "Intensity: " << intensity << std::endl;
 				}
@@ -83,7 +90,8 @@ void Scene::FillRow(int x, float normX, int ySize, float yFact, Image& outputIma
 					//	localColor[0] * intensity,
 					//	localColor[1] * intensity,
 					//	localColor[2] * intensity);
-					outputImage.tempPixels[y * outputImage._xSize + x] =
+					outputImage.tempPixels
+					[GET_PIXELS_INDEX(x, y, outputImage._xSize, outputImage._ySize)] =
 					TO_SDLCOLOR(
 						intersection.Color[0],
 						intersection.Color[1],
@@ -120,8 +128,8 @@ bool Scene::Render(Image& outputImage)
 
 	//loop over each pixel in our image
 
-	float xFact = 2.0f / xSize; //0 to 2
-	float yFact = 2.0f / ySize; //0 to 2
+	float xFact = 1.0f / xSize; //0 to 1 //changed by me
+	float yFact = 1.0f / ySize; //0 to 1 //changed by me
 	//double minDist = 1e6;
 	//double maxDist = 0.0;
 
@@ -131,12 +139,12 @@ bool Scene::Render(Image& outputImage)
 		//std::cout << x << " of " << xSize << std::endl;
 
 		//normalize x coordinate
-		float normX = static_cast<float>(x) * xFact - 1.0f; //-1 to 1
+		float normX = static_cast<float>(x) * xFact - 0.5f; //-0.5 to 0.5 (changed by me)
 
 #ifdef USE_PARALLEL
 		threads.push_back(thread(&Scene::FillRow, std::ref(*this), x, normX, ySize, yFact, std::ref(outputImage)));
 #else
-		 //19.8 sec in serial, 2.8 in parallel, 0.2 in parallel + static array instead of std::vector within Vector<T>
+		//19.8 sec in serial, 2.8 in parallel, 0.2 in parallel + static array instead of std::vector within Vector<T>
 		FillRow(x, normX, ySize, yFact, outputImage);
 #endif
 
