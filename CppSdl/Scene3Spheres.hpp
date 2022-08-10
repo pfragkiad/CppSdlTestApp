@@ -34,10 +34,6 @@ namespace GL::Examples
 			/*basecolor*/ VD{ 255.0, 128.0, 0.0 },
 			Transform(/*translation*/ VDs::Zero, /*rotation*/ VDs::Zero, /*scale*/ VD{ 0.75, 0.5, 0.5 }
 		))));
-		//_objects.push_back(std::make_shared<Sphere>(Sphere(
-		//	/*basecolor*/ VD{ 255.0, 200.0, 0.0 },
-		//	Transform(/*translation*/ VD{ 1.5,0.0,0.0 }, /*rotation*/ VDs::Zero, /*scale*/ VD{ 0.75,0.75,0.75 }
-		//))));
 		_objects.push_back(std::make_shared<Sphere>(Sphere(
 			/*basecolor*/ VD{ 255.0, 200.0, 0.0 },
 			Transform(/*translation*/ VD{ 1.5,0.0,0.0}, /*rotation*/ VDs::Zero, /*scale*/ VD{0.75,0.75,0.75}

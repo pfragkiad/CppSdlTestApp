@@ -562,8 +562,9 @@ Matrix<T> Matrix<T>::operator= (const Matrix<T>& rhs)
 			delete[] _MData;
 
 		_MData = new T[_nElements];
-		for (size_t i = 0; i < _nElements; i++)
-			_MData[i] = rhs._MData[i];
+		std::copy(rhs._MData, rhs._MData + _nElements,_MData);
+		//for (size_t i = 0; i < _nElements; i++)
+			//_MData[i] = rhs._MData[i];
 	}
 
 	return *this;
