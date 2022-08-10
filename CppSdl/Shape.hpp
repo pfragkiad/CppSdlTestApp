@@ -4,6 +4,7 @@
 #include "Ray.hpp"
 #include "Transform.hpp"
 #include "IntersectionInfo.h"
+#include <memory>
 
 namespace GL
 {
@@ -13,7 +14,10 @@ namespace GL
 	public:
 		//constructor and destructor
 		Shape();
+
 		//useful for static images
+		Shape(VD baseColor);
+
 		Shape(VD baseColor, Transform transformMatrix);
 
 		virtual ~Shape();
@@ -38,7 +42,7 @@ namespace GL
 	};
 
 }
+
 //they must be declared after the class definition!
 typedef std::shared_ptr<GL::Shape> pShape;
 typedef std::vector<pShape> pShapesVector;
-

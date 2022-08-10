@@ -117,28 +117,24 @@ void GL::Camera::UpdateCameraGeometry()
 {
 	//first compute the vector from the camera position to the LookAt position
 	_alignmentVector = !(_lookAt - _cameraPosition);
-	//_alignmentVector.Normalize();
 
-	//u, v, up correspond to x (horizontal), y (in-screen), z(up-vertical)
+	//u, v, up correspond to x (horizontal), y (vertical)
 
 	//compute the U and V vectors
 	//_up is not normalized and is not vertical to the _aligmentVector
-	//_u = VD::cross(_alignmentVector, _up);
 	_u = !(_alignmentVector ^ _upVector); //that's the horizontal vector towards right
-	//_u.Normalize();
+
 	_v = _u ^ _alignmentVector; //VD::cross(_u, _alignmentVector)
-	//_v.Normalize();
-	//_v = _up.Normalized(); //this should be if the _up is vertical to the alignment
-	// 
+
 	//we assume that the projection plane occurs at a distance of length on the aligmentVector direction
 	//length should NOT be zero
 	_projectionScreenCenter = _cameraPosition + _projectionScreenDistance * _alignmentVector;
 
 	//modify the U and V vectors to match the size and aspect ratio!
-	//_u = _u * _horizontalSize;
 	_u *= _projectionScreenHorizontalSize; //u length = width of the screen in world coordinates
+
 	//aspect ratio = horizontal/vertical
-	//_v = _v * (_horizontalSize / _aspectRatio);
-	_v *= _projectionScreenHorizontalSize / _projectionScreenAspectRatio; //v length = length of the screen in world coordinates 
+	//v length = length of the screen in world coordinates
+	_v *= _projectionScreenHorizontalSize / _projectionScreenAspectRatio;  
 
 }

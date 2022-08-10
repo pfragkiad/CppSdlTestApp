@@ -101,5 +101,14 @@
     <ClInclude Include="GL.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SceneMultiSpheres.h">
+      <Filter>Header Files\Examples</Filter>
+    </ClInclude>
+    <ClInclude Include="Colors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

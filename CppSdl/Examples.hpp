@@ -5,10 +5,16 @@
 #include "Camera.hpp"
 #include "Sphere.hpp"
 
+#include "Random.h"
+#include "Colors.h"
+
 #include "Scene3Spheres.hpp"
 #include "SceneSphere.h"
+#include "SceneMultiSpheres.h"
 
-#include <random>
+
+
+
 
 namespace GL::Examples
 {
@@ -26,14 +32,7 @@ namespace GL::Examples
 			}
 	}
 
-	inline std::random_device rd;
-	inline std::mt19937 gen(rd());
-
-	inline int random(int low, int high)
-	{
-		std::uniform_int_distribution<> dist(low, high);
-		return dist(gen);
-	}
+	
 
 
 	inline void Example2SimpleSphere(Image& image, Camera& camera, Sphere& sphere)

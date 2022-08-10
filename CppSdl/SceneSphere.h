@@ -2,6 +2,7 @@
 #define SCENE_SPHERE
 
 #include "Scene.hpp"
+#include "Colors.h"
 
 namespace GL::Examples
 {
@@ -25,16 +26,10 @@ namespace GL::Examples
 		//	Transform(VD{0.0,0.0,-0.5},VDs::Zero,VDs::One));
 
 		//construct a test light
-		_lights.push_back(std::make_shared<PointLight>(PointLight()));
-		//X positive is towards left, Y positive is towards front (to the reader)
-		//Z positive is up (towards top)
-
-		// Z seems opposite (positive Z is down)
-		// X seems opposite (positive X is left)
-		// Y seems ok (positive Y away from reader  M_PI- ...approach)
-		_lights[0]->_location = VD{ 5.0,-10.0,-5.0 };//
-		_lights[0]->_lightColor = VD{ 255.0,255.0,255.0 };
-		_lights[0]->_intensity = 1.0;
+			//construct a test light
+		_lights.push_back(std::make_shared<PointLight>(PointLight(
+			/*color*/ Colors::White,
+			/*location*/ VD{ -5.0,-10.0,15.0 })));
 	}
 }
 

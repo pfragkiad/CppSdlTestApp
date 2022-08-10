@@ -156,9 +156,12 @@
     <ClCompile Include="Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Colors.h" />
     <ClInclude Include="GL.h" />
     <ClInclude Include="IntersectionInfo.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="Scene3Spheres.hpp" />
+    <ClInclude Include="SceneMultiSpheres.h" />
     <ClInclude Include="SceneSphere.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.hpp" />

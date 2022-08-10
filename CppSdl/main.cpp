@@ -137,8 +137,12 @@ int main(int argc, char** argv)
 	//testVectors();
 	//testTimer();
 
-	GL::Window app{ Examples::Scene3Spheres() };
+	//GL::Window app{ Examples::Scene3Spheres() };
 	//GL::Window app{ Examples::SceneSphere() };
+	GL::Window app{ std::make_unique<Examples::Scene3Spheres>() };
+
+	//GL::Window app{ std::make_unique<Examples::SceneMultiSpheres>()};
+
 	return app.Run(/*isImageStatic*/ false);
 }
 

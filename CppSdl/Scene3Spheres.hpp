@@ -2,6 +2,7 @@
 #define SCENE3SPHERES_H
 
 #include "Scene.hpp"
+#include "Colors.h"
 #include <SDL.h> //MI_P
 
 namespace GL::Examples
@@ -13,6 +14,8 @@ namespace GL::Examples
 		//only inline is accepted and separate cpp definition.
 		//if the definition is below then it is not accepted
 		Scene3Spheres();
+
+		void ProceedTime() override;
 	};
 	//static int iCall = 0;
 
@@ -25,26 +28,43 @@ namespace GL::Examples
 
 		_objects.push_back(std::make_shared<Sphere>(Sphere(
 			/*basecolor*/ VD{ 64.0, 128.0, 200.0 },
-			Transform(/*translation*/VD{ -1.5,0.0,2.0 },	/*rotation*/VD{ 0.0,-3.14 / 4.0,0.0 },	/*scale*/	VD{ 0.5,0.5,0.75 }
+			Transform(
+				/*translation*/VD{ -1.5,0.0,2.0 },
+				/*rotation*/VD{ 0.0,-Scalars::PI_4,0.0 },
+				/*scale*/	VD{ 0.5,0.5,0.75 }
 		))));
 		_objects.push_back(std::make_shared<Sphere>(Sphere(
 			/*basecolor*/ VD{ 255.0, 128.0, 0.0 },
-			Transform(/*translation*/ VDs::Zero, /*rotation*/ VDs::Zero, /*scale*/ VD{ 0.75, 0.5, 0.5 }
+			Transform(
+				/*translation*/ VD{ 0.0,0.0,0.0 },
+				/*rotation*/ VDs::Zero,
+				/*scale*/ VD{ 0.75, 0.5, 0.5 }
 		))));
 		_objects.push_back(std::make_shared<Sphere>(Sphere(
+			/*radius*/ 0.5,
 			/*basecolor*/ VD{ 255.0, 200.0, 0.0 },
-			Transform(/*translation*/ VD{ 1.5,0.0,0.0 }, /*rotation*/ VDs::Zero, /*scale*/ VD{ 0.75,0.75,0.75 }
-		))));
+			/*Translation*/ VD{ 1.5,0.0,0.0 })));
 
 		//construct a test light
-		_lights.push_back(std::make_shared<PointLight>(PointLight()));
-		//X positive is towards left, Y positive is towards front (to the reader)
-		//Z positive is up (towards top)
-		_lights[0]->_location = VD{ -5.0,-10.0,-15.0 };
-		_lights[0]->_lightColor = VD{ 255.0,255.0,255.0 };
-		_lights[0]->_intensity = 1.0;
+		_lights.push_back(std::make_shared<PointLight>(PointLight(
+			/*color*/ Colors::White,
+			/*location*/ VD{ -5.0,-10.0,15.0 })));
 	}
 
+	inline void Scene3Spheres::ProceedTime()
+	{
+		static Uint32 time = 0;
+		double angle = time * Scalars::TO_RADS;
+
+		_objects[0]->SetTransformMatrix(
+			Transform(
+				/*translation*/VD{ -1.5,0.0,2.0 * cos(angle) },
+				/*rotation*/VD{ 0.0,angle,0.0 },
+				/*scale*/	VD{ 0.5,0.5,0.75}
+		));
+
+		time += 5; if (time == 360) time = 0;
+	}
 }
 
 #endif

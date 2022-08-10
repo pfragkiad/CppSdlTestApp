@@ -4,13 +4,13 @@ GL::LightBase::LightBase()
 {
 }
 
-GL::LightBase::LightBase(VD color, double intensity):
-    _lightColor(color), _intensity(intensity)
+GL::LightBase::LightBase(VD color, VD location) :
+	_lightColor(color), _intensity(1.0), _location(location)
 {
 }
 
-GL::LightBase::LightBase(VD color,double intensity, VD location):
-    _lightColor(color),_intensity(intensity), _location(location)
+GL::LightBase::LightBase(VD color, VD location, double intensity) :
+	_lightColor(color), _intensity(intensity), _location(location)
 {
 }
 
@@ -19,10 +19,10 @@ GL::LightBase::~LightBase()
 }
 
 bool GL::LightBase::ComputeIllumination(
-    const IntersectionInfo& intersectionInfo, const pShapesVector& objectList, const pShape& currentObject,
-    VD& color, double& intensity) const
+	const IntersectionInfo& intersectionInfo, const pShapesVector& objectList, const pShape& currentObject,
+	VD& color, double& intensity) const
 {
-    return false;
+	return false;
 }
 
 //bool GL::LightBase::ComputeIllumination(

@@ -32,6 +32,9 @@ namespace GL
 		pLightsVector _lights;
 
 		void FillRow(int x, float normX, int ySize, float yFact, Image& outputImage);
+
+		//Uint64 time = 0;
+		virtual void ProceedTime();
 	};
 }
 

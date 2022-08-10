@@ -5,15 +5,14 @@
 #include "Ray.hpp"
 #include "Shape.hpp"
 
-
 namespace GL
 {
 	class LightBase
 	{
 	public:
 		LightBase();
-		LightBase(VD color,double intensity);
-		LightBase(VD color,double intensity, VD location);
+		LightBase(VD color,VD location);
+		LightBase(VD color, VD location, double intensity);
 		virtual ~LightBase();
 
 		//function to compute illumination contribution

@@ -1,5 +1,5 @@
-#include "Window.hpp"
-#include "../Algebra/Vector.h"
+
+#include "GL.h"
 
 using namespace GL;
 
@@ -11,7 +11,7 @@ Window::Window()
 	pRenderer = nullptr;
 }
 
-Window::Window(Scene scene)
+Window::Window(std::shared_ptr<GL::Scene> scene)
 {
 	isRunning = true;
 	pWindow = nullptr;
@@ -101,7 +101,7 @@ void Window::OnRender()
 	_image.Reset(); //needed to reset the tempPixels
 #endif
 
-	_scene.Render(_image);
+	_scene->Render(_image);
 	//std::cout << "Done!\n";
 
 	//display the image

@@ -8,11 +8,14 @@ GL::Shape::Shape()
 {
 }
 
+GL::Shape::Shape(VD baseColor):_baseColor(baseColor)
+{
+}
+
 GL::Shape::Shape(VD baseColor, Transform transformMatrix) :
 	_baseColor(baseColor), _transformMatrix(transformMatrix)
 
 {
-
 }
 
 GL::Shape::~Shape()

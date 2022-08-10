@@ -1,6 +1,4 @@
-#include "Image.hpp"
-#include <iostream>
-#include <algorithm>
+#include "GL.h"
 
 using namespace GL;
 
@@ -53,15 +51,15 @@ void Image::Reset()
 //function to initialize
 void Image::Initialize(const int xSize, const int ySize, SDL_Renderer* pRenderer)
 {
+	//store the dimensions
+	_xSize = xSize; _ySize = ySize;
+
 #ifdef USE_RGB_VECTORS
 	//resize the image arrays
 	_rChannel.resize(xSize, std::vector<double>(ySize, 0.0));
 	_gChannel.resize(xSize, std::vector<double>(ySize, 0.0));
 	_bChannel.resize(xSize, std::vector<double>(ySize, 0.0));
 #endif
-
-	//store the dimensions
-	_xSize = xSize; _ySize = ySize;
 
 	//store the pointer to the renderer
 	_pRenderer = pRenderer;

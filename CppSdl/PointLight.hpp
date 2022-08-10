@@ -8,6 +8,9 @@ namespace GL
 	{
 	public:
 		PointLight();
+		PointLight(VD color, VD location) : LightBase(color, location, 1.0) {}
+		PointLight(VD color, VD location, double intensity) : LightBase(color, location, intensity) {}
+
 		virtual ~PointLight() override;
 
 		//function to compute illumination

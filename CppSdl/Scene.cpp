@@ -106,25 +106,21 @@ void Scene::FillRow(int x, float normX, int ySize, float yFact, Image& outputIma
 	}
 }
 
+void GL::Scene::ProceedTime()
+{
+}
+
 
 //function to perform the rendering
 bool Scene::Render(Image& outputImage)
 {
+
 	Timer<10> timer;
 
-	////create some color variations
-	//Examples::Example1Simple2ColorImage(outputImage);
+	ProceedTime(); //useful for animation purposes
 
-	//Examples::Example2SimpleSphere(outputImage, _camera, _testSphere);
-	//Examples::Example2SimpleSphere(outputImage,
-	//	_camera, _objects.at(0)
-	//	)
-	//	;
-	int xSize = outputImage.GetXSize();
-	int ySize = outputImage.GetYSize();
-
-	////create some color variations
-	//Examples::Example1Simple2ColorImage(outputImage);
+	int xSize = outputImage._xSize;
+	int ySize = outputImage._ySize;
 
 	//loop over each pixel in our image
 

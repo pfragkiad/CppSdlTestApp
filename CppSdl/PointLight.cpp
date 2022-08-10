@@ -4,7 +4,7 @@
 #include <iostream>
 
 GL::PointLight::PointLight() :
-	LightBase(/*lightColor*/ VD({ 255.0, 255.0, 255.0 }), /*intensity*/ 1.0)
+	LightBase(/*lightColor*/ VD({ 255.0, 255.0, 255.0 }), /*location*/ VDs::Zero, /*intensity*/ 1.0)
 {
 }
 
@@ -23,7 +23,7 @@ bool GL::PointLight::ComputeIllumination(
 {
 	//construct the vector pointing from the intersection point to the light
 	//VD lightDir = !(_location - intPoint);
-	VD lightDirection = !( intersectionInfo.Point - _location); //end-start
+	VD lightDirection = !(intersectionInfo.Point - _location); //end-start
 
 	//std::cout << intersectionInfo.Normal.LengthSquared() << ", " << lightDirection.LengthSquared() << std::endl;
 

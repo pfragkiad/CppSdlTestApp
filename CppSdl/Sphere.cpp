@@ -2,10 +2,26 @@
 
 GL::Sphere::Sphere()
 {
+	_radius = 1.0;
+}
+
+GL::Sphere::Sphere(double radius) :_radius(radius)
+{
+	
 }
 
 GL::Sphere::~Sphere()
 {
+}
+
+void GL::Sphere::SetRadius(double radius)
+{
+	_radius = radius;
+}
+
+double GL::Sphere::GetRadius() const
+{
+	return _radius;
 }
 
 //bool GL::Sphere::TestIntersection(const Ray& castRay, VD& intersectionPoint, VD& localNormal, VD& localColor)
@@ -14,8 +30,6 @@ GL::IntersectionInfo GL::Sphere::TestIntersection(const Ray& castRay) const
 	//castRay is in the world coordinate system
 	//we transform it in the local coordinate system of the sphere!
 	//APPLY THE BACKWARDS TRANSFORM because we go from WORLD -> LOCAL!
-
-
 	Ray bckRay = _transformMatrix.Apply(castRay, false);
 
 	//compute the values of a, b, c
@@ -32,7 +46,9 @@ GL::IntersectionInfo GL::Sphere::TestIntersection(const Ray& castRay) const
 
 	//calculate c
 	//double c = bckRay.GetPoint1() * bckRay.GetPoint1() - 1.0;
-	double c = p1.LengthSquared() - 1.0;
+	//keeping the radius is faster than leaving that to a scale transformation
+	//https://youtu.be/8fWZM8hCX5E?list=PL3WoIG-PLjSt54LvzY2SuBQDl-cXa11Tm&t=383
+	double c = p1.LengthSquared() - _radius*_radius; 
 
 	//test whether we actually have an intersection!
 	double discriminant = b * b - 4.0 * c;

@@ -15,7 +15,7 @@ namespace GL
 	{
 	public:
 		Window();
-		Window(Scene scene);
+		Window(std::shared_ptr<GL::Scene> scene);
 
 		int Run(bool isImageStatic);
 		int Run(int width, int height, bool isImageStatic);
@@ -30,9 +30,12 @@ namespace GL
 		//instance of the image
 		Image _image;
 
-		//instance of the scene class
-		Scene _scene;
+		//unsigned long long _time;
 
+		//instance of the scene class
+		//Scene* _scene;
+		std::shared_ptr<GL::Scene> _scene;
+			
 		Camera _camera;
 
 		// SDL2 stuff
