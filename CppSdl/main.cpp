@@ -1,8 +1,5 @@
-#include "../Algebra/Algebra.h"
-#include "Window.hpp"
-#include "Examples.hpp"
-#include <iostream>
-#include "Timer.h"
+#include "GL.h"
+
 #include <thread>
 #include <chrono>
 using namespace std::chrono_literals;

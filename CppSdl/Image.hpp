@@ -1,8 +1,6 @@
 #pragma once
 
-#include <string>
 #include <vector>
-#include <array>
 #include <SDL.h>
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN

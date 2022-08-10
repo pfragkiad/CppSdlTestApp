@@ -3,9 +3,9 @@
 
 GL::Camera::Camera()
 {
-	//_projectionScreenDistance = 1.0;
-	//_projectionScreenHorizontalSize = 1.0;
-	//_projectionScreenAspectRatio = 1.0;
+	_projectionScreenDistance = 1.0;
+	_projectionScreenHorizontalSize = 1.0;
+	_projectionScreenAspectRatio = 1.0;
 
 	//_cameraPosition = VD{ {0.0,-10.0,0.0} };
 	//_lookAt = VDs::Zero; //VD{ {0.0,0.0,0.0} };

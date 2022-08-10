@@ -1,11 +1,8 @@
 
 #include "Transform.hpp"
 
-#include <tuple>
-
 GL::Transform::Transform()
 {
-
 }
 
 GL::Transform::~Transform()
@@ -15,12 +12,12 @@ GL::Transform::~Transform()
 //construct from a pair of matrices
 GL::Transform::Transform(const MD& fwd, const MD& bck)
 {
-	//verify that the inputs are 4x4
-	if (fwd.RowsCount() != 4 || fwd.ColsCount() != 4 ||
-		bck.RowsCount() != 4 || bck.ColsCount() != 4)
-	{
-		throw std::invalid_argument("Cannot construct form, inputs are not all 4x4.");
-	}
+	////verify that the inputs are 4x4
+	//if (fwd.RowsCount() != 4 || fwd.ColsCount() != 4 ||
+	//	bck.RowsCount() != 4 || bck.ColsCount() != 4)
+	//{
+	//	throw std::invalid_argument("Cannot construct form, inputs are not all 4x4.");
+	//}
 	_fwdtfm = fwd;
 	_bcktfm = bck;
 }
@@ -28,8 +25,6 @@ GL::Transform::Transform(const MD& fwd, const MD& bck)
 void GL::Transform::Set(const VD& translation, const VD& rotation, const VD& scale)
 {
 	//define a matrix for each component of the transform
-	//tuple<VD,VD,VD> par(translation, rotation, scale);
-
 	MD translationMatrix = MDs::GetTranslation(translation);
 	MD rotationMatrixX = MDs::GetRotationX(rotation[0]);
 	MD rotationMatrixY = MDs::GetRotationY(rotation[1]);
@@ -48,6 +43,7 @@ void GL::Transform::Set(const VD& translation, const VD& rotation, const VD& sca
 		* MDs::GetRotationY(-rotation[1])
 		* MDs::GetRotationX(-rotation[0])
 		* MDs::GetTranslation(-translation); //possibly correct
+
 	//_bcktfm = _fwdtfm; _bcktfm.Inverse();
 	//http://www.info.hiroshima-cu.ac.jp/~miyazaki/knowledge/teche0053.html#:~:text=and%20translation%20matrix)-,Inverse%20matrix%20of%20transformation%20matrix%20(rotation%20and%20translation%20matrix),R%7Ct%5D%20transformation%20matrix.&text=The%20inverse%20of%20transformation%20matrix%20%5BR%7Ct%5D%20is%20%5B,%2D%20R%5ET%20t%5D.
 	// //faster should be by getting the matrices above!

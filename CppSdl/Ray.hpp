@@ -1,5 +1,4 @@
-#ifndef RAY_H
-#define RAY_H
+#pragma once
 #include "../Algebra/Algebra.h"
 
 namespace GL
@@ -25,6 +24,3 @@ namespace GL
 		VD _lab;
 	};
 }
-
-#endif
-

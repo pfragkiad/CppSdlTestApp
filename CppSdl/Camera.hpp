@@ -1,9 +1,7 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#pragma once
 
 #include "../Algebra/Algebra.h"
 #include "Ray.hpp"
-
 
 namespace GL
 {
@@ -78,5 +76,5 @@ namespace GL
 
 
 }
-#endif
+
 
