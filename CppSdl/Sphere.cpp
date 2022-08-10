@@ -25,11 +25,12 @@ GL::IntersectionInfo GL::Sphere::TestIntersection(const Ray& castRay) const
 	//a = 1.0;
 
 	//calculate b
-	double b = 2.0 * bckRay.GetPoint1() * vhat;
+	auto p1 = bckRay._point1;
+	double b = 2.0 * p1 * vhat;
 
 	//calculate c
 	//double c = bckRay.GetPoint1() * bckRay.GetPoint1() - 1.0;
-	double c = bckRay.GetPoint1().LengthSquared() - 1.0;
+	double c = p1.LengthSquared() - 1.0;
 
 	//test whether we actually have an intersection!
 	double discriminant = b * b - 4.0 * c;
@@ -53,7 +54,7 @@ GL::IntersectionInfo GL::Sphere::TestIntersection(const Ray& castRay) const
 
 	//determine which point of intersection was closest to the camera!
 	//t1 is closest to the camera (we are not interested in t2)
-	poi = bckRay.GetPoint1() + vhat * (t1 < t2 ? t1 : t2);
+	poi = p1 + vhat * (t1 < t2 ? t1 : t2);
 	//if (t1 < t2) 
 	//	poi = bckRay._point1 + vhat * t1;
 	//else

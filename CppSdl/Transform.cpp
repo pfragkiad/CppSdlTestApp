@@ -28,7 +28,7 @@ GL::Transform::Transform(const MD& fwd, const MD& bck)
 void GL::Transform::Set(const VD& translation, const VD& rotation, const VD& scale)
 {
 	//define a matrix for each component of the transform
-	tuple<VD,VD,VD> par(translation, rotation, scale);
+	//tuple<VD,VD,VD> par(translation, rotation, scale);
 
 	MD translationMatrix = MDs::GetTranslation(translation);
 	MD rotationMatrixX = MDs::GetRotationX(rotation[0]);
@@ -66,7 +66,9 @@ MD GL::Transform::GetBackward() const
 
 GL::Ray GL::Transform::Apply(const Ray& inputRay, bool isForward) const
 {
-	return Ray(Apply(inputRay.GetPoint1(), isForward), Apply(inputRay.GetPoint2(), isForward));
+	return Ray(
+		Apply(inputRay._point1, isForward),
+		Apply(inputRay._point2, isForward));
 }
 
 VD GL::Transform::Apply(const VD& inputVector, bool isForward) const

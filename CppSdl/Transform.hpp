@@ -17,7 +17,7 @@ namespace GL
 		Transform(const MD& fwd, const MD& bck);
 		
 		//useful for static images
-		Transform(const VD& translation,
+		inline Transform(const VD& translation,
 			const VD& rotation,
 			const VD& scale) {
 			Set(translation, rotation, scale);

@@ -9,7 +9,7 @@
 #include <vector>
 #include <exception>
 #include "Vector.h"
-#include <algorithm> //fill
+#include <algorithm> //fill, copy
 
 template <class T>
 class Matrix
@@ -154,8 +154,10 @@ Matrix<T>::Matrix(size_t nRows, size_t nCols)
 	_nCols = nCols;
 	_nElements = _nRows * _nCols;
 	_MData = new T[_nElements];
-	for (size_t i = 0; i < _nElements; i++)
-		_MData[i] = 0.0;
+
+	std::fill(_MData, _MData + _nElements, static_cast<T>(0.0));
+	//for (size_t i = 0; i < _nElements; i++)
+	//	_MData[i] = 0.0;
 }
 
 // Construct from const linear array.
@@ -166,8 +168,10 @@ Matrix<T>::Matrix(size_t nRows, size_t nCols, const T* inputData)
 	_nCols = nCols;
 	_nElements = _nRows * _nCols;
 	_MData = new T[_nElements];
-	for (size_t i = 0; i < _nElements; i++)
-		_MData[i] = inputData[i];
+
+	std::copy(inputData, inputData + _nElements, _MData);
+	//for (size_t i = 0; i < _nElements; i++)
+	//	_MData[i] = inputData[i];
 }
 
 // The copy constructor.
@@ -179,8 +183,9 @@ Matrix<T>::Matrix(const Matrix<T>& inputMatrix)
 	_nElements = inputMatrix._nElements;
 
 	_MData = new T[_nElements];
-	for (size_t i = 0; i < _nElements; i++)
-		_MData[i] = inputMatrix._MData[i];
+	std::copy(inputMatrix._MData, inputMatrix._MData + _nElements, _MData);
+	//for (size_t i = 0; i < _nElements; i++)
+	//	_MData[i] = inputMatrix._MData[i];
 }
 
 // Construct from std::vector.
@@ -191,8 +196,9 @@ Matrix<T>::Matrix(size_t nRows, size_t nCols, const std::vector<T>& inputData)
 	_nCols = nCols;
 	_nElements = _nRows * _nCols;
 	_MData = new T[_nElements];
-	for (size_t i = 0; i < _nElements; ++i)
-		_MData[i] = inputData[i];
+	std::copy(inputData.cbegin(), inputData.cend(), _MData);
+	//for (size_t i = 0; i < _nElements; ++i)
+	//	_MData[i] = inputData[i];
 }
 
 template <class T>
@@ -218,7 +224,7 @@ bool Matrix<T>::Resize(size_t numRows, size_t numCols)
 	_MData = new T[_nElements];
 	if (_MData == nullptr) return false;
 
-	
+
 	std::fill(_MData, _MData + _nElements, static_cast<T>(0.0));
 	//for (size_t i = 0; i < _nElements; i++)
 	//	_MData[i] = 0.0;
@@ -296,9 +302,9 @@ bool Matrix<T>::Compare(const Matrix<T>& matrix1, double tolerance)
 	{
 		T element1 = matrix1._MData[i];
 		T element2 = _MData[i];
-		cumulativeSum += ((element1 - element2) * (element1 - element2));
+		cumulativeSum += (element1 - element2) * (element1 - element2);
 	}
-	double finalValue = sqrt(cumulativeSum / ((numRows1 * numCols1) - 1));
+	double finalValue = sqrt(cumulativeSum / (numRows1 * numCols1 - 1));
 
 	return finalValue < tolerance;
 }
@@ -568,7 +574,7 @@ template<class T>
 Matrix<T> Matrix<T>::operator*=(const T& rhs)
 {
 	size_t count = _nElements;
-	for (size_t i = 0; i < _nElements;i++)
+	for (size_t i = 0; i < _nElements; i++)
 		_MData[i] *= rhs;
 	return *this;
 }
@@ -598,15 +604,10 @@ bool Matrix<T>::Separate(Matrix<T>& matrix1, Matrix<T>& matrix2, size_t colNum)
 	// Loop over the original matrix and store data into the appropriate elements of the two
 	// output matrices.
 	for (size_t row = 0; row < _nRows; ++row)
-	{
 		for (size_t col = 0; col < _nCols; ++col)
-		{
-			if (col < colNum)
-				matrix1.Set(row, col, this->Get(row, col));
-			else
-				matrix2.Set(row, col - colNum, this->Get(row, col));
-		}
-	}
+			matrix1.Set(row,
+				(col < colNum ? col : col - colNum), Get(row, col));
+
 	return true;
 }
 
@@ -636,7 +637,7 @@ bool Matrix<T>::Join(const Matrix<T>& matrix2)
 	{
 		for (size_t j = 0; j < numCols1 + numCols2; ++j)
 		{
-			resultLinearIndex = (i * (numCols1 + numCols2)) + j;
+			resultLinearIndex = i * (numCols1 + numCols2) + j;
 
 			// If j is in the left hand matrix, we get data from there...
 			if (j < numCols1)
@@ -658,8 +659,9 @@ bool Matrix<T>::Join(const Matrix<T>& matrix2)
 	_nElements = _nRows * _nCols;
 	delete[] _MData;
 	_MData = new T[_nElements];
-	for (size_t i = 0; i < _nElements; ++i)
-		_MData[i] = newMData[i];
+	std::copy(newMData, newMData + _nElements, _MData);
+	//for (size_t i = 0; i < _nElements; ++i)
+	//	_MData[i] = newMData[i];
 
 	delete[] newMData;
 	return true;
@@ -842,8 +844,9 @@ bool Matrix<T>::Inverse()
 			_nElements = _nRows * _nCols;
 			delete[] _MData;
 			_MData = new T[_nElements];
-			for (size_t i = 0; i < _nElements; ++i)
-				_MData[i] = rightHalf._MData[i];
+			std::copy(rightHalf._MData, rightHalf._MData + _nElements, _MData);
+			//for (size_t i = 0; i < _nElements; ++i)
+			//	_MData[i] = rightHalf._MData[i];
 		}
 
 		// Increment the counter.
@@ -890,9 +893,10 @@ Matrix<T> Matrix<T>::RowEchelon()
 		this behaviour. Therefore we take a copy at the beginning and then we will replace the
 		modified matrix data with this copied data at the end, thus preserving the original. */
 	T* tempMData;
-	tempMData = new T[_nRows * _nCols];
-	for (size_t i = 0; i < (_nRows * _nCols); ++i)
-		tempMData[i] = _MData[i];
+	tempMData = new T[_nElements];
+	std::copy(_MData, _MData + _nElements, tempMData);
+	//for (size_t i = 0; i < (_nRows * _nCols); ++i)
+	//	tempMData[i] = _MData[i];
 
 	// Begin the main part of the process.
 	size_t cRow, cCol;
@@ -949,8 +953,9 @@ Matrix<T> Matrix<T>::RowEchelon()
 	Matrix<T> outputMatrix(_nRows, _nCols, _MData);
 
 	// Restore the original matrix data from the copy.
-	for (size_t i = 0; i < (_nRows * _nCols); ++i)
-		_MData[i] = tempMData[i];
+	std::copy(tempMData, tempMData + _nElements, _MData);
+	//for (size_t i = 0; i < (_nRows * _nCols); ++i)
+	//	_MData[i] = tempMData[i];
 
 	// Delete the copy.
 	delete[] tempMData;
@@ -1001,21 +1006,16 @@ size_t Matrix<T>::Rank()
 					completeFlag = true;
 					numNonZeroRows = currentMatrix.RowsCount();
 				}
-				else
-				{
-					// Extract and store each sub-matrix (if larger than 2x2).
+				else 					// Extract and store each sub-matrix (if larger than 2x2).
 					if ((currentMatrix.RowsCount() > 2) && (currentMatrix.ColsCount() > 2))
-					{
 						for (int i = 0; i < currentMatrix.RowsCount(); ++i)
-						{
 							for (int j = 0; j < currentMatrix.ColsCount(); ++j)
-							{
 								// Extract this sub-matrix and store.
 								subMatrixVector.push_back(currentMatrix.FindSubMatrix(i, j));
-							}
-						}
-					}
-				}
+
+
+
+
 			}
 		}
 	}
@@ -1028,8 +1028,8 @@ size_t Matrix<T>::Rank()
 				in row-echelon form and we can compute the rank quite easily
 				as simply the number of non-zero rows. */
 
-		size_t nRows = matrixCopy.RowsCount();
-		size_t nCols = matrixCopy.ColsCount();
+		size_t nRows = matrixCopy._nRows;
+		size_t nCols = matrixCopy._nCols;
 
 		// Loop over each row and test whether it has at least one non-zero element.
 		for (size_t i = 0; i < nRows; ++i)
@@ -1183,7 +1183,7 @@ template <class T>
 void Matrix<T>::MultAdd(size_t i, size_t j, T multFactor)
 {
 	for (size_t k = 0; k < _nCols; ++k)
-		_MData[Sub2Ind(i, k)] += (_MData[Sub2Ind(j, k)] * multFactor);
+		_MData[Sub2Ind(i, k)] += _MData[Sub2Ind(j, k)] * multFactor;
 }
 
 // Function to the find the row with the maximum element at the column given.
