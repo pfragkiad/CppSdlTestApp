@@ -1,5 +1,4 @@
-#ifndef SCENE3SPHERES_H
-#define SCENE3SPHERES_H
+#pragma once
 
 #include "Scene.hpp"
 #include "Colors.h"
@@ -67,4 +66,3 @@ namespace GL::Examples
 	}
 }
 
-#endif

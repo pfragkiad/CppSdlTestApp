@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Algebra/Algebra.h" 
+#include <Algebra.h> 
 #include "Ray.hpp"
 #include "Transform.hpp"
 #include "IntersectionInfo.h"

@@ -71,13 +71,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\libraries\sdl2\SDL2-2.0.22\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\libraries\sdl2\SDL2-2.0.22\include;$(IncludePath);$(SolutionDir)Algebra</IncludePath>
     <LibraryPath>C:\libraries\sdl2\SDL2-2.0.22\lib\x64;$(LibraryPath)</LibraryPath>
     <ExecutablePath>C:\libraries\sdl2\SDL2-2.0.22\lib\x64;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath);C:\libraries\sdl2\SDL2-2.0.22\lib\x64</ExecutablePath>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\libraries\sdl2\SDL2-2.0.22\include;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\libraries\sdl2\SDL2-2.0.22\include;;$(SolutionDir)Algebra</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);C:\libraries\sdl2\SDL2-2.0.22\lib\x64</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -174,6 +174,11 @@
     <ClInclude Include="Ray.hpp" />
     <ClInclude Include="Scene.hpp" />
     <ClInclude Include="Sphere.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Algebra\Algebra.vcxproj">
+      <Project>{1a3fe367-e289-4ea7-b410-4227e2089041}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

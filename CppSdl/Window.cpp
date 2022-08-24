@@ -24,7 +24,7 @@ bool Window::OnInit(int width, int height)
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 		return false;
 
-	pWindow = SDL_CreateWindow("qbRayTracer!",
+	pWindow = SDL_CreateWindow("Ray Tracing Stuff",
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		width, height, SDL_WINDOW_SHOWN);
 
@@ -32,12 +32,11 @@ bool Window::OnInit(int width, int height)
 
 	pRenderer = SDL_CreateRenderer(pWindow, -1, 0);
 
-
 	//initialize the Image instance
 	_image.Initialize(width, height, pRenderer);
 
 	//set the background color
-	SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
+	SDL_SetRenderDrawColor(pRenderer, 100, 255, 255, 255);
 
 	return true;
 }

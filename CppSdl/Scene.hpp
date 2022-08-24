@@ -1,5 +1,4 @@
-#ifndef CSCENE_H
-#define CSCENE_H
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -37,5 +36,3 @@ namespace GL
 		virtual void ProceedTime();
 	};
 }
-
-#endif

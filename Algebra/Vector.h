@@ -1,5 +1,4 @@
-#ifndef VECTOR_H
-#define VECTOR_H
+#pragma once
 
 #ifndef MAX_VECTOR_SIZE
 #define MAX_VECTOR_SIZE 4
@@ -9,6 +8,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
+#include <string>
 #include <vector>
 #include <algorithm> //fill
 
@@ -23,6 +23,11 @@ public:
 	// With a single integer specifying the number of dimensions.
 	Vector(size_t size);
 
+	// With input data (std::vector).
+	Vector(std::vector<T> data);
+
+	Vector(std::initializer_list<T> data);
+
 	//// Move constructor
 	//inline Vector(Vector<T>&& v) noexcept :
 	//	_VData(std::move(v._VData)), _size(v._size)
@@ -34,7 +39,7 @@ public:
 		//_VData = new T[_size];
 		std::copy(v._VData, v._VData + _size, _VData);
 	}
-	
+
 	// Copy assignment
 	inline Vector& operator=(const Vector<T>& v)
 	{
@@ -44,35 +49,30 @@ public:
 		return *this;
 	}
 
-	//// Move assigment (NEEDED OR COMPILATION FAILS)
-	//inline Vector& operator =(Vector<T>&& v)
-	//{
-	//	_size = v._size;
-	//	_VData = std::move(v._VData);
-	//	return *this;
-	//}
-
-	// With input data (std::vector).
-	Vector(std::vector<T> data);
-
-	Vector(std::initializer_list<T> data);
-
 	// And the destructor.
 	~Vector();
+
+#pragma region Elements set/get
 
 	// Returns the number of the vector elements.
 	size_t Count() const;
 
 	// Functions to handle elements of the vector.
 	T Get(size_t index) const;
+
 	void Set(size_t index, T value);
+
+	T operator [](int i) const;
+
+	T& operator[](int i);
+
+#pragma endregion
 
 	// Functions to perform computations on the vector.
 	// Return the length of the vector.
 	T Length() const;
 
 	T LengthSquared() const;
-
 
 	// Return a normalized copy of the vector.
 	Vector<T> Normalized() const;
@@ -90,8 +90,6 @@ public:
 	void operator*= (const T& rhs);
 	void operator/= (const T& rhs);
 
-	T operator [](int i) const;
-	T& operator[](int i);
 
 	// Friend functions.
 	template <class T> friend Vector<T> operator* (const T& lhs, const Vector<T>& rhs);
@@ -106,19 +104,22 @@ public:
 
 	// Static functions.
 	static T dot(const Vector<T>& a, const Vector<T>& b);
+
 	static Vector<T> cross(const Vector<T>& a, const Vector<T>& b);
 
 	template <class T> friend std::ostream& operator << (std::ostream& os, const Vector<T>& v);
 
-	void inline Print() const
+	void inline Print(const std::string& separator) const
 	{
-		for (int row = 0; row < _size; ++row)
-			std::cout << _VData[row] << std::endl;
+		for (size_t row = 0; row < _size - 1; ++row)
+			std::cout << _VData[row] << separator;
+
+		std::cout << _VData[_size - 1];
 	}
 
 	void inline Print(int precision) const
 	{
-		for (int row = 0; row < _size; ++row)
+		for (size_t row = 0; row < _size; ++row)
 			std::cout << std::fixed << std::setprecision(precision) << _VData[row] << std::endl;
 	}
 
@@ -127,6 +128,7 @@ private:
 	//std::vector<T> _VData;
 	//T* _VData = nullptr;
 	T _VData[MAX_VECTOR_SIZE];
+	//T _VData[_size];
 
 	size_t _size;
 };
@@ -150,9 +152,8 @@ std::ostream& operator << (std::ostream& os, const Vector<T>& v)
 	return os;
 }
 
-/* **************************************************************************************************
-CONSTRUCTOR / DESTRUCTOR FUNCTIONS
-/* *************************************************************************************************/
+#pragma region Constructors/Destructor
+
 // The default constructor (default is a vector of 3 dim).
 template <class T>
 Vector<T>::Vector()
@@ -198,6 +199,7 @@ Vector<T>::~Vector()
 	//if (_VData != nullptr)
 	//	delete[] _VData;
 }
+#pragma endregion
 
 /* **************************************************************************************************
 FUNCTIONS TO RETURN PARAMETERS
@@ -514,6 +516,3 @@ Vector<T> Vector<T>::cross(const Vector<T>& a, const Vector<T>& b)
 	return Vector<T>({ a0,a1,a2 });
 }
 
-
-
-#endif

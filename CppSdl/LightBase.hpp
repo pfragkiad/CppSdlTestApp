@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "../Algebra/Algebra.h"
+#include <Algebra.h>
 #include "Ray.hpp"
 #include "Shape.hpp"
 

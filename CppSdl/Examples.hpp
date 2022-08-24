@@ -1,5 +1,4 @@
-#ifndef EXAMPLES_H
-#define EXAMPLES_H
+#pragma once
 
 #include "Image.hpp"
 #include "Camera.hpp"
@@ -96,6 +95,3 @@ namespace GL::Examples
 
 }
 
-
-
-#endif

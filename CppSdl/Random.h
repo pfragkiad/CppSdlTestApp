@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <random>
 
 inline std::random_device rd;

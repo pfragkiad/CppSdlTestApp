@@ -1,5 +1,5 @@
 #pragma once
-#include "../Algebra/Algebra.h"
+#include <Algebra.h>
 
 namespace GL
 {

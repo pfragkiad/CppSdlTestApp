@@ -98,7 +98,7 @@ namespace AlgebraTests
 			unknownData.push_back(randomNumber);
 		}
 		Vector<double> unknownVector{ unknownData };
-		unknownVector.Print();
+		unknownVector.Print(", ");
 		cout << endl;
 
 		cout << "Compute the equation results = " << endl;

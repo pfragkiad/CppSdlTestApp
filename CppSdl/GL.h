@@ -7,7 +7,8 @@
 #include <memory> //safe pointers (used by: LightBase, Scene)
 #include <algorithm> //fill array (used by: Image.cpp)
 
-#include "../Algebra/Algebra.h"
+//#include "../Algebra/Algebra.h"
+#include <Algebra.h>
 
 #include <SDL.h>
 
