@@ -1,36 +1,7 @@
 #ifndef LINSOLVE_H
 #define LINSOLVE_H
 
-/* *************************************************************************************************
 
-	qbLinSolve
-
-	Function to solve a system of linear equations in the form of y = X*beta, where we
-	want to solve for beta.
-
-	*** INPUTS ***
-
-	aMatrix		Matrix<T>		The matrix of independent variables (X in the above equation).
-	bVector		Vector<T>		The vector of dependent variables (y in the above equation).
-	resultVec	Vector<T>		The vector of unknown parameters (beta in the above equation).
-						The final solution is returned in this vector.
-
-	*** OUTPUTS ***
-
-	INT				Flag indicating success or failure of the process.
-						1 Indicates success.
-						-1 indicates failure due to there being no unique solution (infinite solutions).
-						-2 indicates failure due to there being no solution.
-
-	Uses Gaussian elimination on the augmented matrix, followed by back substitution.
-
-	Created as part of the qbLinAlg linear algebra library, which is intended to be primarily for
-	educational purposes. For more details, see the corresponding videos on the QuantitativeBytes
-	YouTube channel at:
-
-	www.youtube.com/c/QuantitativeBytes
-
-	************************************************************************************************* */
 
 #include <stdexcept>
 #include <iostream>
