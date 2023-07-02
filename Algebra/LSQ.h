@@ -1,34 +1,7 @@
 #ifndef LSQ_H
 #define LSQ_H
 
-/* *************************************************************************************************
 
-	LSQ
-	
-	Function to solve a system of linear equations using a least squares approach to handle systems
-	where there are more equations (observations) than unknowns. Assumes that the system is in the
-	form of y = X*beta.
-	
-	*** INPUTS ***
-	
-	Xin		Matrix<T>		The matrix of independent variables (X in the above equation).
-	yin		Vector<T>		The vector of dependent variables (y in the above equation).
-	result		Vector<T>		The vector of unknown parameters (beta in the above equation).
-						The final solution is returned in this vector.
-															
-	*** OUTPUTS ***
-	
-	INT				Flag indicating success or failure of the process.
-						1 Indicates success.
-						-1 indicates failure due to there being no computable inverse.
-
-	Created as part of the qbLinAlg linear algebra library, which is intended to be primarily for
-	educational purposes. For more details, see the corresponding videos on the QuantitativeBytes
-	YouTube channel at:
-	
-	www.youtube.com/c/QuantitativeBytes								
-
-	************************************************************************************************* */
 
 #include <stdexcept>
 #include <iostream>
