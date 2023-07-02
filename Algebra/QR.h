@@ -1,33 +1,7 @@
 #ifndef QR_H
 #define QR_H
 
-/* *************************************************************************************************
 
-	qbQR
-
-	Function to perform QR decomposition on a given input matrix.
-
-	*** INPUTS ***
-
-	A					Matrix<T>	The matrix on which to perform QR decomposition.
-	Q					Matrix<T>	The output Q matrix.
-	R					Matrix<T>	The output R matrix.
-
-	*** OUTPUTS ***
-
-	INT				Flag indicating success or failure of the process.
-						1 Indicates success.
-						-1 indicates failure due to a non-square input matrix.
-
-	Uses an implementation of Householder reflections to perform QR decomposition.
-
-	Created as part of the qbLinAlg linear algebra library, which is intended to be primarily for
-	educational purposes. For more details, see the corresponding videos on the QuantitativeBytes
-	YouTube channel at:
-
-	www.youtube.com/c/QuantitativeBytes
-
-	************************************************************************************************* */
 
 #include <stdexcept>
 #include <iostream>
